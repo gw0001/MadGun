@@ -104,7 +104,7 @@ void PlayerPhysicsComponent::update(double dt)
 	// Check if player is has pressed right or left
 	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right)) 
 	{
-		bufferWalk.loadFromFile("res/audio/Punch.wav");
+		bufferWalk.loadFromFile("res/audio/walk.wav");
 		soundWalk.setBuffer(bufferWalk);
 
 		// Check if right key pressed
@@ -151,7 +151,7 @@ void PlayerPhysicsComponent::update(double dt)
 		// Check if player is grounded
 		if (_grounded) 
 		{
-			bufferJump.loadFromFile("res/audio/Jump3.wav");
+			bufferJump.loadFromFile("res/audio/jump.wav");
 			soundJump.setBuffer(bufferJump);
 			soundJump.play();
 
