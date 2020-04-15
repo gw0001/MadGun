@@ -25,9 +25,17 @@
 #include "system_physics.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Audio.hpp>
 
 // Namespace
 using namespace Physics; // Physics namespace
+
+sf::SoundBuffer bufferWalk;
+sf::SoundBuffer bufferJump;
+sf::Sound soundWalk;
+sf::Sound soundJump;
+
+
 
 // Is Grounded function
 //
@@ -96,9 +104,17 @@ void PlayerPhysicsComponent::update(double dt)
 	// Check if player is has pressed right or left
 	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right)) 
 	{
+		bufferWalk.loadFromFile("res/audio/Punch.wav");
+		soundWalk.setBuffer(bufferWalk);
+
 		// Check if right key pressed
 		if (Keyboard::isKeyPressed(Keyboard::Right)) 
 		{
+
+			
+			
+			soundWalk.play();
+
 			// Check if velocity of the player is less than the max velocity
 			if (getVelocity().x < _maxVelocity.x)
 			{
@@ -109,6 +125,8 @@ void PlayerPhysicsComponent::update(double dt)
 		// Else left key has been pressed
 		else
 		{
+			soundWalk.play();
+
 			// Check if velocity of the player is less than the negative max velocity
 			if (getVelocity().x > -_maxVelocity.x)
 			{
@@ -133,6 +151,10 @@ void PlayerPhysicsComponent::update(double dt)
 		// Check if player is grounded
 		if (_grounded) 
 		{
+			bufferJump.loadFromFile("res/audio/Jump3.wav");
+			soundJump.setBuffer(bufferJump);
+			soundJump.play();
+
 			// Set velocity
 			setVelocity(Vector2f(getVelocity().x, 0.f));
 
