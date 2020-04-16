@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 02/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 14/04/2020
  * -------------------------------------
  * MAIN - main.cpp
  *
@@ -38,11 +38,8 @@ Level2Scene level2;
 // Level 3
 Level3Scene level3;
 
-// Game Window width
-int gameWidth = 1280;
-
-// Game Window height
-int gameHeight = 720;
+// Debug Scene
+DebugScene debugScene;
 
 
 // Main function

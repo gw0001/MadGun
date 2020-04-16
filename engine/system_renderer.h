@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 16/04/2020
  * -------------------------------------
  * SYSTEM RENDERER - system_renderer.h
  *
@@ -41,6 +41,12 @@ namespace Renderer
 
 	// Queue function
 	void queue(const Drawable* s);
+
+	// Set Camera Centre
+	void setCameraTarget(Vector2f vect);
+
+	// Set Camera Zoom
+	void setCameraZoom(float zoom);
 
 	// Render function
 	void render();

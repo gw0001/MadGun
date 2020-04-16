@@ -8,18 +8,16 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/04/2020
+ * Date Last Modified: 13/04/2020
  * -------------------------------------
- * LEVEL 1 SCENE - scene_level1.cpp
+ * DEBUG SCENE - scene_level1.cpp
  *
- * Level 1 of MadGun.
+ * Debug Level.
  *
- * Currently populated with boilerplate
- * platformer code from practicals
  */
 
 // Libraries
-#include "scene_level1.h"
+#include "scene_debug.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../game.h"
@@ -34,22 +32,19 @@ static shared_ptr<Entity> player;
 //
 // Function loads all of the required entities for the first
 // level of the game
-void Level1Scene::Load() 
+void DebugScene::Load() 
 {
 	// Output message to console
-	cout << " Scene 1 Load" << endl;
+	cout << "Load Debug Scene" << endl;
 
 	// Load level 1, tile size 40.0f
-	ls::loadLevelFile("res/levels/level_1.txt", 40.0f);
+	ls::loadLevelFile("res/levels/debug.txt", 40.0f);
 
 	// Determine height offset
 	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
 	
 	// Set tile vertical offset
 	//ls::setOffset(Vector2f(0, ho));
-
-	//
-	Renderer::setCameraZoom(gameZoom);
 
 	// Create player
 	{
@@ -103,8 +98,10 @@ void Level1Scene::Load()
 	//Simulate long loading times - can be commented out when scene becomes more complex
 	//this_thread::sleep_for(chrono::milliseconds(3000));
 
+	Renderer::setCameraZoom(gameZoom);
+
 	// Output message to console when the scene has loaded
-	cout << " Scene 1 Load Done" << endl;
+	cout << " Debug Scene Load Done" << endl;
 
 	// Set loaded to true
 	setLoaded(true);
@@ -113,13 +110,10 @@ void Level1Scene::Load()
 // Unload function
 //
 // Function unloads the scene
-void Level1Scene::UnLoad() 
+void DebugScene::UnLoad()
 {
 	// Display message to console when unloading the scene
-	cout << "Scene 1 Unload" << endl;
-
-	// Set camera to target the player, based on their position
-	Renderer::setCameraTarget(Vector2f(0.0f, 0.0f));
+	cout << "Debug Unload" << endl;
 
 	// Reset the player
 	player.reset();
@@ -131,12 +125,29 @@ void Level1Scene::UnLoad()
 	Scene::UnLoad();
 }
 
+// Unload function
+//
+// Function unloads the scene
+void DebugScene::Reset()
+{
+	// Display message to console when unloading the scene
+	cout << "Reset" << endl;
+
+	// Unload the scene
+	DebugScene::UnLoad();
+
+	// Load the scene
+	DebugScene::Load();
+
+
+}
+
 // Update function
 //
 // Function updates entities within the scene
-void Level1Scene::Update(const double& dt) 
+void DebugScene::Update(const double& dt)
 {
-	// Set the camera to target the player, based on their position
+	// Set camera to target the player, based on their position
 	Renderer::setCameraTarget(player->getPosition());
 
 	// Check player is at an end tile
@@ -146,14 +157,19 @@ void Level1Scene::Update(const double& dt)
 		Engine::ChangeScene((Scene*)&level2);
 	}
 
+	// Check if R key pressed
+	if (Keyboard::isKeyPressed(Keyboard::R))
+	{
+		Reset();
+	}
+
+
 	// Check if user has pressed the escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape)) 
+	if (Keyboard::isKeyPressed(Keyboard::Escape))
 	{
 		// Close the window
 		Engine::ChangeScene((Scene*)&menu);
 	}
-
-	Renderer::setCameraZoom(1.0f);
 
 	// Update the scene
 	Scene::Update(dt);
@@ -163,7 +179,7 @@ void Level1Scene::Update(const double& dt)
 //
 // Function renders all entities
 // and tiles of the scene
-void Level1Scene::Render() 
+void DebugScene::Render()
 {
 	// Render tiles
 	ls::Render(Engine::GetWindow());

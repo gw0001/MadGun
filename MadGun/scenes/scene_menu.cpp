@@ -8,14 +8,11 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 15/04/2020
  * -------------------------------------
  * MENU SCENE - scene_menu.cpp
  *
- * Main menu for MadGun.
- *
- * Currently populated with boilerplate
- * platformer code from practicals
+ * Main menu for MadGun
  */
 
 // Libraries
@@ -37,7 +34,7 @@ void MenuScene::Load()
 		auto txt = makeEntity();
 
 		// Add Text component
-		auto t = txt->addComponent<TextComponent>("MADGUN: GEARS AND BLOOD\nPress Space to Start");
+		auto t = txt->addComponent<TextComponent>("MADGUN: GEARS AND BLOOD\nDEBUG VERSION\n1 - Level 1\n2 - Level 2\n3 - Level 3\nSpace - Debug Room");
 	}
 
 	// Set loaded to true
@@ -52,11 +49,36 @@ void MenuScene::Update(const double& dt)
 	// Output menu update to the console - Will cause FPS to drop when enabled
 	//cout << "Menu Update "<<dt<<"\n";
 
-	// Check if user presses Space bar
-	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) 
+	Renderer::setCameraTarget(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));
+
+	Renderer::setCameraZoom(menuZoom);
+
+	// Check if user presses 1
+	if (Keyboard::isKeyPressed(Keyboard::Num1))
 	{
 		// Change scene to Level 1
 		Engine::ChangeScene(&level1);
+	}
+
+	// Check if user presses 2
+	if (Keyboard::isKeyPressed(Keyboard::Num2))
+	{
+		// Change scene to Level 2
+		Engine::ChangeScene(&level2);
+	}
+
+	// Check if user presses 3
+	if (Keyboard::isKeyPressed(Keyboard::Num3))
+	{
+		// Change scene to Level 3
+		Engine::ChangeScene(&level3);
+	}
+
+	// Check if user presses Space bar
+	if (Keyboard::isKeyPressed(Keyboard::Space))
+	{
+		// Change scene to Level 1
+		Engine::ChangeScene(&debugScene);
 	}
 
 	// Update the scene

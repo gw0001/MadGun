@@ -8,41 +8,41 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 16/04/2020
+ * Date Last Modified: 13/04/2020
  * -------------------------------------
- * MENU SCENE - scene_menu.h
+ * LEVEL 1 SCENE - scene_level1.h
  *
- * Header file Main menu.
+ * Header file of Debug Scene
  *
- * Currently populated with boilerplate
- * platformer code from practicals
  */
 
 // Libraries
 #pragma once
 #include "engine.h"
+#include "system_renderer.h"
 
-// Namespaces
+// Name Spaces
 using namespace std; // Standard namespace
 using namespace sf; // SFML namespace
 
 /*
- * MENU SCENE
- *
- * Menu Scene Class
+ * LEVEL 1 SCENE CLASS
  */
-class MenuScene : public Scene 
+class DebugScene : public Scene 
 {
 	public:
-		// Menu scene constructor
-		MenuScene() = default;
-
-		// Menu scene deconstructor
-		~MenuScene() override = default;
-
 		// Load function
 		void Load() override;
 
+		// Unload function
+		void UnLoad() override;
+
+		// Reset function
+		void Reset();
+
 		// Update function
 		void Update(const double& dt) override;
+
+		// Render function
+		void Render() override;
 };

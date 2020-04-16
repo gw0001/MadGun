@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 15/04/2020
  * -------------------------------------
  * LEVEL 2 SCENE - scene_level2.cpp
  *
@@ -44,10 +44,10 @@ void Level2Scene::Load()
 	ls::loadLevelFile("res/levels/level_2.txt", 40.0f);
 
 	// Determine height offset
-	auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
+	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
 	
 	// Set tile vertical offset
-	ls::setOffset(Vector2f(0, ho));
+	//ls::setOffset(Vector2f(0, ho));
 
 	// Create player
 	{
@@ -152,6 +152,8 @@ void Level2Scene::Load()
 		}
 	}
 
+	Renderer::setCameraZoom(gameZoom);
+
 	// Output message to console once scene 2 has loaded
 	cout << " Scene 2 Load Done" << endl;
 
@@ -182,14 +184,14 @@ void Level2Scene::UnLoad()
 // Function updates the level
 void Level2Scene::Update(const double& dt) 
 {
-	// Update the scene
-	Scene::Update(dt);
-
 	// Obtain player position
-	const auto pp = player->getPosition();
+	const auto playerPos = player->getPosition();
+
+	// Set camera to target the player, based on their position
+	Renderer::setCameraTarget(playerPos);
 
 	// Check if player is at an end tile
-	if (ls::getTileAt(pp) == ls::END) 
+	if (ls::getTileAt(playerPos) == ls::END)
 	{
 		// Change scene to level 3
 		Engine::ChangeScene((Scene*)&level3);
@@ -200,6 +202,16 @@ void Level2Scene::Update(const double& dt)
 		// Reload level 2
 		Engine::ChangeScene((Scene*)&level2);
 	}
+
+	// Check if user has pressed the escape key
+	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	{
+		// Close the window
+		Engine::ChangeScene((Scene*)&menu);
+	}
+
+	// Update the scene
+	Scene::Update(dt);
 }
 
 // Render function

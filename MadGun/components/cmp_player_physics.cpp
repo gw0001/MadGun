@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 13/04/2020
  * -------------------------------------
  * PLAYER PHYSICS COMPONENT
  * - cmp_player_physics.cpp
@@ -41,10 +41,10 @@ bool PlayerPhysicsComponent::isGrounded() const
 	const auto& pos = _body->GetPosition();
 
 	// Half the player height
-	const float halfPlrHeigt = _size.y * .5f;
+	const float halfPlayerHeight = _size.y * 0.5f;
 
 	// Half the player width
-	const float halfPlrWidth = _size.x * .52f;
+	const float halfPlayerWidth = _size.x * 0.5f;
 
 	// Box2D manifold
 	b2WorldManifold manifold;
@@ -64,7 +64,7 @@ bool PlayerPhysicsComponent::isGrounded() const
 		// If all contacts are below the player.
 		for (int j = 0; j < numPoints; j++) 
 		{
-			onTop &= (manifold.points[j].y < pos.y - halfPlrHeigt);
+			onTop &= (manifold.points[j].y < pos.y - halfPlayerHeight);
 		}
 		// Check if on top is true
 		if (onTop) 

@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 15/04/2020
  * -------------------------------------
  * ENGINE - engine.cpp
  *
@@ -238,12 +238,12 @@ void Engine::Start(unsigned int width, unsigned int height, const string& gameNa
 			}
 		}
 
-		// Check if user has pressed the escape key
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) 
-		{
-			// Close the window
-			window.close();
-		}
+		//// Check if user has pressed the escape key
+		//if (Keyboard::isKeyPressed(Keyboard::Escape)) 
+		//{
+		//	// Close the window
+		//	window.close();
+		//}
 
 		// Clear the render window
 		window.clear();
@@ -447,7 +447,7 @@ namespace timing
 	// Return time since Epoch
 	long long now() 
 	{
-	  return chrono::high_resolution_clock::now().time_since_epoch().count();
+		return chrono::high_resolution_clock::now().time_since_epoch().count();
 	}
 	// Return time since last() was last called.
 	long long last() 

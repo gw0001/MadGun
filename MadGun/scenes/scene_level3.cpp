@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 15/04/2020
  * -------------------------------------
  * LEVEL 3 SCENE - scene_level3.cpp
  *
@@ -42,10 +42,10 @@ void Level3Scene::Load()
 	ls::loadLevelFile("res/levels/level_3.txt", 40.0f);
 
 	// Determine height offset
-	auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
+	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
 	
 	// Set tile offset
-	ls::setOffset(Vector2f(0, ho));
+	//ls::setOffset(Vector2f(0, ho));
 
 	// Create player
 	{
@@ -126,14 +126,14 @@ void Level3Scene::UnLoad()
 // Function updates the scene
 void Level3Scene::Update(const double& dt) 
 {
-	// Update scene
-	Scene::Update(dt);
-
 	// Obtain player position
-	const auto pp = player->getPosition();
+	const auto playerPos = player->getPosition();
 
-	// Check if playher has reached end tile
-	if (ls::getTileAt(pp) == ls::END) 
+	// Set camera to target the player, based on their position
+	Renderer::setCameraTarget(playerPos);
+
+	// Check if player has reached end tile
+	if (ls::getTileAt(playerPos) == ls::END)
 	{
 		// Change scene to level 1
 		Engine::ChangeScene((Scene*)&level1);
@@ -143,6 +143,13 @@ void Level3Scene::Update(const double& dt)
 	{
 		// Restart level 3
 		Engine::ChangeScene((Scene*)&level3);
+	}
+
+	// Check if user has pressed the escape key
+	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	{
+		// Close the window
+		Engine::ChangeScene((Scene*)&menu);
 	}
 
 	// Rock time
@@ -194,6 +201,10 @@ void Level3Scene::Update(const double& dt)
 		p->setMass(1000000000.0f);
 	}
   
+	Renderer::setCameraZoom(gameZoom);
+
+	// Update scene
+	Scene::Update(dt);
 }
 
 // Render function
