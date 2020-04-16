@@ -34,7 +34,10 @@ class LevelSystem
 {
 	public:
 		// Load Level File function
-		static void loadLevelFile(const string&, float tileSize = 100.0f);
+		static void loadTXTLevelFile(const string&, float tileSize = 100.0f);
+		
+		// Load Level File function
+		static void loadCSVLevelFile(const string&, float tileSize = 100.0f);
 
 		// Unload function
 		static void unload();
@@ -47,12 +50,12 @@ class LevelSystem
 
 		// Enumumerator for Level System
 		enum TILES { 
-			EMPTY = ' ', 
-			START = 's',
-			END = 'e',
-			WALL = 'w',
-			ENEMY = 'n',
-			WAYPOINT = '+'
+			EMPTY = '0',
+			ENEMY = '1',
+			END = '2',
+			START = '3',
+			WALL = '4',
+			WAYPOINT = '5'
 		};
 
 		// Get tile at Grid coordinate

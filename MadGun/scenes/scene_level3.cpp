@@ -39,7 +39,10 @@ void Level3Scene::Load()
 	cout << "Scene 3 Load" << endl;
 
 	// Load level from level 3 file
-	ls::loadLevelFile("res/levels/level_3.txt", 40.0f);
+	//ls::loadTXTLevelFile("res/levels/level_3.txt", 40.0f);
+
+	// Load level from level 3 file
+	ls::loadCSVLevelFile("res/levels/labLevel3.csv", 40.0f);
 
 	// Determine height offset
 	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
@@ -152,54 +155,54 @@ void Level3Scene::Update(const double& dt)
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
-	// Rock time
-	static float rocktime = 0.0f;
+	//// Rock time
+	//static float rocktime = 0.0f;
 
-	// Decrement rock time by time slice
-	rocktime -= dt;
+	//// Decrement rock time by time slice
+	//rocktime -= dt;
 
-	// Check if rock time is less than, or equal to, 0
-	if (rocktime <= 0.f)
-	{
-		// Set rock time to 5.0f
-		rocktime  = 5.f;
+	//// Check if rock time is less than, or equal to, 0
+	//if (rocktime <= 0.f)
+	//{
+	//	// Set rock time to 5.0f
+	//	rocktime  = 5.f;
 
-		// Make Rock entity
-		auto rock = makeEntity();
+	//	// Make Rock entity
+	//	auto rock = makeEntity();
 
-		// Spawn rock at rock tile (r) and add vertical offset
-		rock->setPosition(ls::getTilePosition(ls::findTiles('r')[0]) + Vector2f(0, 40) );
+	//	// Spawn rock at rock tile (r) and add vertical offset
+	//	rock->setPosition(ls::getTilePosition(ls::findTiles('r')[0]) + Vector2f(0, 40) );
 
-		// Add bullet component to the rock, with a life of 30 seconds
-		rock->addComponent<BulletComponent>(30.f);
+	//	// Add bullet component to the rock, with a life of 30 seconds
+	//	rock->addComponent<BulletComponent>(30.f);
 
-		// Add shape component to the rock
-		auto s = rock->addComponent<ShapeComponent>();
+	//	// Add shape component to the rock
+	//	auto s = rock->addComponent<ShapeComponent>();
 
-		// Set shape component of the rock to a circle of size 40
-		s->setShape<CircleShape>(40.f);
+	//	// Set shape component of the rock to a circle of size 40
+	//	s->setShape<CircleShape>(40.f);
 
-		// Set rock colour to cyan
-		s->getShape().setFillColor(Color::Cyan);
+	//	// Set rock colour to cyan
+	//	s->getShape().setFillColor(Color::Cyan);
 
-		// Set origin of the rock
-		s->getShape().setOrigin(40.f, 40.f);
+	//	// Set origin of the rock
+	//	s->getShape().setOrigin(40.f, 40.f);
 
-		// Add physics component to the rock
-		auto p = rock->addComponent<PhysicsComponent>(true, Vector2f(75.f, 75.f));
-		
-		// Set Restitution of rock
-		p->setRestitution(.4f);
+	//	// Add physics component to the rock
+	//	auto p = rock->addComponent<PhysicsComponent>(true, Vector2f(75.f, 75.f));
+	//	
+	//	// Set Restitution of rock
+	//	p->setRestitution(.4f);
 
-		// Set rock's friction value
-		p->setFriction(.0001f);
+	//	// Set rock's friction value
+	//	p->setFriction(.0001f);
 
-		// Apply impulse of -3 in x (will cause rock to move from right to left)
-		p->impulse(Vector2f(-3.0f, 0));
+	//	// Apply impulse of -3 in x (will cause rock to move from right to left)
+	//	p->impulse(Vector2f(-3.0f, 0));
 
-		// Set mass of rock
-		p->setMass(1000000000.0f);
-	}
+	//	// Set mass of rock
+	//	p->setMass(1000000000.0f);
+	//}
   
 	Renderer::setCameraZoom(gameZoom);
 

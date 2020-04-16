@@ -41,7 +41,10 @@ void Level2Scene::Load()
 	cout << "Scene 2 Load" << endl;
 
 	// Load Level from level file
-	ls::loadLevelFile("res/levels/level_2.txt", 40.0f);
+	//ls::loadTXTLevelFile("res/levels/level_2.txt", 40.0f);
+
+	// Load Level from level file
+	ls::loadCSVLevelFile("res/levels/labLevel2.csv", 40.0f);
 
 	// Determine height offset
 	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
@@ -103,29 +106,29 @@ void Level2Scene::Load()
 		enemy->addComponent<EnemyAIComponent>();
 	}
 
-	// Create Turret
-	{
-		// Create turret entity
-		auto turret = makeEntity();
+	//// Create Turret
+	//{
+	//	// Create turret entity
+	//	auto turret = makeEntity();
 
-		// Set enemy position to turret tile (character t) and add horizontal offset
-		turret->setPosition(ls::getTilePosition(ls::findTiles('t')[0]) + Vector2f(ls::getTileSize() / 2.0f, 0));
-		
-		// Add shape component to turret
-		auto s = turret->addComponent<ShapeComponent>();
-		
-		// Set to circle shape, size 16, with 3 points (will make a triangle)
-		s->setShape<sf::CircleShape>(16.0f, 3);
+	//	// Set enemy position to turret tile (character t) and add horizontal offset
+	//	turret->setPosition(ls::getTilePosition(ls::findTiles('t')[0]) + Vector2f(ls::getTileSize() / 2.0f, 0));
+	//	
+	//	// Add shape component to turret
+	//	auto s = turret->addComponent<ShapeComponent>();
+	//	
+	//	// Set to circle shape, size 16, with 3 points (will make a triangle)
+	//	s->setShape<sf::CircleShape>(16.0f, 3);
 
-		// Set turret to red
-		s->getShape().setFillColor(Color::Red);
+	//	// Set turret to red
+	//	s->getShape().setFillColor(Color::Red);
 
-		// Set origin of the turret
-		s->getShape().setOrigin(16.f, 16.f);
+	//	// Set origin of the turret
+	//	s->getShape().setOrigin(16.f, 16.f);
 
-		// Add Enemy Turret Component
-		turret->addComponent<EnemyTurretComponent>();
-	}
+	//	// Add Enemy Turret Component
+	//	turret->addComponent<EnemyTurretComponent>();
+	//}
 
 	// Add physics colliders to level tiles.
 	{

@@ -37,8 +37,11 @@ void DebugScene::Load()
 	// Output message to console
 	cout << "Load Debug Scene" << endl;
 
-	// Load level 1, tile size 40.0f
-	ls::loadLevelFile("res/levels/debug.txt", 40.0f);
+	// Load debug level, tile size 40.0f
+	//ls::loadTXTLevelFile("res/levels/debug.txt", 40.0f);
+
+	// Load level from level 3 file
+	ls::loadCSVLevelFile("res/levels/debugLevel.csv", 40.0f);
 
 	// Determine height offset
 	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
