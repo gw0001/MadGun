@@ -32,6 +32,8 @@
 static shared_ptr<Entity> player;
 
 sf::Music music;
+sf::SoundBuffer buffer;
+sf::Sound sound;
 
 
 // Load Function
@@ -140,6 +142,9 @@ void Level1Scene::Update(const double& dt)
 	// Check player is at an end tile
 	if (ls::getTileAt(player->getPosition()) == ls::END) 
 	{
+		buffer.loadFromFile("res/audio/level.wav");
+		sound.setBuffer(buffer);
+		sound.play();
 		// Change scene to level 2
 		Engine::ChangeScene((Scene*)&level2);
 	}
