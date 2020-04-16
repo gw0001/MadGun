@@ -46,16 +46,16 @@ class LevelSystem
 		static void Render(RenderWindow &aWindow);
 
 		// Tile type definition
-		typedef unsigned char Tile;
+		typedef int Tile;
 
 		// Enumumerator for Level System
 		enum TILES { 
-			EMPTY = '0',
-			ENEMY = '1',
-			END = '2',
-			START = '3',
-			WALL = '4',
-			WAYPOINT = '5'
+			EMPTY = 0,
+			ENEMY = 1,
+			END = 2,
+			START = 3,
+			WALL = 4,
+			WAYPOINT = 5
 		};
 
 		// Get tile at Grid coordinate

@@ -18,17 +18,20 @@
 
 // Libraries
 #include "LevelSystem.h"
+#include <iostream>
+#include <sstream>
 #include <fstream>
 
 // Name spaces
-using namespace std;
-using namespace sf;
+using namespace std; // Standard Namespace
+using namespace sf; // SFML Namespace
 
 // Colour Map
 map<LevelSystem::Tile, Color> LevelSystem::_colours
 {
 	// White wall
 	{WALL, Color::White},
+
 	// Red end
 	{END, Color::Red} 
 };
@@ -73,7 +76,7 @@ size_t LevelSystem::_height;
 float LevelSystem::_tileSize(100.f);
 
 // Tile offset 
-Vector2f LevelSystem::_offset(0.0f, 30.0f);
+Vector2f LevelSystem::_offset(0.0f, 0.0f);
 
 // Sprite vector
 vector<unique_ptr<RectangleShape>> LevelSystem::_sprites;
@@ -135,13 +138,6 @@ void LevelSystem::loadTXTLevelFile(const string& path, float tileSize)
 		{ 
 			// Break
 			break; 
-		}
-
-		// If line contains null
-		if (c == ',')
-		{
-			// Break
-			i++;
 		}
 
 		//Check if at new line
@@ -213,113 +209,78 @@ void LevelSystem::loadCSVLevelFile(const string& path, float tileSize)
 	size_t w = 0, h = 0;
 
 	// String buffer for CSV file
-	string buffer;
+	string bufferString;
+
+	// Temporary tile vector
+	vector<int> temp_tiles;
 
 	// Load in file to buffer
-	ifstream f(path);
+	ifstream CSVfile(path);
 
 	// Check path exists
-	if (f.good())
+	if (CSVfile.good())
 	{
-		// Move position to end of the file
-		f.seekg(0, std::ios::end);
+		// Loop whilst reading each line of CSV file
+		while (getline(CSVfile, bufferString))
+		{
+			// New String Stream
+			stringstream stringStream(bufferString);
 
-		// Resize buffer string
-		buffer.resize(f.tellg());
+			// Variable of type integer for storing the values from the string stream
+			int intValue;
 
-		// Move position to the start of the file
-		f.seekg(0);
+			// Loop whilst copying integer values from string stream
+			while (stringStream >> intValue)
+			{
+				// Add value to temporary tile vector
+				temp_tiles.push_back(intValue);
 
-		// Read
-		f.read(&buffer[0], buffer.size());
+				// Check if next value is a comma
+				if (stringStream.peek() == ',')
+				{
+					// Comma found, ignore it
+					stringStream.ignore();
+				}
+			}
 
-		// Close
-		f.close();
+			// After line has been read, check the value of the level width
+			if (w == 0)
+			{
+				// Width is 0, set width to the current size of the buffer vector
+				w = temp_tiles.size();
+			}
+
+			// Increment the level height by 1
+			h++;
+		}
 	}
 	// Path doesn't exist
 	else
 	{
-		// Throw error message and incluide path
+		// Throw error message and include path
 		throw string("Couldn't open level file: ") + path;
 	}
 
-	// Iterate over all characters from the file buffer string
-	for (int i = 0; i < buffer.size(); i++)
-	{
-		// Check if character at position i in string is a comma
-		if (buffer[i] == ',')
-		{
-			// Comma found, remove it from the buffer string
-			buffer.erase(buffer.begin() + i);
+	// Output level width to the console
+	cout << "Level Width: " << w << endl;
 
-			// Decrement i
-			i--;
-		}
-	}
+	// Output level height to the console
+	cout << "Level Height: " << h << endl;
 
-	// Temporary tile vector
-	std::vector<Tile> temp_tiles;
-
-	// Width check 
-	int widthCheck = 0;
-
-	// Iterate over all characters in the buffer
-	for (int i = 0; i < buffer.size(); ++i)
-	{
-		// Obtain character at position i
-		const char c = buffer[i];
-
-		// If line contains null
-		if (c == '\0')
-		{
-			// Break
-			break;
-		}
-
-		//Check if at new line
-		if (c == '\n')
-		{
-			// Check if width has been written
-			if (w == 0)
-			{
-				// Set width
-				w = i;
-			}
-			// Else, check if width is non-uniform
-			else if (w != (widthCheck - 1))
-			{
-				throw string("non uniform width:" + to_string(h) + " ") + path;
-			}
-			// Set width check to 0
-			widthCheck = 0;
-
-			// increment the height
-			h++;
-		}
-		else
-		{
-			// Add tile to temporary tile vector
-			temp_tiles.push_back((Tile)c);
-		}
-
-		// Increment width check
-		++widthCheck;
-	}
-
-	// Check if size of temporary vector matches width by height
+	// Check if size of buffer vector matches the value of the level width by the level height
 	if (temp_tiles.size() != (w * h))
 	{
 		// Size doesn't match, throw error message and include path
 		throw string("Can't parse level file") + path;
 	}
 
-	// Set tile vector to size of width times height
-	_tiles = std::make_unique<Tile[]>(w * h);
+	// Set tile vector to size of the level width by the level height
+	_tiles = make_unique<Tile[]>(w * h);
 
-	// Set width
+	// Set width of level
 	_width = w;
 
-	// Set height
+	// Set height of level
 	_height = h;
 
 	// Copy tiles in temporary tile vector to main tile vector
@@ -327,6 +288,9 @@ void LevelSystem::loadCSVLevelFile(const string& path, float tileSize)
 
 	// Display success message to the console
 	cout << "Level " << path << " Loaded. " << w << "x" << h << std::endl;
+
+	// Close CSV file
+	CSVfile.close();
 
 	// Build sprites
 	buildSprites();
