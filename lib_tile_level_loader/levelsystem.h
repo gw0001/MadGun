@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 16/04/2020
+ * Date Last Modified: 17/04/2020
  * -------------------------------------
  * LEVEL SYSTEM - levelsystem.h
  *
@@ -118,6 +118,9 @@ class LevelSystem
 
 		// Build Sprites function
 		static void buildSprites(bool optimise = true);
+
+		// Build Sprites function
+		static void buildTexturedSprites();
 
 	private:
 		LevelSystem() = delete;

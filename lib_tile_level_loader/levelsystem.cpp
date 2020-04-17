@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 16/04/2020
+ * Date Last Modified: 17/04/2020
  * -------------------------------------
  * LEVEL SYSTEM - levelsystem.cpp
  *
@@ -25,6 +25,8 @@
 // Name spaces
 using namespace std; // Standard Namespace
 using namespace sf; // SFML Namespace
+
+Texture spriteSheet;
 
 // Colour Map
 map<LevelSystem::Tile, Color> LevelSystem::_colours
@@ -293,16 +295,22 @@ void LevelSystem::loadCSVLevelFile(const string& path, float tileSize)
 	CSVfile.close();
 
 	// Build sprites
-	buildSprites();
+	//buildSprites();
+
+	// Build sprites with textures
+	buildTexturedSprites();
 }
 
-void LevelSystem::buildSprites(bool optimise) 
+//Build Sprites Function
+//
+// Function for building tile sprites
+void LevelSystem::buildSprites(bool optimise)
 {
 	// Clear sprite vector
 	_sprites.clear();
 
 	// TP struct
-	struct tp 
+	struct tp
 	{
 		// Positon
 		sf::Vector2f p;
@@ -328,9 +336,9 @@ void LevelSystem::buildSprites(bool optimise)
 		{
 			// Get tile at position x, y
 			Tile t = getTile({ x, y });
-			
+
 			// Check if tile is empty
-			if (t == EMPTY) 
+			if (t == EMPTY)
 			{
 				// Contine
 				continue;
@@ -346,9 +354,9 @@ void LevelSystem::buildSprites(bool optimise)
 
 	// If tile of the same type are next to each other,
 	// We can use one large sprite instead of two.
-	
+
 	// Check if optimise is true and TPS vector is not empty
-	if (optimise && nonempty) 
+	if (optimise && nonempty)
 	{
 		// Optimised tile vector
 		vector<tp> tpo;
@@ -360,25 +368,25 @@ void LevelSystem::buildSprites(bool optimise)
 		size_t samecount = 0;
 
 		// iterate over all non-empty tiles
-		for (size_t i = 1; i < nonempty; ++i) 
+		for (size_t i = 1; i < nonempty; ++i)
 		{
 			// Determine if tile is similar
 			bool same = ((tps[i].p.y == last.p.y) &&
 				(tps[i].p.x == last.p.x + (tls.x * (1 + samecount))) &&
 				(tps[i].c == last.c));
-			
+
 			// Check if same is true
-			if (same == true) 
+			if (same == true)
 			{
 				// Increment same count and keep going
 				++samecount;
 				// tps[i].c = Color::Green;
 			}
 			// 
-			else 
+			else
 			{
 				// Check same count
-				if (samecount) 
+				if (samecount)
 				{
 					// Expand tile
 					last.s.x = (1 + samecount) * tls.x;
@@ -395,7 +403,7 @@ void LevelSystem::buildSprites(bool optimise)
 			}
 		}
 		// catch the last tile
-		if (samecount) 
+		if (samecount)
 		{
 			last.s.x = (1 + samecount) * tls.x;
 			tpo.push_back(last);
@@ -414,15 +422,15 @@ void LevelSystem::buildSprites(bool optimise)
 				bool same = ((tpo[j].p.x == last.p.x) && (tpo[j].s == last.s) &&
 					(tpo[j].p.y == last.p.y + (tls.y * (1 + samecount))) &&
 					(tpo[j].c == last.c));
-				
-				if (same) 
+
+				if (same)
 				{
 					++samecount;
 					tpo.erase(tpo.begin() + j);
 					--j;
 				}
 			}
-			if (samecount) 
+			if (samecount)
 			{
 				last.s.y = (1 + samecount) * tls.y; // Expand tile
 			}
@@ -449,6 +457,89 @@ void LevelSystem::buildSprites(bool optimise)
 
 	cout << "Level with " << (_width * _height) << " Tiles, With " << nonempty
 		<< " Not Empty, using: " << _sprites.size() << " Sprites\n";
+}
+
+
+// Build Textured Sprites
+//
+// Function for building tile sprites and applying
+// textures from sprite sheet, depending on the tile's
+// ID
+void LevelSystem::buildTexturedSprites()
+{
+	// Clear Sprite vector
+	_sprites.clear();
+
+	// Load world sprite sheet and determine if file path is good
+	if (!spriteSheet.loadFromFile("res/img/devWorld2.png"))
+	{
+		// Cannot load from file, throw error message
+		throw string("Cannot load sprite sheet! Check the file path!");
+	}
+
+	// Iterate over all tile y-coordinates
+	for (int y = 0; y < _height; y++)
+	{
+		// Iterate over all tile x-coordinates
+		for (int x = 0; x < _width; x++)
+		{
+			// Create unique rectangle shape sprite
+			auto sprite = make_unique<RectangleShape>();
+
+			// Tile Position Vector as Maths Vector2ul
+			Vector2ul tilePos = Vector2ul(x, y);
+
+			// Set the tile position of the sprite
+			sprite->setPosition(getTilePosition(tilePos));
+
+			// Set texture to the sprite sheet
+			sprite->setTexture(&spriteSheet);
+
+			// Determine the texture of the sprite sheet to display, depending on the tile - WILL NEED TO WORK ON THIS WITH FINALISED WORLD TILE SET!!
+			// Check if tile is EMPTY
+			if (getTile(tilePos) == EMPTY)
+			{
+				// Apply texture to sprite
+				sprite->setTextureRect(IntRect(0, 0, 32, 32));
+			}
+			// Check if tile is ENEMY
+			else if (getTile(tilePos) == ENEMY)
+			{
+				// Apply texture to sprite
+				sprite->setTextureRect(IntRect(32, 0, 32, 32));
+			}
+			// Check if tile is END
+			else if (getTile(tilePos) == END)
+			{
+				// Apply texture to sprite
+				sprite->setTextureRect(IntRect(0, 32, 32, 32));
+			}
+			// Check if tile is START
+			else if (getTile(tilePos) == START)
+			{
+				// Apply texture to sprite
+				sprite->setTextureRect(IntRect(32, 32, 32, 32));
+			}
+			// Check if tile is WALL
+			else if (getTile(tilePos) == WALL)
+			{
+				// Apply texture to sprite
+				sprite->setTextureRect(IntRect(0, 64, 32, 32));
+			}
+			// Check if tile is WAYPOINT
+			else if (getTile(tilePos) == WAYPOINT)
+			{
+				// Apply Texture to sprite
+				sprite->setTextureRect(IntRect(32, 64, 32, 32));
+			}
+
+			// Set texture size of sprite
+			sprite->setSize(Vector2f(_tileSize, _tileSize));
+
+			// Add sprite to the sprites vector
+			_sprites.push_back(move(sprite));
+		}
+	}
 }
 
 // Render function
