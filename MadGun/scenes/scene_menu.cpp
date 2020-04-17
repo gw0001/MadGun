@@ -24,7 +24,7 @@
 #include <SFML/Audio.hpp>
 
 //Level soundtrack
-sf::Music music;
+sf::Music music0;
 
 // Load Function
 //
@@ -32,8 +32,8 @@ sf::Music music;
 void MenuScene::Load() 
 {
 	//open the soundtrack file and plays it
-	music.openFromFile("0_menu.ogg");
-	music.play();
+	music0.openFromFile("res/audio/music/0_menu.ogg");
+	music0.play();
 
 	// Output menu load message to console
 	cout << "Menu Load \n";
@@ -64,6 +64,7 @@ void MenuScene::Update(const double& dt)
 	// Check if user presses 1
 	if (Keyboard::isKeyPressed(Keyboard::Num1))
 	{
+		music0.stop();
 		// Change scene to Level 1
 		Engine::ChangeScene(&level1);
 	}
@@ -71,6 +72,7 @@ void MenuScene::Update(const double& dt)
 	// Check if user presses 2
 	if (Keyboard::isKeyPressed(Keyboard::Num2))
 	{
+		music0.stop();
 		// Change scene to Level 2
 		Engine::ChangeScene(&level2);
 	}
@@ -78,6 +80,7 @@ void MenuScene::Update(const double& dt)
 	// Check if user presses 3
 	if (Keyboard::isKeyPressed(Keyboard::Num3))
 	{
+		music0.stop();
 		// Change scene to Level 3
 		Engine::ChangeScene(&level3);
 	}
@@ -85,6 +88,7 @@ void MenuScene::Update(const double& dt)
 	// Check if user presses Space bar
 	if (Keyboard::isKeyPressed(Keyboard::Space))
 	{
+		music0.stop();
 		// Change scene to Level 1
 		Engine::ChangeScene(&debugScene);
 	}

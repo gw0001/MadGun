@@ -32,7 +32,7 @@
 static shared_ptr<Entity> player;
 
 //Level soundtrack
-sf::Music music;
+sf::Music music3;
 
 // Load function
 //
@@ -57,8 +57,8 @@ void Level3Scene::Load()
 	// Create player
 	{
 		//open the soundtrack file and plays it
-		music.openFromFile("3_boss.ogg");
-		music.play();
+		music3.openFromFile("res/audio/music/3_boss.ogg");
+		music3.play();
 
 		// Create player entity
 		player = makeEntity();
@@ -146,6 +146,7 @@ void Level3Scene::Update(const double& dt)
 	// Check if player has reached end tile
 	if (ls::getTileAt(playerPos) == ls::END)
 	{
+		music3.stop();
 		// Change scene to level 1
 		Engine::ChangeScene((Scene*)&level1);
 	} 
@@ -159,6 +160,7 @@ void Level3Scene::Update(const double& dt)
 	// Check if user has pressed the escape key
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
 	{
+		music3.stop();
 		// Close the window
 		Engine::ChangeScene((Scene*)&menu);
 	}

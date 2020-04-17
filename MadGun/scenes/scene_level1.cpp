@@ -32,7 +32,7 @@
 static shared_ptr<Entity> player;
 
 //Level soundtrack
-sf::Music music;
+sf::Music music1;
 
 
 
@@ -64,8 +64,8 @@ void Level1Scene::Load()
 	// Create player
 	{
 		//open the soundtrack file and plays it
-		music.openFromFile("1_manifest.ogg");
-		music.play();
+		music1.openFromFile("res/audio/music/1_manifest.ogg");
+		music1.play();
 
 		// Create player entity
 		player = makeEntity();
@@ -158,6 +158,7 @@ void Level1Scene::Update(const double& dt)
 	{
 		// Change scene to level 2
 		Engine::ChangeScene((Scene*)&level2);
+		music1.stop();
 	}
 
 	// Check if user has pressed the escape key
@@ -165,6 +166,7 @@ void Level1Scene::Update(const double& dt)
 	{
 		// Close the window
 		Engine::ChangeScene((Scene*)&menu);
+		music1.stop();
 	}
 
 	Renderer::setCameraZoom(1.0f);
