@@ -28,9 +28,13 @@
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
+#include <SFML/Audio.hpp>
 
 // Player shared pointer
 static shared_ptr<Entity> player;
+
+//Level soundtrack
+sf::Music music;
 
 // Load function
 //
@@ -54,6 +58,10 @@ void Level2Scene::Load()
 
 	// Create player
 	{
+		//open the soundtrack file and plays it
+		music.openFromFile("2_landing.ogg");
+		music.play();
+
 		// Create player entity
 		player = makeEntity();
 

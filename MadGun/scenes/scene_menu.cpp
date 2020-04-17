@@ -21,12 +21,20 @@
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
+#include <SFML/Audio.hpp>
+
+//Level soundtrack
+sf::Music music;
 
 // Load Function
 //
 // Function loads required entities for the menu scene
 void MenuScene::Load() 
 {
+	//open the soundtrack file and plays it
+	music.openFromFile("0_menu.ogg");
+	music.play();
+
 	// Output menu load message to console
 	cout << "Menu Load \n";
 	{
