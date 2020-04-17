@@ -50,7 +50,8 @@ class LevelSystem
 
 		// Enumumerator for Level System
 		enum TILES { 
-			EMPTY = 0,
+			EMPTY = -1,
+			FILLER = 0,
 			ENEMY = 1,
 			END = 2,
 			START = 3,

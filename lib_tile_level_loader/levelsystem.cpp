@@ -471,7 +471,7 @@ void LevelSystem::buildTexturedSprites()
 	_sprites.clear();
 
 	// Load world sprite sheet and determine if file path is good
-	if (!spriteSheet.loadFromFile("res/img/devWorld2.png"))
+	if (!spriteSheet.loadFromFile("res/img/devWorld3.png"))
 	{
 		// Cannot load from file, throw error message
 		throw string("Cannot load sprite sheet! Check the file path!");
@@ -491,50 +491,57 @@ void LevelSystem::buildTexturedSprites()
 
 			// Set the tile position of the sprite
 			sprite->setPosition(getTilePosition(tilePos));
+			
+			// Check that tile is not an empty tile
+			if (getTile(tilePos) != EMPTY)
+			{
+				// Tile is not empty, apply texture to sprite
+				sprite->setTextureRect(IntRect(0, 0, 16, 16));
 
-			// Set texture to the sprite sheet
-			sprite->setTexture(&spriteSheet);
+				// Set texture to the sprite sheet
+				sprite->setTexture(&spriteSheet);
 
-			// Determine the texture of the sprite sheet to display, depending on the tile - WILL NEED TO WORK ON THIS WITH FINALISED WORLD TILE SET!!
-			// Check if tile is EMPTY
-			if (getTile(tilePos) == EMPTY)
-			{
-				// Apply texture to sprite
-				sprite->setTextureRect(IntRect(0, 0, 32, 32));
-			}
-			// Check if tile is ENEMY
-			else if (getTile(tilePos) == ENEMY)
-			{
-				// Apply texture to sprite
-				sprite->setTextureRect(IntRect(32, 0, 32, 32));
-			}
-			// Check if tile is END
-			else if (getTile(tilePos) == END)
-			{
-				// Apply texture to sprite
-				sprite->setTextureRect(IntRect(0, 32, 32, 32));
-			}
-			// Check if tile is START
-			else if (getTile(tilePos) == START)
-			{
-				// Apply texture to sprite
-				sprite->setTextureRect(IntRect(32, 32, 32, 32));
-			}
-			// Check if tile is WALL
-			else if (getTile(tilePos) == WALL)
-			{
-				// Apply texture to sprite
-				sprite->setTextureRect(IntRect(0, 64, 32, 32));
-			}
-			// Check if tile is WAYPOINT
-			else if (getTile(tilePos) == WAYPOINT)
-			{
-				// Apply Texture to sprite
-				sprite->setTextureRect(IntRect(32, 64, 32, 32));
-			}
+				// Determine the texture of the sprite sheet to display, depending on the tile - WILL NEED TO WORK ON THIS WITH FINALISED WORLD TILE SET!!
+				// Check if tile is FILLER
+				if (getTile(tilePos) == FILLER)
+				{
+					// Apply texture to sprite
+					sprite->setTextureRect(IntRect(0, 0, 16, 16));
+				}
+				// Check if tile is ENEMY
+				else if (getTile(tilePos) == ENEMY)
+				{
+					// Apply texture to sprite
+					sprite->setTextureRect(IntRect(16, 0, 16, 16));
+				}
+				// Check if tile is END
+				else if (getTile(tilePos) == END)
+				{
+					// Apply texture to sprite
+					sprite->setTextureRect(IntRect(0, 16, 16, 16));
+				}
+				// Check if tile is START
+				else if (getTile(tilePos) == START)
+				{
+					// Apply texture to sprite
+					sprite->setTextureRect(IntRect(16, 16, 16, 16));
+				}
+				// Check if tile is WALL
+				else if (getTile(tilePos) == WALL)
+				{
+					// Apply texture to sprite
+					sprite->setTextureRect(IntRect(16, 32, 16, 16));
+				}
+				// Check if tile is WAYPOINT
+				else if (getTile(tilePos) == WAYPOINT)
+				{
+					// Apply Texture to sprite
+					sprite->setTextureRect(IntRect(0, 32, 16, 16));
+				}
 
-			// Set texture size of sprite
-			sprite->setSize(Vector2f(_tileSize, _tileSize));
+				// Set texture size of sprite
+				sprite->setSize(Vector2f(_tileSize, _tileSize));
+			}
 
 			// Add sprite to the sprites vector
 			_sprites.push_back(move(sprite));
