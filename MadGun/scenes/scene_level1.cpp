@@ -31,8 +31,10 @@
 // Player Shared Pointer
 static shared_ptr<Entity> player;
 
-//Level soundtrack
+//Level audio variables
 sf::Music music1;
+sf::SoundBuffer buffer1;
+sf::Sound endLvl1;
 
 
 
@@ -156,6 +158,11 @@ void Level1Scene::Update(const double& dt)
 	// Check player is at an end tile
 	if (ls::getTileAt(player->getPosition()) == ls::END) 
 	{
+		//end level sound played
+		buffer1.loadFromFile("res/audio/fx/level.wav");
+		endLvl1.setBuffer(buffer1);
+		endLvl1.play();
+
 		// Change scene to level 2
 		Engine::ChangeScene((Scene*)&level2);
 		music1.stop();

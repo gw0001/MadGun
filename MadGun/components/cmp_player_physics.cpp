@@ -25,9 +25,16 @@
 #include "system_physics.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Audio.hpp>
 
 // Namespace
 using namespace Physics; // Physics namespace
+
+//creating audio variables
+sf::SoundBuffer bufferWalk;
+sf::SoundBuffer bufferJump;
+sf::Sound soundWalk;
+sf::Sound soundJump;
 
 // Is Grounded function
 //
@@ -83,6 +90,7 @@ bool PlayerPhysicsComponent::isGrounded() const
 // Function updates the player physics component
 void PlayerPhysicsComponent::update(double dt) 
 {
+	
 	// Obtain Position
 	const auto pos = _parent->getPosition();
 
@@ -96,30 +104,54 @@ void PlayerPhysicsComponent::update(double dt)
 	// Check if player is has pressed right or left
 	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right)) 
 	{
-		// Check if right key pressed
-		if (Keyboard::isKeyPressed(Keyboard::Right)) 
-		{
-			// Check if velocity of the player is less than the max velocity
-			if (getVelocity().x < _maxVelocity.x)
+		//soundfx loaded in the buffer
+		bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
+		soundWalk.setBuffer(bufferWalk);
+		soundWalk.setLoop(true);
+		
+		
+		
+
+			// Check if right key pressed
+			if (Keyboard::isKeyPressed(Keyboard::Right))
 			{
-				// Apply impulse (move player right)
-				impulse({ (float)(dt * _groundspeed), 0 });
+				
+
+				// Check if velocity of the player is less than the max velocity
+				if (getVelocity().x < _maxVelocity.x)
+				{
+					
+
+					// Apply impulse (move player right)
+					impulse({ (float)(dt * _groundspeed), 0 });
+				}
 			}
-		}
-		// Else left key has been pressed
-		else
-		{
-			// Check if velocity of the player is less than the negative max velocity
-			if (getVelocity().x > -_maxVelocity.x)
+			// Else left key has been pressed
+			else
 			{
-				// Apply negative impulse (move player left)
-				impulse({ -(float)(dt * _groundspeed), 0 });
+				
+				
+				// Check if velocity of the player is less than the negative max velocity
+				if (getVelocity().x > -_maxVelocity.x)
+				{
+
+					
+					// Apply negative impulse (move player left)
+					impulse({ -(float)(dt * _groundspeed), 0 });
+				}
 			}
-		}
+			
+				
+			
+
+			
+
+		
 	}
 	// No keys pressed
 	else 
 	{
+		soundWalk.setLoop(false);
 		// Dampen X axis movement
 		dampen({0.9f, 1.0f});
 	}
@@ -133,6 +165,11 @@ void PlayerPhysicsComponent::update(double dt)
 		// Check if player is grounded
 		if (_grounded) 
 		{
+			//jump audio played
+			bufferJump.loadFromFile("res/audio/fx/jump.wav");
+			soundJump.setBuffer(bufferJump);
+			soundJump.play();
+
 			// Set velocity
 			setVelocity(Vector2f(getVelocity().x, 0.f));
 
