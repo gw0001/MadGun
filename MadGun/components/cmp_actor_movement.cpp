@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
  * ACTOR MOVEMENT COMPONET
  * - cmp_actor_movement.cpp
@@ -42,8 +42,21 @@ ActorMovementComponent::ActorMovementComponent(Entity* p)
 // Function determines if the actor has made a valid move
 bool ActorMovementComponent::validMove(const Vector2f& pos) 
 {
-	// Return true if actor's position isn't a wall
-	return (LevelSystem::getTileAt(pos) != LevelSystem::WALL);
+	// Check boolean set to true by default
+	bool validMoveCheck = true;
+
+	// Obtain the tile at the position
+	auto tileAtPos = LevelSystem::getTileAt(pos);
+
+	// Check that tile at position is a wall tile
+	if (LevelSystem::isWallTile(tileAtPos))
+	{
+		// Wall tile found, set valid move check to false
+		validMoveCheck = false;
+	}
+
+	// Return value of valid move check
+	return validMoveCheck;
 }
 
 // Move function

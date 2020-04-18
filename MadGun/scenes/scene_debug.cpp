@@ -8,11 +8,12 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 13/04/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
- * DEBUG SCENE - scene_level1.cpp
+ * DEBUG SCENE - scene_debug.cpp
  *
- * Debug Level.
+ * Debug Level, for testing various
+ * aspects of the game
  *
  */
 
@@ -37,17 +38,11 @@ void DebugScene::Load()
 	// Output message to console
 	cout << "Load Debug Scene" << endl;
 
-	// Load debug level, tile size 40.0f
-	//ls::loadTXTLevelFile("res/levels/debug.txt", 40.0f);
-
-	// Load level from level 3 file
+	// Load level from debug level CSV file
 	ls::loadCSVLevelFile("res/levels/debugLevel.csv", 40.0f);
 
-	// Determine height offset
-	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
-	
-	// Set tile vertical offset
-	//ls::setOffset(Vector2f(0, ho));
+	// Have camera target the player start position
+	Renderer::setCameraTarget(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
 	// Create player
 	{
@@ -76,7 +71,7 @@ void DebugScene::Load()
 	// Add physics colliders to level tiles.
 	{
 		// Find all wall tiles in the level
-		auto walls = ls::findTiles(ls::WALL);
+		auto walls = ls::findWallTiles();
 		
 		// Iterate over each wall tile
 		for (auto w : walls) 
@@ -99,9 +94,7 @@ void DebugScene::Load()
 	}
 
 	//Simulate long loading times - can be commented out when scene becomes more complex
-	//this_thread::sleep_for(chrono::milliseconds(3000));
-
-	Renderer::setCameraZoom(gameZoom);
+	this_thread::sleep_for(chrono::milliseconds(3000));
 
 	// Output message to console when the scene has loaded
 	cout << " Debug Scene Load Done" << endl;
@@ -141,8 +134,6 @@ void DebugScene::Reset()
 
 	// Load the scene
 	DebugScene::Load();
-
-
 }
 
 // Update function
@@ -153,8 +144,8 @@ void DebugScene::Update(const double& dt)
 	// Set camera to target the player, based on their position
 	Renderer::setCameraTarget(player->getPosition());
 
-	// Check player is at an end tile
-	if (ls::getTileAt(player->getPosition()) == ls::END) 
+	// Check player is at an exit tile
+	if (ls::getTileAt(player->getPosition()) == ls::EXIT) 
 	{
 		// Change scene to level 2
 		Engine::ChangeScene((Scene*)&level2);
@@ -165,7 +156,6 @@ void DebugScene::Update(const double& dt)
 	{
 		Reset();
 	}
-
 
 	// Check if user has pressed the escape key
 	if (Keyboard::isKeyPressed(Keyboard::Escape))

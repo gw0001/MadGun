@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/04/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
  * ENGINE - engine.cpp
  *
@@ -87,13 +87,16 @@ void Loading_render()
 	// Set loading circle origin
 	octagon.setOrigin(80, 80);
 
+	// Set the camera to target the loading wheel
+	Renderer::setCameraTarget(octagon.getPosition());
+
 	// Set rotation
 	octagon.setRotation(loadingspinner);
 
 	// Set position
 	octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
 
-	// Set fill colour
+	// Set fill colour (will fade in over time)
 	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
 
 	// Loading text
