@@ -49,9 +49,8 @@ void MenuScene::Update(const double& dt)
 	// Output menu update to the console - Will cause FPS to drop when enabled
 	//cout << "Menu Update "<<dt<<"\n";
 
+	// Set camera to target the centre of the menu screen
 	Renderer::setCameraTarget(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));
-
-	Renderer::setCameraZoom(menuZoom);
 
 	// Check if user presses 1
 	if (Keyboard::isKeyPressed(Keyboard::Num1))

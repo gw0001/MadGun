@@ -8,14 +8,12 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/04/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
  * LEVEL 1 SCENE - scene_level1.cpp
  *
  * Level 1 of MadGun.
  *
- * Currently populated with boilerplate
- * platformer code from practicals
  */
 
 // Libraries
@@ -40,19 +38,10 @@ void Level1Scene::Load()
 	cout << " Scene 1 Load" << endl;
 
 	// Load level 1, tile size 40.0f
-	//ls::loadLevelFile("res/levels/level_1.txt", 40.0f);
+	ls::loadCSVLevelFile("res/levels/level1.csv", 40.0f);
 
-	// Load level 1, tile size 40.0f
-	ls::loadCSVLevelFile("res/levels/labLevel1.csv", 40.0f);
-
-	// Determine height offset
-	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
-	
-	// Set tile vertical offset
-	//ls::setOffset(Vector2f(0, ho));
-
-	//
-	Renderer::setCameraZoom(gameZoom);
+	// Have camera target the player start position
+	Renderer::setCameraTarget(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
 	// Create player
 	{
@@ -81,7 +70,7 @@ void Level1Scene::Load()
 	// Add physics colliders to level tiles.
 	{
 		// Find all wall tiles in the level
-		auto walls = ls::findTiles(ls::WALL);
+		auto walls = ls::findWallTiles();
 		
 		// Iterate over each wall tile
 		for (auto w : walls) 
@@ -143,7 +132,7 @@ void Level1Scene::Update(const double& dt)
 	Renderer::setCameraTarget(player->getPosition());
 
 	// Check player is at an end tile
-	if (ls::getTileAt(player->getPosition()) == ls::END) 
+	if (ls::getTileAt(player->getPosition()) == ls::EXIT) 
 	{
 		// Change scene to level 2
 		Engine::ChangeScene((Scene*)&level2);
@@ -155,8 +144,6 @@ void Level1Scene::Update(const double& dt)
 		// Close the window
 		Engine::ChangeScene((Scene*)&menu);
 	}
-
-	Renderer::setCameraZoom(1.0f);
 
 	// Update the scene
 	Scene::Update(dt);

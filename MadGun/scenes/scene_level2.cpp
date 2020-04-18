@@ -8,14 +8,12 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/04/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
  * LEVEL 2 SCENE - scene_level2.cpp
  *
  * Level 2 of MadGun.
  *
- * Currently populated with boilerplate
- * platformer code from practicals
  */
 
 // Libraries
@@ -41,16 +39,10 @@ void Level2Scene::Load()
 	cout << "Scene 2 Load" << endl;
 
 	// Load Level from level file
-	//ls::loadTXTLevelFile("res/levels/level_2.txt", 40.0f);
+	ls::loadCSVLevelFile("res/levels/level2.csv", 40.0f);
 
-	// Load Level from level file
-	ls::loadCSVLevelFile("res/levels/labLevel2.csv", 40.0f);
-
-	// Determine height offset
-	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
-	
-	// Set tile vertical offset
-	//ls::setOffset(Vector2f(0, ho));
+	// Have camera target the player start position
+	Renderer::setCameraTarget(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
 	// Create player
 	{
@@ -64,7 +56,7 @@ void Level2Scene::Load()
 		auto s = player->addComponent<ShapeComponent>();
 
 		// Set shape component of the player
-		s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
+		s->setShape<RectangleShape>(Vector2f(20.f, 30.f));
 
 		// Set fill colour of the player
 		s->getShape().setFillColor(Color::Magenta);
@@ -85,7 +77,7 @@ void Level2Scene::Load()
 		auto enemy = makeEntity();
 
 		// Set enemy position to enemy tile and add vertical offset
-		enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]) + Vector2f(0, 24));
+		enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::HAZARD_1)[0]) + Vector2f(0, 24));
 
 		// Add HurtComponent to the enemy
 		enemy->addComponent<HurtComponent>();
@@ -94,7 +86,7 @@ void Level2Scene::Load()
 		auto s = enemy->addComponent<ShapeComponent>();
 
 		// Set shape component of the enemy
-		s->setShape<sf::CircleShape>(16.0f);
+		s->setShape<CircleShape>(16.0f);
 
 		// Set fill colour of the player
 		s->getShape().setFillColor(Color::Red);
@@ -133,7 +125,7 @@ void Level2Scene::Load()
 	// Add physics colliders to level tiles.
 	{
 		// Find all wall tiles in the level
-		auto walls = ls::findTiles(ls::WALL);
+		auto walls = ls::findWallTiles();
 
 		// Iterate over each wall tile
 		for (auto w : walls)
@@ -155,7 +147,8 @@ void Level2Scene::Load()
 		}
 	}
 
-	Renderer::setCameraZoom(gameZoom);
+	//Simulate long loading times - can be commented out when scene becomes more complex
+	//this_thread::sleep_for(chrono::milliseconds(3000));
 
 	// Output message to console once scene 2 has loaded
 	cout << " Scene 2 Load Done" << endl;
@@ -194,7 +187,7 @@ void Level2Scene::Update(const double& dt)
 	Renderer::setCameraTarget(playerPos);
 
 	// Check if player is at an end tile
-	if (ls::getTileAt(playerPos) == ls::END)
+	if (ls::getTileAt(playerPos) == ls::EXIT)
 	{
 		// Change scene to level 3
 		Engine::ChangeScene((Scene*)&level3);

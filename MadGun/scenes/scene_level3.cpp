@@ -8,14 +8,12 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/04/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
  * LEVEL 3 SCENE - scene_level3.cpp
  *
  * Level 3 of MadGun.
  *
- * Currently populated with boilerplate
- * platformer code from practicals
  */
 
 // Library
@@ -39,16 +37,10 @@ void Level3Scene::Load()
 	cout << "Scene 3 Load" << endl;
 
 	// Load level from level 3 file
-	//ls::loadTXTLevelFile("res/levels/level_3.txt", 40.0f);
+	ls::loadCSVLevelFile("res/levels/level3.csv", 40.0f);
 
-	// Load level from level 3 file
-	ls::loadCSVLevelFile("res/levels/labLevel3.csv", 40.0f);
-
-	// Determine height offset
-	//auto ho = Engine::getWindowSize().y - (ls::getHeight() * ls::getTileSize());
-	
-	// Set tile offset
-	//ls::setOffset(Vector2f(0, ho));
+	// Have camera target the player start position
+	Renderer::setCameraTarget(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
 	// Create player
 	{
@@ -80,7 +72,7 @@ void Level3Scene::Load()
 	// Add physics colliders to level tiles.
 	{
 		// Find all wall tiles in the level
-		auto walls = ls::findTiles(ls::WALL);
+		auto walls = ls::findWallTiles();
 
 		// Iterate over each wall tile
 		for (auto w : walls)
@@ -101,6 +93,9 @@ void Level3Scene::Load()
 			e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
 		}
 	}
+
+	//Simulate long loading times - can be commented out when scene becomes more complex
+	//this_thread::sleep_for(chrono::milliseconds(3000));
 
 	// Output message when scene loaded
 	cout << " Scene 3 Load Done" << endl;
@@ -136,7 +131,7 @@ void Level3Scene::Update(const double& dt)
 	Renderer::setCameraTarget(playerPos);
 
 	// Check if player has reached end tile
-	if (ls::getTileAt(playerPos) == ls::END)
+	if (ls::getTileAt(playerPos) == ls::EXIT)
 	{
 		// Change scene to level 1
 		Engine::ChangeScene((Scene*)&level1);
@@ -203,8 +198,6 @@ void Level3Scene::Update(const double& dt)
 	//	// Set mass of rock
 	//	p->setMass(1000000000.0f);
 	//}
-  
-	Renderer::setCameraZoom(gameZoom);
 
 	// Update scene
 	Scene::Update(dt);

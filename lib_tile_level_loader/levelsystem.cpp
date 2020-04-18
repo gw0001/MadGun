@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 17/04/2020
+ * Date Last Modified: 18/04/2020
  * -------------------------------------
  * LEVEL SYSTEM - levelsystem.cpp
  *
@@ -26,16 +26,50 @@
 using namespace std; // Standard Namespace
 using namespace sf; // SFML Namespace
 
+// Sprite Sheet texture
 Texture spriteSheet;
+
+// Tile set sprite width
+int tsSpriteWidth = 32;
+
+// Tile set sprite height
+int tsSpriteHeight = 32;
 
 // Colour Map
 map<LevelSystem::Tile, Color> LevelSystem::_colours
 {
 	// White wall
-	{WALL, Color::White},
+	{4, Color::White},
 
 	// Red end
-	{END, Color::Red} 
+	{EXIT, Color::Red} 
+};
+
+// Wall Tile ID vector
+//
+// Vector is populated with the IDs of wall tiles
+vector<int> LevelSystem::_wallTileIDs = {
+	 0, 1, 2, 3, 4, 5, 6, 7,
+	 8, 9,10,11,12,13,14,15,
+	16,17,18,19,20,21,22,23,
+	24,25,26,27,28,29,30,31,
+	32,33,34,35,36,37,38,39,
+	40,41,42,43,44,45,46,47,
+	48,49,50,51,52,53,54,55,
+	56,57,58,59,60,61,62,
+	64,65,66,67,68,69,70,71
+};
+
+
+// Unique Tile ID vector
+//
+// Vector is populated with tiles with unique
+// tile IDs (e.g, spawn points, empty tiles, etc)
+vector<int> LevelSystem::_uniqueTileIDs = {
+	 -1,  63, 106, 107, 108, 109,
+	110, 111, 112, 113, 114, 115,
+	116, 117, 118, 119, 120, 121, 
+	122, 123, 124, 125, 126, 127
 };
 
 // Get colour function
@@ -62,6 +96,7 @@ Color LevelSystem::getColour(LevelSystem::Tile t)
 // Function sets colour of the tile
 void LevelSystem::setColour(LevelSystem::Tile t, Color c) 
 {
+	// Set colour of tile
 	_colours[t] = c;
 }
 
@@ -83,125 +118,11 @@ Vector2f LevelSystem::_offset(0.0f, 0.0f);
 // Sprite vector
 vector<unique_ptr<RectangleShape>> LevelSystem::_sprites;
 
-// Load level file
-void LevelSystem::loadTXTLevelFile(const string& path, float tileSize) 
-{
-	// Set tile size
-	_tileSize = tileSize;
-
-	// Temporary width and height
-	size_t w = 0, h = 0;
-
-	// String buffer for text file
-	string buffer;
-
-	// Load in file to buffer
-	ifstream f(path);
-
-	// Check path exists
-	if (f.good()) 
-	{
-		// Move position to end of the file
-		f.seekg(0, std::ios::end);
-
-		// Resize buffer string
-		buffer.resize(f.tellg());
-
-		// Move position to the start of the file
-		f.seekg(0);
-
-		// Read
-		f.read(&buffer[0], buffer.size());
-
-		// Close
-		f.close();
-	}
-	// Path doesn't exist
-	else 
-	{
-		// Throw error message and incluide path
-		throw string("Couldn't open level file: ") + path;
-	}
-
-	// Temporary tile vector
-	std::vector<Tile> temp_tiles;
-
-	// Width check 
-	int widthCheck = 0;
-
-	// Iterate over all characters in the buffer
-	for (int i = 0; i < buffer.size(); ++i)
-	{
-		// Obtain character at position i
-		const char c = buffer[i];
-
-		// If line contains null
-		if (c == '\0') 
-		{ 
-			// Break
-			break; 
-		}
-
-		//Check if at new line
-		if (c == '\n') 
-		{ 
-			// Check if width has been written
-			if (w == 0) 
-			{  
-				// Set width
-				w = i;
-			}
-			// Else, check if width is non-uniform
-			else if (w != (widthCheck - 1)) 
-			{
-				throw string("non uniform width:" + to_string(h) + " ") + path;
-			}
-			// Set width check to 0
-			widthCheck = 0;
-
-			// increment the height
-			h++;
-		}
-		else 
-		{
-			// Add tile to temporary tile vector
-			temp_tiles.push_back((Tile)c);
-		}
-
-		// Increment width check
-		++widthCheck;
-	}
-
-	// Check if size of temporary vector matches width by height
-	if (temp_tiles.size() != (w * h)) 
-	{
-		// Size doesn't match, throw error message and include path
-		throw string("Can't parse level file") + path;
-	}
-
-	// Set tile vector to size of width times height
-	_tiles = std::make_unique<Tile[]>(w * h);
-
-	// Set width
-	_width = w;
-
-	// Set height
-	_height = h;
-
-	// Copy tiles in temporary tile vector to main tile vector
-	copy(temp_tiles.begin(), temp_tiles.end(), &_tiles[0]);
-
-	// Display success message to the console
-	cout << "Level " << path << " Loaded. " << w << "x" << h << std::endl;
-
-	// Build sprites
-	buildSprites();
-}
-
 // Load CSV level file
 //
-// Function loads level from a CSV file. Similar to previous
-// function, but method removes commas that separate values 
+// Function loads level from a CSV file. As this is a CSV file
+// file contains values seperated by commas. Function reads the
+// values and ignores the commas
 void LevelSystem::loadCSVLevelFile(const string& path, float tileSize)
 {
 	// Set tile size
@@ -294,171 +215,9 @@ void LevelSystem::loadCSVLevelFile(const string& path, float tileSize)
 	// Close CSV file
 	CSVfile.close();
 
-	// Build sprites
-	//buildSprites();
-
 	// Build sprites with textures
 	buildTexturedSprites();
 }
-
-//Build Sprites Function
-//
-// Function for building tile sprites
-void LevelSystem::buildSprites(bool optimise)
-{
-	// Clear sprite vector
-	_sprites.clear();
-
-	// TP struct
-	struct tp
-	{
-		// Positon
-		sf::Vector2f p;
-
-		// Scale
-		sf::Vector2f s;
-
-		// Colour
-		sf::Color c;
-	};
-
-	// TPS vector
-	vector<tp> tps;
-
-	// Tile scale
-	const auto tls = Vector2f(_tileSize, _tileSize);
-
-	// Iterate over all y
-	for (size_t y = 0; y < _height; ++y)
-	{
-		// Iterate over x
-		for (size_t x = 0; x < _width; ++x)
-		{
-			// Get tile at position x, y
-			Tile t = getTile({ x, y });
-
-			// Check if tile is empty
-			if (t == EMPTY)
-			{
-				// Contine
-				continue;
-			}
-
-			// Add tile to TPS vector
-			tps.push_back({ getTilePosition({x, y}), tls, getColour(t) });
-		}
-	}
-
-	// Obtain size of Tile Positions vector
-	const auto nonempty = tps.size();
-
-	// If tile of the same type are next to each other,
-	// We can use one large sprite instead of two.
-
-	// Check if optimise is true and TPS vector is not empty
-	if (optimise && nonempty)
-	{
-		// Optimised tile vector
-		vector<tp> tpo;
-
-		// Last TP
-		tp last = tps[0];
-
-		// Set same count to 0
-		size_t samecount = 0;
-
-		// iterate over all non-empty tiles
-		for (size_t i = 1; i < nonempty; ++i)
-		{
-			// Determine if tile is similar
-			bool same = ((tps[i].p.y == last.p.y) &&
-				(tps[i].p.x == last.p.x + (tls.x * (1 + samecount))) &&
-				(tps[i].c == last.c));
-
-			// Check if same is true
-			if (same == true)
-			{
-				// Increment same count and keep going
-				++samecount;
-				// tps[i].c = Color::Green;
-			}
-			// 
-			else
-			{
-				// Check same count
-				if (samecount)
-				{
-					// Expand tile
-					last.s.x = (1 + samecount) * tls.x;
-				}
-
-				// Write tile to list
-				tpo.push_back(last);
-
-				// Set same count to 0
-				samecount = 0;
-
-				// Set last to TPS at element i
-				last = tps[i];
-			}
-		}
-		// catch the last tile
-		if (samecount)
-		{
-			last.s.x = (1 + samecount) * tls.x;
-			tpo.push_back(last);
-		}
-
-		// No scan down Y, using different algo now that compressible blocks may
-		// not be contiguous
-		const auto xsave = tpo.size();
-		samecount = 0;
-		vector<tp> tpox;
-		for (size_t i = 0; i < tpo.size(); ++i)
-		{
-			last = tpo[i];
-			for (size_t j = i + 1; j < tpo.size(); ++j)
-			{
-				bool same = ((tpo[j].p.x == last.p.x) && (tpo[j].s == last.s) &&
-					(tpo[j].p.y == last.p.y + (tls.y * (1 + samecount))) &&
-					(tpo[j].c == last.c));
-
-				if (same)
-				{
-					++samecount;
-					tpo.erase(tpo.begin() + j);
-					--j;
-				}
-			}
-			if (samecount)
-			{
-				last.s.y = (1 + samecount) * tls.y; // Expand tile
-			}
-
-			// write tile to list
-			tpox.push_back(last);
-
-			samecount = 0;
-		}
-
-		tps.swap(tpox);
-	}
-
-	for (auto& t : tps)
-	{
-		auto s = make_unique<sf::RectangleShape>();
-		s->setPosition(t.p);
-		s->setSize(t.s);
-		s->setFillColor(Color::Red);
-		s->setFillColor(t.c);
-		// s->setFillColor(Color(rand()%255,rand()%255,rand()%255));
-		_sprites.push_back(move(s));
-	}
-
-	cout << "Level with " << (_width * _height) << " Tiles, With " << nonempty
-		<< " Not Empty, using: " << _sprites.size() << " Sprites\n";
-}
-
 
 // Build Textured Sprites
 //
@@ -471,7 +230,7 @@ void LevelSystem::buildTexturedSprites()
 	_sprites.clear();
 
 	// Load world sprite sheet and determine if file path is good
-	if (!spriteSheet.loadFromFile("res/img/devWorld3.png"))
+	if (!spriteSheet.loadFromFile("res/img/worldTiles.png"))
 	{
 		// Cannot load from file, throw error message
 		throw string("Cannot load sprite sheet! Check the file path!");
@@ -489,60 +248,59 @@ void LevelSystem::buildTexturedSprites()
 			// Tile Position Vector as Maths Vector2ul
 			Vector2ul tilePos = Vector2ul(x, y);
 
-			// Set the tile position of the sprite
-			sprite->setPosition(getTilePosition(tilePos));
-			
-			// Check that tile is not an empty tile
-			if (getTile(tilePos) != EMPTY)
-			{
-				// Tile is not empty, apply texture to sprite
-				sprite->setTextureRect(IntRect(0, 0, 16, 16));
+			// Tile from CSV file at X and Y
+			Tile CSVtile = getTile(tilePos);
 
-				// Set texture to the sprite sheet
+			// Set the tile position of the sprite
+			sprite->setPosition(getTilePosition(tilePos));	
+
+			// Determine the width of the sprite sheet texture
+			int textureWidth = spriteSheet.getSize().x;
+
+			// Determine the height of the textyre
+			int textureHeight = spriteSheet.getSize().y;
+
+			// Determine the number of tiles in X direction
+			int tilesInX = textureWidth / tsSpriteWidth;
+
+			// Determine the number of tiles in the Y direction
+			int tilesInY = textureHeight / tsSpriteHeight;
+
+			// Check that tile is not considered a unique tile to avoid adding textures to these tiles
+			if (isUniqueTile(CSVtile) == false)
+			{
+				// Set texture of the sprite to the sprite sheet
 				sprite->setTexture(&spriteSheet);
 
-				// Determine the texture of the sprite sheet to display, depending on the tile - WILL NEED TO WORK ON THIS WITH FINALISED WORLD TILE SET!!
-				// Check if tile is FILLER
-				if (getTile(tilePos) == FILLER)
-				{
-					// Apply texture to sprite
-					sprite->setTextureRect(IntRect(0, 0, 16, 16));
-				}
-				// Check if tile is ENEMY
-				else if (getTile(tilePos) == ENEMY)
-				{
-					// Apply texture to sprite
-					sprite->setTextureRect(IntRect(16, 0, 16, 16));
-				}
-				// Check if tile is END
-				else if (getTile(tilePos) == END)
-				{
-					// Apply texture to sprite
-					sprite->setTextureRect(IntRect(0, 16, 16, 16));
-				}
-				// Check if tile is START
-				else if (getTile(tilePos) == START)
-				{
-					// Apply texture to sprite
-					sprite->setTextureRect(IntRect(16, 16, 16, 16));
-				}
-				// Check if tile is WALL
-				else if (getTile(tilePos) == WALL)
-				{
-					// Apply texture to sprite
-					sprite->setTextureRect(IntRect(16, 32, 16, 16));
-				}
-				// Check if tile is WAYPOINT
-				else if (getTile(tilePos) == WAYPOINT)
-				{
-					// Apply Texture to sprite
-					sprite->setTextureRect(IntRect(0, 32, 16, 16));
-				}
+				// Tile ID
+				int tileID = 0;
 
+				// Iterate over all texture squares in Y
+				for (int tex_Y = 0; tex_Y < tilesInY; tex_Y++)
+				{
+					// Iterate over all texture squares in X
+					for (int tex_X = 0; tex_X < tilesInX; tex_X++)
+					{
+						// Check if the value of the CSVtile matches the tile ID
+						if (CSVtile == tileID)
+						{
+							// ID's match
+							// Determine the X Coordinate of the texture
+							int texCoord_X = (tex_X * tsSpriteWidth);
+
+							// Determine the Y Coordinate of the texture
+							int texCoord_Y = (tex_Y * tsSpriteHeight);
+
+							// Set the sprites texture to the coordinates determined and the width and height of the texture
+							sprite->setTextureRect(IntRect(texCoord_X, texCoord_Y, tsSpriteWidth, tsSpriteHeight));
+						}
+						// Increment texture ID
+						tileID++;
+					}
+				}
 				// Set texture size of sprite
 				sprite->setSize(Vector2f(_tileSize, _tileSize));
 			}
-
 			// Add sprite to the sprites vector
 			_sprites.push_back(move(sprite));
 		}
@@ -554,8 +312,10 @@ void LevelSystem::buildTexturedSprites()
 // Function for rendering tiles to window
 void LevelSystem::Render(RenderWindow& window)
 {
+	// Iterate over all sprites
 	for (auto& t : _sprites) 
 	{
+		// Draw sprite to window
 		window.draw(*t);
 	}
 }
@@ -563,13 +323,16 @@ void LevelSystem::Render(RenderWindow& window)
 // Get Tile Function
 //
 // Function returns the tile as a Vector2ul
-LevelSystem::Tile LevelSystem::getTile(sf::Vector2ul p) 
+LevelSystem::Tile LevelSystem::getTile(Vector2ul p) 
 {
+	// Check tile coordinates does not exceed width or height of level
 	if (p.x > _width || p.y > _height) 
 	{
-		throw string("Tile out of range: ") + to_string(p.x) + "," +
-			to_string(p.y) + ")";
+		// Tile exceeds limits, throw error message to console
+		throw string("Tile out of range: ") + to_string(p.x) + "," + to_string(p.y) + ")";
 	}
+
+	// Return specific tile
 	return _tiles[(p.y * _width) + p.x];
 }
 
@@ -578,6 +341,7 @@ LevelSystem::Tile LevelSystem::getTile(sf::Vector2ul p)
 // Returns the tile width
 size_t LevelSystem::getWidth()
 { 
+	// Return level width
 	return _width;
 }
 
@@ -585,34 +349,120 @@ size_t LevelSystem::getWidth()
 //
 // Function returns the tile height
 size_t LevelSystem::getHeight()
-{ 
+{
+	// Return level height
 	return _height; 
 }
 
 // Get Tile Position
 //
-// Obtain the tile position as a Vector2f
-sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p) 
+// Obtains the tile position as a Vector2f
+Vector2f LevelSystem::getTilePosition(Vector2ul p) 
 {
+	// Return tile position as a Vector2f
 	return (Vector2f(p.x, p.y) * _tileSize) + _offset;
 }
 
 // Find Tiles function
 //
 // Function returns specific tiles
-std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type) {
+vector<Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type) 
+{
+	// Create an empty vector
+	auto v = vector<Vector2ul>();
 	
-	auto v = vector<sf::Vector2ul>();
-	
+	// Iterate over all tiles in level
 	for (size_t i = 0; i < _width * _height; ++i) 
 	{
+		// Check if tile in tiles vector matches the type required
 		if (_tiles[i] == type) 
 		{
+			// Add tile to vector
 			v.push_back({ i % _width, i / _width });
 		}
 	}
 
+	// Return vector
 	return v;
+}
+
+// Find Wall Tiles function
+//
+// Function returns vector of wall tiles
+vector<Vector2ul> LevelSystem::findWallTiles() 
+{
+	// Create empty vector
+	auto v = vector<Vector2ul>();
+
+	// Iterate over all tiles in level
+	for (size_t i = 0; i < _width * _height; ++i)
+	{
+		// Iterate over all specified wall tiles
+		for (int j = 0; j < _wallTileIDs.size(); j++)
+		{
+			// Check if tile in tiles vector matches the ID of a known wall tile
+			if (_tiles[i] == _wallTileIDs[j])
+			{
+				// Wall tile found, add it to the vector
+				v.push_back({ i % _width, i / _width });
+			}
+		}
+	}
+
+	// Return vector
+	return v;
+}
+
+//Is Unique Tile funciton
+//
+//Method checks if a tiles ID is considered a unique ID
+bool LevelSystem::isUniqueTile(Tile tile)
+{
+	// Check boolean set to false
+	bool check = false;
+
+	// Iterate over all values held in unique tile ID vector
+	for (int i = 0; i < _uniqueTileIDs.size(); i++)
+	{
+		// Check if tile matches that of any of the unique IDs
+		if (tile == _uniqueTileIDs[i])
+		{
+			// Unique ID found, set check to true
+			check = true;
+
+			// Break loop
+			break;
+		}
+	}
+
+	// Return check boolean
+	return check;
+}
+
+//Is Unique Tile funciton
+//
+//Method checks if a tiles ID is considered a unique ID
+bool LevelSystem::isWallTile(Tile tile)
+{
+	// Check boolean set to false
+	bool check = false;
+
+	// Iterate over all values held in unique tile ID vector
+	for (int i = 0; i < _wallTileIDs.size(); i++)
+	{
+		// Check if tile matches that of any of the unique IDs
+		if (tile == _wallTileIDs[i])
+		{
+			// Unique ID found, set check to true
+			check = true;
+
+			// Break loop
+			break;
+		}
+	}
+
+	// Return check boolean
+	return check;
 }
 
 // Get Tile At function
@@ -620,35 +470,45 @@ std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type) {
 // Function returns the tile at a specific location
 LevelSystem::Tile LevelSystem::getTileAt(Vector2f v) 
 {
+	// Remove offset from tile coordinates
 	auto a = v - _offset;
 
+	// Check tile is within range
 	if (a.x < 0 || a.y < 0) 
 	{
 		throw string("Tile out of range ");
 	}
 
+	// Return tile found at coordinates
 	return getTile(Vector2ul((v - _offset) / (_tileSize)));
 }
 
 // Is On Grid function
 //
-// Function determines if the tile is on a grid
-bool LevelSystem::isOnGrid(sf::Vector2f v) 
+// Function determines if the tile is on the grid
+bool LevelSystem::isOnGrid(Vector2f v) 
 {
+	// Remove offset from tile coordinates
 	auto a = v - _offset;
 
+	// Check tile is within range
 	if (a.x < 0 || a.y < 0) 
 	{
+		// Tile outwidth range, return false
 		return false;
 	}
 
+	// Change tile coordinates to Vector2ul
 	auto p = Vector2ul((v - _offset) / (_tileSize));
 
+	// Check tile is within width or height of the level
 	if (p.x > _width || p.y > _height) 
 	{
+		// Tile is not within width or height, return false
 		return false;
 	}
 
+	// Return true
 	return true;
 }
 
@@ -661,7 +521,7 @@ void LevelSystem::setOffset(const Vector2f& _offset)
 	LevelSystem::_offset = _offset;
 
 	// Build sprites
-	buildSprites();
+	buildTexturedSprites();
 }
 
 // Unload function
@@ -693,6 +553,7 @@ void LevelSystem::unload()
 // Function returns the offset of the tiles
 const Vector2f& LevelSystem::getOffset() 
 { 
+	// Return tile offset
 	return _offset; 
 }
 
@@ -701,5 +562,6 @@ const Vector2f& LevelSystem::getOffset()
 // Function returns the size of the tiles
 float LevelSystem::getTileSize() 
 { 
+	// Return tile size
 	return _tileSize; 
 }
