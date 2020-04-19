@@ -26,6 +26,7 @@
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Window/Joystick.hpp>
 
 // Namespace
 using namespace Physics; // Physics namespace
@@ -35,6 +36,9 @@ sf::SoundBuffer bufferWalk;
 sf::SoundBuffer bufferJump;
 sf::Sound soundWalk;
 sf::Sound soundJump;
+
+float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
 
 // Is Grounded function
 //
@@ -144,6 +148,50 @@ void PlayerPhysicsComponent::update(double dt)
 			
 
 		
+	}
+	// Check if player is has pressed right or left
+	if (x < -20)
+	{
+		//soundfx loaded in the buffer
+		//bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
+		//soundWalk.setBuffer(bufferWalk);
+		//soundWalk.setLoop(true);
+
+			// Check if right key pressed
+		if (x > 20)
+		{
+
+
+			// Check if velocity of the player is less than the max velocity
+			if (getVelocity().x < _maxVelocity.x)
+			{
+
+
+				// Apply impulse (move player right)
+				impulse({ (float)(dt * _groundspeed), 0 });
+			}
+		}
+		// Else left key has been pressed
+		else
+		{
+
+
+			// Check if velocity of the player is less than the negative max velocity
+			if (getVelocity().x > -_maxVelocity.x)
+			{
+
+
+				// Apply negative impulse (move player left)
+				impulse({ -(float)(dt * _groundspeed), 0 });
+			}
+		}
+
+
+
+
+
+
+
 	}
 	// No keys pressed
 	else 
