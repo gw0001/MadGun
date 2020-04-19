@@ -105,12 +105,9 @@ void PlayerPhysicsComponent::update(double dt)
 	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right)) 
 	{
 		//soundfx loaded in the buffer
-		bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
-		soundWalk.setBuffer(bufferWalk);
-		soundWalk.setLoop(true);
-		
-		
-		
+		//bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
+		//soundWalk.setBuffer(bufferWalk);
+		//soundWalk.setLoop(true);
 
 			// Check if right key pressed
 			if (Keyboard::isKeyPressed(Keyboard::Right))

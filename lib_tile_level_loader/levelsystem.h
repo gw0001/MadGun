@@ -110,7 +110,7 @@ class LevelSystem
 		static bool isUniqueTile(Tile tile);
 
 		// Is Wall Tile function
-		static bool LevelSystem::isWallTile(Tile tile);
+		static bool isWallTile(Tile tile);
 
 		// Get Offset function
 		static const Vector2f& getOffset();
