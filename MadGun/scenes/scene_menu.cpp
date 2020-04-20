@@ -46,8 +46,8 @@ void MenuScene::Load()
 		auto txtBody = makeEntity();
 
 		// Add Text component
-		auto tT = txtTitle->addComponent<TextComponentTitle>("MADGUN: GEARS AND BLOOD\nDEBUG VERSION\n");
-		auto tB = txtBody->addComponent<TextComponent>("\n\n\nLevel 1 - Keyboard 1 or Controller A \nLevel 2 - Keyboard 2 or Controller X\nLevel 3 - Keyboard 3 or Controller Y\nDebug Room - Keyboard Space or Controller B");
+		auto tT = txtTitle->addComponent<TextComponentTitle>("MADGUN: GEARS AND BLOOD");
+		auto tB = txtBody->addComponent<TextComponent>("Level 1 - Keyboard 1 or Controller A \n\nLevel 2 - Keyboard 2 or Controller X\n\nLevel 3 - Keyboard 3 or Controller Y\n\nDebug Room - Keyboard Space or Controller B");
 		
 	}
 

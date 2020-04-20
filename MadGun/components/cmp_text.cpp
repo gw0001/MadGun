@@ -52,8 +52,9 @@ TextComponentTitle::TextComponentTitle(Entity* const p, const string& str)
 	_text.setFont(*_font);
 
     _text.setFillColor(sf::Color::Red);
-    _text.setCharacterSize(32);
-    _text.setStyle(sf::Text::Bold);
+    _text.setCharacterSize(100);
+    _text.setStyle(sf::Text::Bold || sf::Text::Underlined);
+    _text.setPosition(200, 50);
 }
 
 // Set Text function
@@ -96,7 +97,8 @@ TextComponent::TextComponent(Entity* const p, const string& str)
     _text.setFont(*_font);
 
     _text.setFillColor(sf::Color::White);
-    _text.setCharacterSize(24);
+    _text.setCharacterSize(32);
+    _text.setPosition(700, 300);
 }
 
 // Set Text function
