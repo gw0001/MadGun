@@ -27,39 +27,86 @@
 // Update function
 //
 // Function updates the text component
-void TextComponent::update(double dt) {}
+void TextComponentTitle::update(double dt) {}
 
 // Render function
 //
 // Function renders the text component
-void TextComponent::render() 
+void TextComponentTitle::render() 
 {
 	// Add text to renderer queue
 	Renderer::queue(&_text);
 }
 
 // Text Component constructor
-TextComponent::TextComponent(Entity* const p, const string& str)
+TextComponentTitle::TextComponentTitle(Entity* const p, const string& str)
     : Component(p), _string(str) 
 {
 	// Set String
 	_text.setString(_string);
 
 	// Set font to arial
-	_font = Resources::get<Font>("arial.ttf");
+	_font = Resources::get<Font>("gotham-medium.ttf");
 
 	// Set text font
 	_text.setFont(*_font);
+
+    _text.setFillColor(sf::Color::Red);
+    _text.setCharacterSize(32);
+    _text.setStyle(sf::Text::Bold);
 }
 
 // Set Text function
 //
 // Function sets the text of the text component
-void TextComponent::SetText(const string& str) 
+void TextComponentTitle::SetText(const string& str) 
 {
 	// Set string
 	_string = str;
 
 	// Set text string
 	_text.setString(_string);
+}
+
+// Update function
+//
+// Function updates the text component
+void TextComponent::update(double dt) {}
+
+// Render function
+//
+// Function renders the text component
+void TextComponent::render()
+{
+    // Add text to renderer queue
+    Renderer::queue(&_text);
+}
+
+// Text Component constructor
+TextComponent::TextComponent(Entity* const p, const string& str)
+    : Component(p), _string(str)
+{
+    // Set String
+    _text.setString(_string);
+
+    // Set font to arial
+    _font = Resources::get<Font>("arial.ttf");
+
+    // Set text font
+    _text.setFont(*_font);
+
+    _text.setFillColor(sf::Color::White);
+    _text.setCharacterSize(24);
+}
+
+// Set Text function
+//
+// Function sets the text of the text component
+void TextComponent::SetText(const string& str)
+{
+    // Set string
+    _string = str;
+
+    // Set text string
+    _text.setString(_string);
 }

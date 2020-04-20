@@ -27,6 +27,7 @@
 //Level soundtrack
 sf::Music music0;
 
+
 // Load Function
 //
 // Function loads required entities for the menu scene
@@ -39,11 +40,15 @@ void MenuScene::Load()
 	// Output menu load message to console
 	cout << "Menu Load \n";
 	{
+		
 		// Text entity
-		auto txt = makeEntity();
+		auto txtTitle = makeEntity();
+		auto txtBody = makeEntity();
 
 		// Add Text component
-		auto t = txt->addComponent<TextComponent>("MADGUN: GEARS AND BLOOD\nDEBUG VERSION\nLevel 1 - Keyboard 1 or Controller A \nLevel 2 - Keyboard 2 or Controller X\nLevel 3 - Keyboard 3 or Controller Y\nDebug Room - Keyboard Space or Controller B");
+		auto tT = txtTitle->addComponent<TextComponentTitle>("MADGUN: GEARS AND BLOOD\nDEBUG VERSION\n");
+		auto tB = txtBody->addComponent<TextComponent>("\n\n\nLevel 1 - Keyboard 1 or Controller A \nLevel 2 - Keyboard 2 or Controller X\nLevel 3 - Keyboard 3 or Controller Y\nDebug Room - Keyboard Space or Controller B");
+		
 	}
 
 	// Set loaded to true
