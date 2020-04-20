@@ -37,7 +37,10 @@ sf::SoundBuffer bufferJump;
 sf::Sound soundWalk;
 sf::Sound soundJump;
 
-float x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+float joyX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+
 
 
 // Is Grounded function
@@ -95,6 +98,9 @@ bool PlayerPhysicsComponent::isGrounded() const
 void PlayerPhysicsComponent::update(double dt) 
 {
 	
+	
+	
+
 	// Obtain Position
 	const auto pos = _parent->getPosition();
 
@@ -106,7 +112,7 @@ void PlayerPhysicsComponent::update(double dt)
 	}
 
 	// Check if player is has pressed right or left
-	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right)) 
+	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right) || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100 || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == -100)
 	{
 		//soundfx loaded in the buffer
 		//bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
@@ -114,7 +120,7 @@ void PlayerPhysicsComponent::update(double dt)
 		//soundWalk.setLoop(true);
 
 			// Check if right key pressed
-			if (Keyboard::isKeyPressed(Keyboard::Right))
+			if (Keyboard::isKeyPressed(Keyboard::Right)|| sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100)
 			{
 				
 
@@ -149,50 +155,7 @@ void PlayerPhysicsComponent::update(double dt)
 
 		
 	}
-	// Check if player is has pressed right or left
-	if (x < -20)
-	{
-		//soundfx loaded in the buffer
-		//bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
-		//soundWalk.setBuffer(bufferWalk);
-		//soundWalk.setLoop(true);
-
-			// Check if right key pressed
-		if (x > 20)
-		{
-
-
-			// Check if velocity of the player is less than the max velocity
-			if (getVelocity().x < _maxVelocity.x)
-			{
-
-
-				// Apply impulse (move player right)
-				impulse({ (float)(dt * _groundspeed), 0 });
-			}
-		}
-		// Else left key has been pressed
-		else
-		{
-
-
-			// Check if velocity of the player is less than the negative max velocity
-			if (getVelocity().x > -_maxVelocity.x)
-			{
-
-
-				// Apply negative impulse (move player left)
-				impulse({ -(float)(dt * _groundspeed), 0 });
-			}
-		}
-
-
-
-
-
-
-
-	}
+	
 	// No keys pressed
 	else 
 	{
@@ -201,8 +164,10 @@ void PlayerPhysicsComponent::update(double dt)
 		dampen({0.9f, 1.0f});
 	}
 
+	
+
 	// Handle Jump
-	if (Keyboard::isKeyPressed(Keyboard::Up)) 
+	if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		// Obtain status of player being grounded
 		_grounded = isGrounded();
@@ -262,6 +227,7 @@ void PlayerPhysicsComponent::update(double dt)
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p, const Vector2f& size)
     : PhysicsComponent(p, true, size) 
 {
+	
 	// Set Size
 	_size = sv2_to_bv2(size, true);
 

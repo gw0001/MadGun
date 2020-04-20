@@ -22,6 +22,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 #include <SFML/Audio.hpp>
+#include <SFML/Window/Joystick.hpp>
 
 //Level soundtrack
 sf::Music music0;
