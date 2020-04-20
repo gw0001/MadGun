@@ -43,7 +43,7 @@ void MenuScene::Load()
 		auto txt = makeEntity();
 
 		// Add Text component
-		auto t = txt->addComponent<TextComponent>("MADGUN: GEARS AND BLOOD\nDEBUG VERSION\n1 - Level 1\n2 - Level 2\n3 - Level 3\nSpace - Debug Room");
+		auto t = txt->addComponent<TextComponent>("MADGUN: GEARS AND BLOOD\nDEBUG VERSION\nLevel 1 - Keyboard 1 or Controller A \nLevel 2 - Keyboard 2 or Controller X\nLevel 3 - Keyboard 3 or Controller Y\nDebug Room - Keyboard Space or Controller B");
 	}
 
 	// Set loaded to true
@@ -62,7 +62,7 @@ void MenuScene::Update(const double& dt)
 	Renderer::setCameraTarget(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));
 
 	// Check if user presses 1
-	if (Keyboard::isKeyPressed(Keyboard::Num1))
+	if (Keyboard::isKeyPressed(Keyboard::Num1) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		music0.stop();
 		// Change scene to Level 1
@@ -70,7 +70,7 @@ void MenuScene::Update(const double& dt)
 	}
 
 	// Check if user presses 2
-	if (Keyboard::isKeyPressed(Keyboard::Num2))
+	if (Keyboard::isKeyPressed(Keyboard::Num2) || sf::Joystick::isButtonPressed(0, 2))
 	{
 		music0.stop();
 		// Change scene to Level 2
@@ -78,7 +78,7 @@ void MenuScene::Update(const double& dt)
 	}
 
 	// Check if user presses 3
-	if (Keyboard::isKeyPressed(Keyboard::Num3))
+	if (Keyboard::isKeyPressed(Keyboard::Num3) || sf::Joystick::isButtonPressed(0, 3))
 	{
 		music0.stop();
 		// Change scene to Level 3
@@ -86,7 +86,7 @@ void MenuScene::Update(const double& dt)
 	}
 
 	// Check if user presses Space bar
-	if (Keyboard::isKeyPressed(Keyboard::Space))
+	if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 1))
 	{
 		music0.stop();
 		// Change scene to Level 1

@@ -20,7 +20,7 @@
  *
  */
 
-// Libraries
+ // Libraries
 #include "cmp_player_physics.h"
 #include "system_physics.h"
 #include <LevelSystem.h>
@@ -46,7 +46,7 @@ float joyX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
 // Is Grounded function
 //
 // Function determines if player physics component is grounded
-bool PlayerPhysicsComponent::isGrounded() const 
+bool PlayerPhysicsComponent::isGrounded() const
 {
 	// Obtain touch
 	auto touch = getTouching();
@@ -64,7 +64,7 @@ bool PlayerPhysicsComponent::isGrounded() const
 	b2WorldManifold manifold;
 
 	// Iterate over each touch
-	for (const auto& contact : touch) 
+	for (const auto& contact : touch)
 	{
 		// Obtain world manifold
 		contact->GetWorldManifold(&manifold);
@@ -76,12 +76,12 @@ bool PlayerPhysicsComponent::isGrounded() const
 		bool onTop = numPoints > 0;
 
 		// If all contacts are below the player.
-		for (int j = 0; j < numPoints; j++) 
+		for (int j = 0; j < numPoints; j++)
 		{
 			onTop &= (manifold.points[j].y < pos.y - halfPlayerHeight);
 		}
 		// Check if on top is true
-		if (onTop) 
+		if (onTop)
 		{
 			// Return true
 			return true;
@@ -95,11 +95,11 @@ bool PlayerPhysicsComponent::isGrounded() const
 // Update function
 //
 // Function updates the player physics component
-void PlayerPhysicsComponent::update(double dt) 
+void PlayerPhysicsComponent::update(double dt)
 {
-	
-	
-	
+
+
+
 
 	// Obtain Position
 	const auto pos = _parent->getPosition();
@@ -120,51 +120,40 @@ void PlayerPhysicsComponent::update(double dt)
 		//soundWalk.setLoop(true);
 
 			// Check if right key pressed
-			if (Keyboard::isKeyPressed(Keyboard::Right)|| sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100)
+		if (Keyboard::isKeyPressed(Keyboard::Right) || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100)
+		{
+			// Check if velocity of the player is less than the max velocity
+			if (getVelocity().x < _maxVelocity.x)
 			{
-				
 
-				// Check if velocity of the player is less than the max velocity
-				if (getVelocity().x < _maxVelocity.x)
-				{
-					
 
-					// Apply impulse (move player right)
-					impulse({ (float)(dt * _groundspeed), 0 });
-				}
+				// Apply impulse (move player right)
+				impulse({ (float)(dt * _groundspeed), 0 });
 			}
-			// Else left key has been pressed
-			else
+		}
+		// Else left key has been pressed
+		else
+		{
+			// Check if velocity of the player is less than the negative max velocity
+			if (getVelocity().x > -_maxVelocity.x)
 			{
-				
-				
-				// Check if velocity of the player is less than the negative max velocity
-				if (getVelocity().x > -_maxVelocity.x)
-				{
 
-					
-					// Apply negative impulse (move player left)
-					impulse({ -(float)(dt * _groundspeed), 0 });
-				}
+
+				// Apply negative impulse (move player left)
+				impulse({ -(float)(dt * _groundspeed), 0 });
 			}
-			
-				
-			
-
-			
-
-		
+		}
 	}
-	
+
 	// No keys pressed
-	else 
+	else
 	{
 		soundWalk.setLoop(false);
 		// Dampen X axis movement
-		dampen({0.9f, 1.0f});
+		dampen({ 0.9f, 1.0f });
 	}
 
-	
+
 
 	// Handle Jump
 	if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::isButtonPressed(0, 0))
@@ -173,7 +162,7 @@ void PlayerPhysicsComponent::update(double dt)
 		_grounded = isGrounded();
 
 		// Check if player is grounded
-		if (_grounded) 
+		if (_grounded)
 		{
 			//jump audio played
 			bufferJump.loadFromFile("res/audio/fx/jump.wav");
@@ -192,16 +181,16 @@ void PlayerPhysicsComponent::update(double dt)
 	}
 
 	// Check if player is in the air
-	if (!_grounded) 
+	if (!_grounded)
 	{
 		// Check if player has landed
 		_grounded = isGrounded();
 
 		// Remove friction whilst jumping
 		setFriction(0.0f);
-	} 
+	}
 	// Player is on the ground
-	else 
+	else
 	{
 		// Set friction to 0.1
 		setFriction(0.1f);
@@ -215,7 +204,7 @@ void PlayerPhysicsComponent::update(double dt)
 
 	// Clamp Y value
 	v.y = copysign(min(abs(v.y), _maxVelocity.y), v.y);
-	
+
 	// Set velocity of the player to the clamped velocity values
 	setVelocity(v);
 
@@ -225,9 +214,9 @@ void PlayerPhysicsComponent::update(double dt)
 
 // Player Physics Component constructor
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p, const Vector2f& size)
-    : PhysicsComponent(p, true, size) 
+	: PhysicsComponent(p, true, size)
 {
-	
+
 	// Set Size
 	_size = sv2_to_bv2(size, true);
 
