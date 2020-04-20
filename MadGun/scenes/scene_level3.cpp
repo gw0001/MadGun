@@ -160,7 +160,7 @@ void Level3Scene::Update(const double& dt)
 	}
 
 	// Check if user has pressed the escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	if (Keyboard::isKeyPressed(Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 1))
 	{
 		music3.stop();
 		// Close the window
