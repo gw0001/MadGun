@@ -21,6 +21,10 @@
 // Libraries
 #pragma once
 #include "engine.h"
+#include <SFML/Graphics/Text.hpp>
+#include <ecm.h>
+
+#define MAX_NUMBER_OF_ITEMS 3
 
 // Namespaces
 using namespace std; // Standard namespace
@@ -45,4 +49,25 @@ class MenuScene : public Scene
 
 		// Update function
 		void Update(const double& dt) override;
+};
+
+class Menu : public Component
+{
+public:
+    Menu() = delete;
+    explicit Menu(Entity* p);
+    ~Menu() override = default;
+
+    void render() override;
+
+    //void draw(sf::RenderWindow& window);
+    void MoveUp();
+    void MoveDown();
+    int GetPressedItem() { return selectedItemIndex; }
+
+private:
+    int selectedItemIndex;
+    sf::Font font;
+    sf::Text menu[MAX_NUMBER_OF_ITEMS];
+
 };

@@ -28,6 +28,9 @@
 sf::Music music0;
 
 
+
+
+
 // Load Function
 //
 // Function loads required entities for the menu scene
@@ -39,17 +42,12 @@ void MenuScene::Load()
 
 	// Output menu load message to console
 	cout << "Menu Load \n";
-	{
+	
+	auto menuItems = makeEntity();
+	auto t = menuItems->addComponent<TextComponent>();
 		
-		// Text entity
-		auto txtTitle = makeEntity();
-		auto txtBody = makeEntity();
+	
 
-		// Add Text component
-		auto tT = txtTitle->addComponent<TextComponentTitle>("MADGUN: GEARS AND BLOOD");
-		auto tB = txtBody->addComponent<TextComponent>("Level 1 - Keyboard 1 or Controller A \n\nLevel 2 - Keyboard 2 or Controller X\n\nLevel 3 - Keyboard 3 or Controller Y\n\nDebug Room - Keyboard Space or Controller B");
-		
-	}
 
 	// Set loaded to true
 	setLoaded(true);
@@ -65,9 +63,10 @@ void MenuScene::Update(const double& dt)
 
 	// Set camera to target the centre of the menu screen
 	Renderer::setCameraTarget(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));
+	
 
 	// Check if user presses 1
-	if (Keyboard::isKeyPressed(Keyboard::Num1) || sf::Joystick::isButtonPressed(0, 0))
+	if (Keyboard::isKeyPressed(Keyboard::Return) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		music0.stop();
 		// Change scene to Level 1

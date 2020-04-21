@@ -24,21 +24,24 @@
 #include <SFML/Graphics/Text.hpp>
 #include <ecm.h>
 
+
 // Namespaces
 using namespace std; // Standard namespace
 using namespace sf; // SFML namespace
 
+
+
 /*
  * TEXT COMPONENT CLASS
  */
-class TextComponentTitle : public Component 
+class TextComponent : public Component 
 {
 	public:
 		// Blank Text Component constructor (deleted)
-		TextComponentTitle() = delete;
+		TextComponent() = delete;
 
 		// Text Component constructor
-		explicit TextComponentTitle(Entity* p, const string& str = "");
+		explicit TextComponent(Entity* p, const string& str = "");
 
 		// Update function
 		void update(double dt) override;
@@ -47,10 +50,16 @@ class TextComponentTitle : public Component
 		void render() override;
 
 		// Text Component deconstructor
-		~TextComponentTitle() override = default;
+		~TextComponent() override = default;
 
 		// Set Text function
 		void SetText(const string& str);
+
+		
+
+		/*void MoveUp();
+		void MoveDown();
+		int GetPressedItem() { return selectedItemIndex; }*/
 
 	protected:
 		// Font shared pointer
@@ -61,36 +70,8 @@ class TextComponentTitle : public Component
 
 		// Text
 		Text _text;
-};
+		Text _sub;
 
-class TextComponent : public Component
-{
-public:
-	// Blank Text Component constructor (deleted)
-	TextComponent() = delete;
-
-	// Text Component constructor
-	explicit TextComponent(Entity* p, const string& str = "");
-
-	// Update function
-	void update(double dt) override;
-
-	// Render function
-	void render() override;
-
-	// Text Component deconstructor
-	~TextComponent() override = default;
-
-	// Set Text function
-	void SetText(const string& str);
-
-protected:
-	// Font shared pointer
-	shared_ptr<Font> _font;
-
-	// String
-	string _string;
-
-	// Text
-	Text _text;
+		int selectedItemIndex;
+		Text menu[4];
 };
