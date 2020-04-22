@@ -50,7 +50,36 @@ class TextComponent : public Component
 		~TextComponent() override = default;
 
 		// Set Text function
-		void SetText(const string& str);
+		void setText(const string& str);
+
+		//
+		void setFont(string aFont);
+
+		void setPosition(Vector2f position);
+
+		void setCharacterSize(float charSize);
+
+		void setColour(Color colour);
+
+		void setLetterSpacing(float spacing);
+
+		void textBold();
+
+		void textItalic();
+
+		void textUnderlined();
+
+		void textRegular();
+
+		float getTextWidth();
+
+		float getTextHeight();
+
+		void setTextOrigin(Vector2f origin);
+
+		void setTextOrigin(float x, float y);
+
+		void centreOrigin();
 
 	protected:
 		// Font shared pointer
