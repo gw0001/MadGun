@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 22/04/2020
  * -------------------------------------
  * TEXT COMPONENT - cmp_text.h
  *
@@ -52,33 +52,46 @@ class TextComponent : public Component
 		// Set Text function
 		void setText(const string& str);
 
-		//
+		// Set Font function
 		void setFont(string aFont);
 
+		// Set Position function
 		void setPosition(Vector2f position);
 
+		// Set Character Size function
 		void setCharacterSize(float charSize);
 
+		// Set Colour function
 		void setColour(Color colour);
 
+		// Set letter spacing function
 		void setLetterSpacing(float spacing);
 
+		// Text Bold function
 		void textBold();
 
+		// Text Italic function
 		void textItalic();
 
+		// Text Underlined function
 		void textUnderlined();
 
+		// Text Regular function
 		void textRegular();
 
+		// Get Text Width function
 		float getTextWidth();
 
+		// Get Text Height function
 		float getTextHeight();
 
+		// Set Text Origin function
 		void setTextOrigin(Vector2f origin);
 
+		// Set Text Origin function
 		void setTextOrigin(float x, float y);
 
+		// Centre Origin Function
 		void centreOrigin();
 
 	protected:

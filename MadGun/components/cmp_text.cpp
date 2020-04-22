@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 22/04/2020
  * -------------------------------------
  * TEXT COMPONENT - cmp_text.cpp
  *

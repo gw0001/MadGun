@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/04/2020
+ * Date Last Modified: 22/04/2020
  * -------------------------------------
  * MENU SCENE - scene_menu.cpp
  *
@@ -87,7 +87,6 @@ void MenuScene::Update(const double& dt)
 		txt->setLetterSpacing(1.0f);
 		txt->setPosition(Vector2f(0.0f, 0.0f));
 		txt->setTextOrigin(Vector2f(0.0f, 0.0f));
-
 		txt->textRegular();
 	}
 
@@ -97,31 +96,38 @@ void MenuScene::Update(const double& dt)
 		txt->setFont("gotham.ttf");
 	}
 
-
+	// Change Character size to 100.0f
 	if (Keyboard::isKeyPressed(Keyboard::Num3))
 	{
 		txt->setCharacterSize(100.0f);
 	}
 
+	// Change text to become underlined
 	if (Keyboard::isKeyPressed(Keyboard::Num4))
 	{
 		txt->textUnderlined();
 	}
 
+	// Change text to bold
 	if (Keyboard::isKeyPressed(Keyboard::Num5))
 	{
 		txt->textBold();
 	}
+
+	// Change to italic text
 	if (Keyboard::isKeyPressed(Keyboard::Num6))
 	{
 		txt->textItalic();
 	}
 
+	// Set the text component position to the centre of the screen
+	// Note:- How it looks depends on the origin of the text box
 	if (Keyboard::isKeyPressed(Keyboard::Num7))
 	{
 		txt->setPosition(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));
 	}
 
+	// Display Text width to the console
 	if (Keyboard::isKeyPressed(Keyboard::Num8))
 	{
 		float width = txt->getTextWidth();
@@ -129,6 +135,7 @@ void MenuScene::Update(const double& dt)
 		cout << "Text width: " << width << endl;
 	}
 
+	// Display the text height to the console
 	if (Keyboard::isKeyPressed(Keyboard::Num9))
 	{
 		float height = txt->getTextHeight();
@@ -136,12 +143,11 @@ void MenuScene::Update(const double& dt)
 		cout << "Text height: " << height << endl;
 	}
 
+	// Centre the origin of the text component
 	if (Keyboard::isKeyPressed(Keyboard::Num0))
 	{
 		txt->centreOrigin();
 	}
-
-
 
 	//// Output menu update to the console - Will cause FPS to drop when enabled
 	////cout << "Menu Update "<<dt<<"\n";
