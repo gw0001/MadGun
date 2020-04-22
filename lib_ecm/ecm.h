@@ -34,7 +34,7 @@ using namespace std; // STD Namespace
 // Forward declaration of classes
 // Entity class
 class Entity;
-// Component class
+// Scene class
 class Scene;
 
 // #################################################################### //

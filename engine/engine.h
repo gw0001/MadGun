@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 22/04/2020
  * -------------------------------------
  * ENGINE - engine.h
  *
@@ -35,6 +35,15 @@ using namespace std; // Standard namespace
 class Scene 
 {
 	public:
+		// Player Shared Pointer
+		shared_ptr<Entity> player;
+
+		// Number of Enemy Types
+		const int numberOfEnemyTypes = 5;
+
+		// Number of Hazard Types
+		const int numberOfHazardTypes = 3;
+
 		// Scene constructor
 		Scene() = default;
 
@@ -61,6 +70,21 @@ class Scene
 
 		// Make Entity function
 		shared_ptr<Entity> makeEntity();
+
+		// Create Player Function
+		virtual void createPlayer();
+
+		// Create Enemies function
+		virtual void createEnemy(int aNum);
+
+		// Create Hazards function
+		virtual void createHazards(int aNum);
+
+		// Add Wall Physics function
+		virtual void addWallPhysics();
+
+		// Populate Level function
+		virtual void populateLevel();
 
 		// Entity Manager
 		EntityManager ents;

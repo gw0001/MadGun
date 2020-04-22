@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 18/04/2020
+ * Date Last Modified: 22/04/2020
  * -------------------------------------
  * ENGINE - engine.cpp
  *
@@ -26,6 +26,14 @@
 #include <future>
 #include <iostream>
 #include <stdexcept>
+#include "levelsystem.h"
+
+// Component Libraries
+#include "../MadGun/components/cmp_player_physics.h"
+#include "../MadGun/components/cmp_sprite.h"
+#include "../MadGun/components/cmp_physics.h"
+#include "../MadGun/components/cmp_hurt_player.h"
+#include "../MadGun/components/cmp_enemy_ai.h"
 
 // Active scene pointer
 Scene* Engine::_activeScene = nullptr;
@@ -296,10 +304,270 @@ shared_ptr<Entity> Scene::makeEntity()
 	return move(e);
 }
 
+// Create player function
+//
+// Function to create the player
+void Scene::createPlayer()
+{
+	// Create player entity
+	player = makeEntity();
+
+	// Set player to starting position
+	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+
+	// Add shape component to the player
+	auto s = player->addComponent<ShapeComponent>();
+
+	// Set shape component of the player
+	s->setShape<RectangleShape>(Vector2f(20.f, 30.f));
+
+	// Set fill colour of the player
+	s->getShape().setFillColor(Color::Magenta);
+
+	// Set player's origin
+	s->getShape().setOrigin(10.f, 15.f);
+
+	// Add Physics component to the player
+	player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
+
+	// Add player tag
+	player->addTag("player");
+}
+
+// Create Enemy Function
+//
+// Function to create an enemy, based on the
+// value of the enemy type integer argument
+void Scene::createEnemy(int enemyType)
+{
+	// Enemy Tile Set
+	ls::Tile enemyTileSet;
+
+	// Enemy colour
+	Color enemyColour;
+
+	// Check if argument number is 1
+	if (enemyType == 1)
+	{
+		// Set tile set to ENEMY_1
+		enemyTileSet = ls::ENEMY_1;
+
+		// Set enemy colour to blue
+		enemyColour = Color::Blue;
+	}
+	// Else, check if argument number is 2
+	else if (enemyType == 2)
+	{
+		// Set tile set to ENEMY_2
+		enemyTileSet = ls::ENEMY_2;
+
+		// Set enemy colour to Yellow
+		enemyColour = Color::Yellow;
+	}
+	// Else, check if argument number is 3
+	else if (enemyType == 3)
+	{
+		// Set tile set to ENEMY_3
+		enemyTileSet = ls::ENEMY_3;
+
+		// Set enemy colour to Red
+		enemyColour = Color::Red;
+	}
+	// Else, check if argument number is 4
+	else if (enemyType == 4)
+	{
+		// Set tile set to ENEMY_4
+		enemyTileSet = ls::ENEMY_4;
+
+		// Set enemy colour to Cyan
+		enemyColour = Color::Cyan;
+	}
+	// Else, check if argument number is 5
+	else if (enemyType == 5)
+	{
+		// Set tile set to ENEMY_5
+		enemyTileSet = ls::ENEMY_5;
+
+		// Set enemy colour to Green
+		enemyColour = Color::Green;
+	}
+
+	// Find enemy tiles from level
+	auto enemyTiles = ls::findTiles(enemyTileSet);
+
+	// Check that relevant tiles have been found within the level
+	if (enemyTiles.size() > 0)
+	{
+		// Relevant tile exists
+		for (auto enemyTile : enemyTiles)
+		{
+			// Make enemy entity
+			auto enemy = makeEntity();
+
+			// Obtain enemy tile position
+			Vector2f enemyTilePos = ls::getTilePosition(enemyTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - 15.0f);
+
+			// Set enemy position to an enemy tile
+			enemy->setPosition(enemyTilePos);
+
+			// Check enemy type
+			if (enemyType == 1)
+			{
+				// Add an enemy AI Component to the entity
+				enemy->addComponent<EnemyAIComponent>();
+			}
+
+			// Allow entity to hurt the player
+			enemy->addComponent<HurtComponent>();
+
+			// Add shape component to the enemy entity
+			auto s = enemy->addComponent<ShapeComponent>();
+
+			// Set Shape of Enemy
+			s->setShape<RectangleShape>(Vector2f(30.0f, 30.0f));
+
+			// Set fill colour of enemy
+			s->getShape().setFillColor(enemyColour);
+
+			// Set enemy origin
+			s->getShape().setOrigin(Vector2f(15.0f, 15.0f));
+		}
+	}
+}
+
+// Create Hazard function
+//
+//
+void Scene::createHazards(int hazardType)
+{
+	// Enemy Tile Set
+	ls::Tile hazardTileSet;
+
+	// Enemy colour
+	Color hazardColour;
+
+	// Check if argument number is 1
+	if (hazardType == 1)
+	{
+		// Set tile set to HAZARD_1
+		hazardTileSet = ls::HAZARD_1;
+
+		// Set enemy colour to light orange
+		hazardColour = Color::Color(243,124,66);
+	}
+	// Else, check if argument number is 2
+	else if (hazardType == 2)
+	{
+		// Set tile set to HAZARD_2
+		hazardTileSet = ls::HAZARD_2;
+
+		// Set enemy colour to Dark Orange
+		hazardColour = Color::Color(199, 64, 56);
+	}
+	// Else, check if argument number is 3
+	else if (hazardType == 3)
+	{
+		// Set tile set to HAZARD_3
+		hazardTileSet = ls::HAZARD_3;
+
+		// Set enemy colour to Blood
+		hazardColour = Color::Color(117, 20, 48);
+	}
+
+	// Find enemy tiles from level
+	auto hazardTiles = ls::findTiles(hazardTileSet);
+
+	// Check that relevant tiles have been found within the level
+	if (hazardTiles.size() > 0)
+	{
+		// Relevant tile exists
+		for (auto hazardTile : hazardTiles)
+		{
+			// Make enemy entity
+			auto hazard = makeEntity();
+
+			// Obtain enemy tile position
+			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - 15.0f);
+
+			// Set enemy position to an enemy tile
+			hazard->setPosition(hazardTilePos);
+
+			// Allow entity to hurt the player
+			hazard->addComponent<HurtComponent>();
+
+			// Add shape component to the enemy entity
+			auto s = hazard->addComponent<ShapeComponent>();
+
+			// Set Shape of Enemy
+			s->setShape<RectangleShape>(Vector2f(30.0f, 30.0f));
+
+			// Set fill colour of enemy
+			s->getShape().setFillColor(hazardColour);
+
+			// Set enemy origin
+			s->getShape().setOrigin(Vector2f(15.0f, 15.0f));
+		}
+	}
+}
+
+// Add Wall Physics
+//
+// Function to add wall physics to relevante tiles
+// found in the level
+void Scene::addWallPhysics()
+{
+	// Find all wall tiles in the level
+	auto walls = ls::findWallTiles();
+
+	// Iterate over each wall tile
+	for (auto w : walls)
+	{
+		// Obtain wall tile position
+		auto pos = ls::getTilePosition(w);
+
+		// Offset the position to the centre
+		pos += Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() / 2.0f);
+
+		// Make entity
+		auto e = makeEntity();
+
+		// Set position of the entity
+		e->setPosition(pos);
+
+		// Add Physics component to the entity
+		e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
+	}
+}
+
+// Populate Level function
+//
+// 
+void Scene::populateLevel()
+{
+	// Create Player entity
+	createPlayer();
+
+	// Add wall physics colliders
+	addWallPhysics();
+
+	// Iterate over all enemy types
+	for (int i = 1; i < numberOfEnemyTypes + 1; i++)
+	{
+		createEnemy(i);
+	}
+
+	// Create Hazards
+	for (int i = 1; i < 4; i++)
+	{
+		createHazards(i);
+	}
+}
+
+
 // Set Vsync function
 //
 // Function for enabling or disabling Vertical Sync
-void Engine::setVsync(bool b) 
+void Engine::setVsync(bool b)
 { 
 	// Set the vertical sync
 	_window->setVerticalSyncEnabled(b); 

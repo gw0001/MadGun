@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 18/04/2020
+ * Date Last Modified: 22/04/2020
  * -------------------------------------
  * DEBUG SCENE - scene_debug.cpp
  *
@@ -19,21 +19,16 @@
 
 // Libraries
 #include "scene_debug.h"
-#include "../components/cmp_player_physics.h"
-#include "../components/cmp_sprite.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
 
-// Player Shared Pointer
-static shared_ptr<Entity> player;
-
 // Load Function
 //
 // Function loads all of the required entities for the first
 // level of the game
-void DebugScene::Load() 
+void DebugScene::Load()
 {
 	// Output message to console
 	cout << "Load Debug Scene" << endl;
@@ -44,57 +39,11 @@ void DebugScene::Load()
 	// Have camera target the player start position
 	Renderer::setCameraTarget(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
-	// Create player
-	{
-		// Create player entity
-		player = makeEntity();
-
-		// Set player to starting position
-		player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-
-		// Add shape component to the player
-		auto s = player->addComponent<ShapeComponent>();
-
-		// Set shape component of the player
-		s->setShape<RectangleShape>(Vector2f(20.f, 30.f));
-
-		// Set fill colour of the player
-		s->getShape().setFillColor(Color::Magenta);
-
-		// Set player's origin
-		s->getShape().setOrigin(10.f, 15.f);
-
-		// Add Physics component to the player
-		player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
-	}
-
-	// Add physics colliders to level tiles.
-	{
-		// Find all wall tiles in the level
-		auto walls = ls::findWallTiles();
-		
-		// Iterate over each wall tile
-		for (auto w : walls) 
-		{
-			// Obtain wall tile position
-			auto pos = ls::getTilePosition(w);
-
-			// Offset the position to the centre
-			pos += Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() / 2.0f);
-
-			// Make entity
-			auto e = makeEntity();
-
-			// Set position of the entity
-			e->setPosition(pos);
-
-			// Add Physics component to the entity
-			e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
-		}
-	}
+	// Automatically populate level with entities
+	populateLevel();
 
 	//Simulate long loading times - can be commented out when scene becomes more complex
-	this_thread::sleep_for(chrono::milliseconds(3000));
+	//this_thread::sleep_for(chrono::milliseconds(3000));
 
 	// Output message to console when the scene has loaded
 	cout << " Debug Scene Load Done" << endl;
@@ -102,6 +51,7 @@ void DebugScene::Load()
 	// Set loaded to true
 	setLoaded(true);
 }
+
 
 // Unload function
 //
@@ -149,6 +99,12 @@ void DebugScene::Update(const double& dt)
 	{
 		// Change scene to level 2
 		Engine::ChangeScene((Scene*)&level2);
+	}
+	// Else, check if player has died
+	else if (!player->isAlive())
+	{
+		// Reload level
+		Engine::ChangeScene((Scene*)&debugScene);
 	}
 
 	// Check if R key pressed
