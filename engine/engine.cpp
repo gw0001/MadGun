@@ -637,18 +637,12 @@ void Engine::PauseScene(Scene* s)
 	// Display message to console when changing the scene
 	cout << "Eng: pausing scene: " << s << endl;
 
-	// Take active scene as the old scene
+	// Take active scene as the paused scene
 	_pausedScene = _activeScene;
+	
 
 	// Set active scene to the new scene
 	_activeScene = s;
-
-	 /*Check if old scene still exists*/
-	//if (_activeScenePaused == nullptr)
-	//{
-	//	// Unload old scene
-	//	_activeScenePaused->Load();
-	//}
 
 	// Check if new scene hasn't loaded
 	if (!s->isLoaded())
@@ -679,22 +673,23 @@ void Engine::ResumeScene(Scene* s)
 {
 	// Display message to console when changing the scene
 	cout << "Eng: resuming scene: " << s << endl;
+	
 
 	
 	// Take active scene as the old scene
 	auto old = _activeScene;
+	
 
 	// Set paused scene to the new scene
 	_pausedScene = s;
+	
 
 	// Check if old scene still exists
 	if (old != nullptr)
 	{
 		// Unload old scene
 		old->UnLoad();
-		cout << "PAUSE UNLOAD";
 	}
-
 	// Check if new scene hasn't loaded
 	if (!s->isLoaded())
 	{
@@ -705,7 +700,7 @@ void Engine::ResumeScene(Scene* s)
 		loadingTime = 0.0f;
 
 		// Load Scene with loading screen - comment out if bypassing the loading screen
-		_activeScene->LoadAsync();
+		_pausedScene->LoadAsync();
 
 		// Load scene without loading screen - will cause game to hang before loading 
 		// the next scene. Comment out if using the method that loads the scene with
@@ -714,7 +709,10 @@ void Engine::ResumeScene(Scene* s)
 
 		// Set loading to true
 		loading = true;
+		//Renderer::setCameraTarget(Scene::player->getPosition());
 	}
+	
+
 }
 
 // Update function
