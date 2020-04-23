@@ -17,18 +17,29 @@
 
 // Libraries
 #include "scene_menu.h"
-#include "../components/cmp_text.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Joystick.hpp>
 
+// Component libraries
+#include "../components/cmp_text.h"
+
 //Level soundtrack
 sf::Music music0;
 
 // Set selection number to 0
-int _selectionNumber = 0;
+int selectionNumber;
+
+// Menu selection change boolean
+bool menuSelectionChanged = false;
+
+// Default cooldown time for changing menu selection
+float defaultMenuCooldownTime = 0.25f;
+
+// Menu Cool Down time initialised to 0.0f
+float menuCooldownTime = 0.0f;
 
 // Load Function
 //
@@ -37,6 +48,9 @@ void MenuScene::Load()
 {
 	// Message to console
 	cout << "Menu Load \n";
+
+	// Inistialise Menu
+	selectionNumber = 0;
 
 	//open the soundtrack file
 	music0.openFromFile("res/audio/music/0_menu.ogg");
@@ -162,72 +176,65 @@ void MenuScene::Load()
 void MenuScene::Update(const double& dt) 
 {
 	// Highlight the text based on the selection number
-	selectionHightlight(_selectionNumber);
+	selectionHightlight(selectionNumber);
 
-	// Select "New Game"
-	if (Keyboard::isKeyPressed(Keyboard::Num1))
+	// Check if cool down time is greater than 0.0f
+	if (menuCooldownTime > 0.0f)
 	{
-		// Set selection number to 0
-		_selectionNumber = 0;
+		// Decrement cooldown time by time increment dt
+		menuCooldownTime -= dt;
 	}
 
-	// Select "Continue" 
-	if (Keyboard::isKeyPressed(Keyboard::Num2))
+	// Check if menu cool down time is less that or equal to 0.0f
+	if (menuCooldownTime <= 0.0f)
 	{
-		// Set selection number to 1
-		_selectionNumber = 1;
+		// Check if user has pressed (UP ARROW)
+		if (Keyboard::isKeyPressed(Keyboard::Up))
+		{
+			// Invoke moveUp() function
+			moveUp();
+		}
+
+		// Check if user has pressed (DOWN ARROW)
+		if (Keyboard::isKeyPressed(Keyboard::Down))
+		{
+			// Invoke moveDown() function
+			moveDown();
+		}
 	}
 
-	// Select "Options"
-	if (Keyboard::isKeyPressed(Keyboard::Num3))
-	{
-		// Set selection number to 2
-		_selectionNumber = 2;
-	}
-
-	// Set "Credits"
-	if (Keyboard::isKeyPressed(Keyboard::Num4))
-	{
-		// Set selection number to 3
-		_selectionNumber = 3;
-	}
-
-	// Select "Quit Game"
-	if (Keyboard::isKeyPressed(Keyboard::Num5))
-	{
-		// Set selection number to 4
-		_selectionNumber = 4;
-	}
-
-	// User presses enter
+	// User Chooses a selection
 	if (Keyboard::isKeyPressed(Keyboard::Enter))
 	{
-		// New Game
-		if (_selectionNumber == 0)
-		{
-			// Stop music
-			music0.stop();
+		// Stop music
+		music0.stop();
 
+		// New Game
+		if (selectionNumber == 0)
+		{
 			// Start the game from level 1
 			Engine::ChangeScene(&level1);
 		}
 		// Continue Game
-		else if (_selectionNumber == 1)
+		else if (selectionNumber == 1)
 		{
 			// Continue game screen
+			Engine::ChangeScene(&level2);
 		}
 		// Options
-		else if (_selectionNumber == 2)
+		else if (selectionNumber == 2)
 		{
 			// Options Screen
+			Engine::ChangeScene(&level3);
 		}
 		// Credits
-		else if (_selectionNumber == 3)
+		else if (selectionNumber == 3)
 		{
 			// Credits screen
+			Engine::ChangeScene(&debugScene);
 		}
 		// Quit game
-		else if (_selectionNumber == 4)
+		else if (selectionNumber == 4)
 		{
 			// Quit Game
 			Engine::quitGame();
@@ -276,4 +283,38 @@ void MenuScene::selectionHightlight(int selectionNumber)
 			textComp->textRegular();
 		}
 	}
+}
+
+// Move Up function
+void MenuScene::moveUp()
+{
+	// Decrement the selection number
+	selectionNumber--;
+
+	// Check that the selection number does not subceed minimum index number of the menu array
+	if (selectionNumber < 0)
+	{
+		// Set selection number to 0
+		selectionNumber = 0;
+	}
+
+	// Set menu cool down to full time
+	menuCooldownTime = defaultMenuCooldownTime;
+}
+
+// Move Down function
+void MenuScene::moveDown()
+{
+	// Increment the selection index number
+	selectionNumber++;
+
+	// Check that the selection number does not exceed the maximum index number of the menu array
+	if (selectionNumber > MAX_MENU_ITEMS - 1)
+	{
+		// Set the selection number to the maximum index number of the menu array
+		selectionNumber = MAX_MENU_ITEMS - 1;
+	}
+
+	// Set menu cool down to full time
+	menuCooldownTime = defaultMenuCooldownTime;
 }

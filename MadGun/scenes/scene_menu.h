@@ -24,6 +24,7 @@
 
 // Definitions
 #define MAX_MENU_ITEMS 5
+
 // Namespaces
 using namespace std; // Standard namespace
 using namespace sf; // SFML namespace
@@ -49,8 +50,7 @@ class MenuScene : public Scene
 		void Update(const double& dt) override;
 
 	private:
-		//
-		int _selectionNumber;
+
 		// Game title entity
 		shared_ptr<Entity> _gameTitle;
 
@@ -62,6 +62,12 @@ class MenuScene : public Scene
 
 		// Selection Highlight function
 		void selectionHightlight(int anInt);
+
+		// Move Up function
+		void moveUp();
+
+		// Move Down function
+		void moveDown();
 
 
 
