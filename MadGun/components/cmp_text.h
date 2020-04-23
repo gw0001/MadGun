@@ -8,14 +8,12 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 22/04/2020
+ * Date Last Modified: 23/04/2020
  * -------------------------------------
  * TEXT COMPONENT - cmp_text.h
  *
  * Header file for text component
  *
- * Currently populated with boiler plate
- * code from platformer practical
  *
  */
 
@@ -78,21 +76,6 @@ class TextComponent : public Component
 
 		// Text Regular function
 		void textRegular();
-
-		// Get Text Width function
-		float getTextWidth();
-
-		// Get Text Height function
-		float getTextHeight();
-
-		// Set Text Origin function
-		void setTextOrigin(Vector2f origin);
-
-		// Set Text Origin function
-		void setTextOrigin(float x, float y);
-
-		// Centre Origin Function
-		void centreOrigin();
 
 	protected:
 		// Font shared pointer

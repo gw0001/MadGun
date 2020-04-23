@@ -573,6 +573,14 @@ void Engine::setVsync(bool b)
 	_window->setVerticalSyncEnabled(b); 
 }
 
+// Quit function
+//
+// Function closes the game window and quits the game
+void Engine::quitGame()
+{
+	_window->close();
+}
+
 // Change Scene function
 //
 // Function for changing the scene
