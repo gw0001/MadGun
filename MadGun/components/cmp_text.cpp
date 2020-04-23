@@ -8,14 +8,11 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 22/04/2020
+ * Date Last Modified: 23/04/2020
  * -------------------------------------
  * TEXT COMPONENT - cmp_text.cpp
  *
  * Text component
- *
- * Currently populated with boiler plate
- * code from platformer practical
  *
  */
 
@@ -92,6 +89,7 @@ void TextComponent::setPosition(Vector2f aPosition)
 // component
 void TextComponent::setCharacterSize(float charSize)
 {
+	// Set Character size of text
 	_text.setCharacterSize(charSize);
 }
 
@@ -100,6 +98,7 @@ void TextComponent::setCharacterSize(float charSize)
 // Function sets the colour of the text component
 void TextComponent::setColour(Color colour)
 {
+	// Set Text colour
 	_text.setColor(colour);
 }
 
@@ -109,6 +108,7 @@ void TextComponent::setColour(Color colour)
 // component
 void TextComponent::setLetterSpacing(float spacing)
 {
+	// Set spacing of text
 	_text.setLetterSpacing(spacing);
 }
 
@@ -118,6 +118,7 @@ void TextComponent::setLetterSpacing(float spacing)
 // to Bold
 void TextComponent::textBold()
 {
+	// Set text to bold style
 	_text.setStyle(Text::Bold);
 }
 
@@ -127,6 +128,7 @@ void TextComponent::textBold()
 // to Italic
 void TextComponent::textItalic()
 {
+	// Set text to italic style
 	_text.setStyle(Text::Italic);
 }
 
@@ -136,6 +138,7 @@ void TextComponent::textItalic()
 // to Underlined
 void TextComponent::textUnderlined()
 {
+	// Set text to underlined style
 	_text.setStyle(Text::Underlined);
 }
 
@@ -145,66 +148,6 @@ void TextComponent::textUnderlined()
 // to Regular
 void TextComponent::textRegular()
 {
+	// Set text to regular style
 	_text.setStyle(Text::Regular);
 }
-
-// Get Text Width Function
-//
-// Function returns the width of the text component
-float TextComponent::getTextWidth()
-{
-	// Obtain width from local bounds of text
-	float width = _text.getGlobalBounds().width;
-
-	// Return width
-	return width;
-}
-
-// Get Text Height Function
-//
-// Function returns the height of the text component
-float TextComponent::getTextHeight()
-{
-	// Obtain height from local bounds of text
-	float height = _text.getGlobalBounds().height;
-
-	// Return height
-	return height;
-}
-
-// Set Text Origin function
-//
-// Function sets the origin of the text component
-// from a Vector2f as an argument
-void TextComponent::setTextOrigin(Vector2f origin)
-{
-	// Set the origin of the text component
-	_text.setOrigin(origin.x, origin.y);
-}
-
-// Set Text Origin function
-//
-// Function invokes previous method to set the 
-// origin of the text component, but the function
-// accepts two float values (x and y)
-void TextComponent::setTextOrigin(float x, float y)
-{
-	// Invoke the previous method to set the origin
-	setTextOrigin(Vector2f(x, y));
-}
-
-// Centre the origin
-//
-// Function determines the width and height of the 
-// text component, determines the centre of the 
-// text component and sets as the origin
-void TextComponent::centreOrigin()
-{
-	float textWidth = getTextWidth();
-	float textHeight = getTextHeight();
-
-	setTextOrigin(textWidth / 2.0f, textHeight / 2.0f);
-
-}
-
-

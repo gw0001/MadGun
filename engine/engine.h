@@ -128,6 +128,9 @@ class Engine
 		// Set Vsync function
 		static void setVsync(bool b);
 
+		// Quit Game function
+		static void quitGame();
+
 	private:
 		// Active Scene
 		static Scene* _activeScene;

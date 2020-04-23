@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 16/04/2020
+ * Date Last Modified: 23/04/2020
  * -------------------------------------
  * MENU SCENE - scene_menu.h
  *
@@ -22,6 +22,8 @@
 #pragma once
 #include "engine.h"
 
+// Definitions
+#define MAX_MENU_ITEMS 5
 // Namespaces
 using namespace std; // Standard namespace
 using namespace sf; // SFML namespace
@@ -45,4 +47,22 @@ class MenuScene : public Scene
 
 		// Update function
 		void Update(const double& dt) override;
+
+	private:
+		//
+		int _selectionNumber;
+		// Game title entity
+		shared_ptr<Entity> _gameTitle;
+
+		// Game subtitle entity
+		shared_ptr<Entity> _gameSubtitle;
+
+		// Menu entity array
+		shared_ptr<Entity> _menu[MAX_MENU_ITEMS];
+
+		// Selection Highlight function
+		void selectionHightlight(int anInt);
+
+
+
 };
