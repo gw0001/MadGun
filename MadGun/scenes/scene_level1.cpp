@@ -24,10 +24,13 @@
 #include <thread>
 #include <SFML/Audio.hpp>
 
+
 //Level audio variables
 sf::Music music1;
 sf::SoundBuffer buffer1;
 sf::Sound endLvl1;
+
+bool paused = false;
 
 // Load Function
 //
@@ -117,8 +120,17 @@ void Level1Scene::Update(const double& dt)
 		music1.stop();
 	}
 
-	// Update the scene
-	Scene::Update(dt);
+	if (!paused) //unpaused update
+	{
+		// Update the scene
+		Scene::Update(dt);
+	}
+	else //pause update
+	{
+		pmenu.Update();
+	}
+
+	
 }
 
 // Render function
@@ -127,6 +139,12 @@ void Level1Scene::Update(const double& dt)
 // and tiles of the scene
 void Level1Scene::Render() 
 {
+	if (paused) 
+	{
+		pmenu.Render(*target);
+		Renderer::queue(pmenu);
+	}
+
 	// Render tiles
 	ls::Render(Engine::GetWindow());
 
