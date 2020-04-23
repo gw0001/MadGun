@@ -147,7 +147,7 @@ class Engine
 		static Scene* _activeScene;
 
 		// Paused Scene
-		static Scene* _activeScenePaused;
+		static Scene* _pausedScene;
 
 		// Game Name
 		static string _gameName;

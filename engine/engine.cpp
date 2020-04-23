@@ -39,7 +39,7 @@
 Scene* Engine::_activeScene = nullptr;
 
 // Paused scene pointer
-Scene* Engine::_activeScenePaused = nullptr;
+Scene* Engine::_pausedScene = nullptr;
 
 // Game Name string
 string Engine::_gameName;
@@ -638,17 +638,17 @@ void Engine::PauseScene(Scene* s)
 	cout << "Eng: pausing scene: " << s << endl;
 
 	// Take active scene as the old scene
-	_activeScenePaused = _activeScene;
+	_pausedScene = _activeScene;
 
 	// Set active scene to the new scene
 	_activeScene = s;
 
 	 /*Check if old scene still exists*/
-	if (_activeScenePaused == nullptr)
-	{
-		// Unload old scene
-		_activeScenePaused->Load();
-	}
+	//if (_activeScenePaused == nullptr)
+	//{
+	//	// Unload old scene
+	//	_activeScenePaused->Load();
+	//}
 
 	// Check if new scene hasn't loaded
 	if (!s->isLoaded())
@@ -665,7 +665,7 @@ void Engine::PauseScene(Scene* s)
 		// Load scene without loading screen - will cause game to hang before loading 
 		// the next scene. Comment out if using the method that loads the scene with
 		// a loading screen
-		_activeScene->Load();
+		//_activeScene->Load();
 
 		// Set loading to true
 		loading = true;
@@ -680,11 +680,12 @@ void Engine::ResumeScene(Scene* s)
 	// Display message to console when changing the scene
 	cout << "Eng: resuming scene: " << s << endl;
 
+	
 	// Take active scene as the old scene
 	auto old = _activeScene;
 
-	// Set active scene to the new scene
-	_activeScenePaused = s;
+	// Set paused scene to the new scene
+	_pausedScene = s;
 
 	// Check if old scene still exists
 	if (old != nullptr)
