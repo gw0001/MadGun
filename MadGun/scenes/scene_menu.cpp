@@ -49,6 +49,9 @@ void MenuScene::Load()
 	// Message to console
 	cout << "Menu Load \n";
 
+	// Set Camera position to the middle of the window screen
+	Renderer::setCameraTarget(Vector2f(gameWidth / 2, gameHeight / 2));
+
 	// Inistialise Menu
 	selectionNumber = 0;
 
@@ -219,19 +222,19 @@ void MenuScene::Update(const double& dt)
 		else if (selectionNumber == 1)
 		{
 			// Continue game screen
-			Engine::ChangeScene(&level2);
+			Engine::ChangeScene(&continueScene);
 		}
 		// Options
 		else if (selectionNumber == 2)
 		{
 			// Options Screen
-			Engine::ChangeScene(&level3);
+			Engine::ChangeScene(&optionsScene);
 		}
 		// Credits
 		else if (selectionNumber == 3)
 		{
 			// Credits screen
-			Engine::ChangeScene(&debugScene);
+			Engine::ChangeScene(&creditsScene);
 		}
 		// Quit game
 		else if (selectionNumber == 4)

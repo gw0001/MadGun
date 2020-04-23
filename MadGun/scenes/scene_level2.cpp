@@ -124,7 +124,7 @@ void Level2Scene::Update(const double& dt)
 
 // Render function
 //
-// Function renders 
+// Function renders entities in scene
 void Level2Scene::Render() 
 {
 	// Render tiles

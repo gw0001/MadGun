@@ -26,8 +26,23 @@
 // Using Namespace
 using namespace std;
 
+// Intro Scene
+IntroScene intro;
+
 // Menu Scene
 MenuScene menu;
+
+// Continue scene
+ContinueScene continueScene;
+
+// Options Scene
+OptionsScene optionsScene;
+
+// Credits Scene
+CreditsScene creditsScene;
+
+// Ending Scene
+EndingScene endingScene;
 
 // Level 1
 Level1Scene level1;
@@ -48,5 +63,5 @@ DebugScene debugScene;
 int main() 
 {
 	// Start game from menu screen
-	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&menu);
+	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&intro);
 }
