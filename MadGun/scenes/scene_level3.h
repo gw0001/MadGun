@@ -43,4 +43,6 @@ class Level3Scene : public Scene
 
 		// Render function
 		void Render() override;
+
+        int lvl3 = 3;
 };

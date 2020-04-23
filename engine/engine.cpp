@@ -38,6 +38,9 @@
 // Active scene pointer
 Scene* Engine::_activeScene = nullptr;
 
+// Paused scene pointer
+Scene* Engine::_activeScenePaused = nullptr;
+
 // Game Name string
 string Engine::_gameName;
 
@@ -604,6 +607,95 @@ void Engine::ChangeScene(Scene* s)
 
 	// Check if new scene hasn't loaded
 	if (!s->isLoaded()) 
+	{
+		// Display message 
+		cout << "Eng: Entering Loading Screen\n";
+
+		// Set loading time to 0
+		loadingTime = 0.0f;
+
+		// Load Scene with loading screen - comment out if bypassing the loading screen
+		_activeScene->LoadAsync();
+
+		// Load scene without loading screen - will cause game to hang before loading 
+		// the next scene. Comment out if using the method that loads the scene with
+		// a loading screen
+		//_activeScene->Load();
+
+		// Set loading to true
+		loading = true;
+	}
+}
+
+// Change Scene function
+//
+// Function for changing the scene
+void Engine::PauseScene(Scene* s)
+{
+
+	
+	// Display message to console when changing the scene
+	cout << "Eng: pausing scene: " << s << endl;
+
+	// Take active scene as the old scene
+	_activeScenePaused = _activeScene;
+
+	// Set active scene to the new scene
+	_activeScene = s;
+
+	 /*Check if old scene still exists*/
+	if (_activeScenePaused == nullptr)
+	{
+		// Unload old scene
+		_activeScenePaused->Load();
+	}
+
+	// Check if new scene hasn't loaded
+	if (!s->isLoaded())
+	{
+		// Display message 
+		cout << "Eng: Entering Loading Screen\n";
+
+		// Set loading time to 0
+		loadingTime = 0.0f;
+
+		// Load Scene with loading screen - comment out if bypassing the loading screen
+		_activeScene->LoadAsync();
+
+		// Load scene without loading screen - will cause game to hang before loading 
+		// the next scene. Comment out if using the method that loads the scene with
+		// a loading screen
+		_activeScene->Load();
+
+		// Set loading to true
+		loading = true;
+	}
+}
+
+// Change Scene function
+//
+// Function for changing the scene
+void Engine::ResumeScene(Scene* s)
+{
+	// Display message to console when changing the scene
+	cout << "Eng: resuming scene: " << s << endl;
+
+	// Take active scene as the old scene
+	auto old = _activeScene;
+
+	// Set active scene to the new scene
+	_activeScenePaused = s;
+
+	// Check if old scene still exists
+	if (old != nullptr)
+	{
+		// Unload old scene
+		old->UnLoad();
+		cout << "PAUSE UNLOAD";
+	}
+
+	// Check if new scene hasn't loaded
+	if (!s->isLoaded())
 	{
 		// Display message 
 		cout << "Eng: Entering Loading Screen\n";

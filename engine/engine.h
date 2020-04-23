@@ -89,6 +89,11 @@ class Scene
 		// Entity Manager
 		EntityManager ents;
 
+		//Scene ID
+		int lvl1 = 1;
+		int lvl2 = 2;
+		int lvl3 = 3;
+
 	protected:
 		// Set Loaded function
 		void setLoaded(bool);
@@ -119,6 +124,12 @@ class Engine
 		// Change Scene function
 		static void ChangeScene(Scene*);
 
+		//Pause Scene function
+		static void PauseScene(Scene*);
+
+		//Resume Scene function
+		static void ResumeScene(Scene*);
+
 		// Get Window function
 		static RenderWindow& GetWindow();
 
@@ -134,6 +145,9 @@ class Engine
 	private:
 		// Active Scene
 		static Scene* _activeScene;
+
+		// Paused Scene
+		static Scene* _activeScenePaused;
 
 		// Game Name
 		static string _gameName;

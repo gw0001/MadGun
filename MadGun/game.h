@@ -20,6 +20,7 @@
 // Libraries
 #pragma once
 #include "scenes/scene_menu.h"
+#include "scenes/scene_pause.h"
 #include "scenes/scene_level1.h"
 #include "scenes/scene_level2.h"
 #include "scenes/scene_level3.h"
@@ -27,6 +28,9 @@
 
 // MenuScene object
 extern MenuScene menu;
+
+// PauseScene object
+extern PauseScene pause;
 
 // Level 1 Scene object
 extern Level1Scene level1;

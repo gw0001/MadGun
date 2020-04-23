@@ -43,4 +43,6 @@ class Level2Scene : public Scene
 
 		// Render function
 		void Render() override;
+
+        int lvl2 = 2;
 };

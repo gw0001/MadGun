@@ -29,6 +29,9 @@ using namespace std;
 // Menu Scene
 MenuScene menu;
 
+// Pause Scene
+PauseScene pause;
+
 // Level 1
 Level1Scene level1;
 

@@ -28,6 +28,18 @@
 sf::Music music1;
 sf::SoundBuffer buffer1;
 sf::Sound endLvl1;
+sf::Event gameEvent;
+
+
+
+
+
+
+
+
+
+bool isPaused;
+
 
 // Load Function
 //
@@ -59,6 +71,7 @@ void Level1Scene::Load()
 
 	// Set loaded to true
 	setLoaded(true);
+	
 }
 
 // Unload function
@@ -87,6 +100,10 @@ void Level1Scene::UnLoad()
 // Function updates entities within the scene
 void Level1Scene::Update(const double& dt) 
 {
+	
+
+
+
 	// Set the camera to target the player, based on their position
 	Renderer::setCameraTarget(player->getPosition());
 
@@ -117,8 +134,32 @@ void Level1Scene::Update(const double& dt)
 		music1.stop();
 	}
 
-	// Update the scene
-	Scene::Update(dt);
+	if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 1))
+	{
+		if (!isPaused) {
+			isPaused = true;
+			cout << "PAUSED";
+			
+			Engine::PauseScene((Scene*)&pause);
+			music1.setAttenuation(50);
+			lvl1 = true;
+			
+		}
+		else {
+			isPaused = false;
+		}
+	}
+
+	if (!isPaused) {
+		// Update the scene
+		Scene::Update(dt);
+		music1.setAttenuation(0);
+		
+		
+	}
+	
+
+	
 }
 
 // Render function

@@ -31,6 +31,8 @@ sf::Music music3;
 sf::SoundBuffer buffer3;
 sf::Sound endLvl3;
 
+bool isPaused3;
+
 // Load function
 //
 // Function loads assets for the scene
@@ -60,6 +62,7 @@ void Level3Scene::Load()
 
 	// Set loaded to true
 	setLoaded(true);
+	lvl3 = true;
 }
 
 void Level3Scene::UnLoad() 
@@ -115,8 +118,24 @@ void Level3Scene::Update(const double& dt)
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
-	// Update scene
-	Scene::Update(dt);
+	if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 1))
+	{
+		if (!isPaused3) {
+			isPaused3 = true;
+			cout << "PAUSED";
+			Engine::PauseScene((Scene*)&pause);
+			
+
+		}
+		else {
+			isPaused3 = false;
+		}
+	}
+
+	if (!isPaused3) {
+		// Update the scene
+		Scene::Update(dt);
+	}
 }
 
 // Render function

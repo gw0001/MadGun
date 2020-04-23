@@ -31,6 +31,8 @@ sf::Music music2;
 sf::SoundBuffer buffer2;
 sf::Sound endLvl2;
 
+bool isPaused2;
+
 // Load function
 //
 // Function loads entities into the scene
@@ -60,6 +62,7 @@ void Level2Scene::Load()
 
 	// Set loaded to true
 	setLoaded(true);
+	
 }
 
 // Unload function
@@ -118,8 +121,23 @@ void Level2Scene::Update(const double& dt)
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
-	// Update the scene
-	Scene::Update(dt);
+	if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 1))
+	{
+		if (!isPaused2) {
+			isPaused2 = true;
+			cout << "PAUSED";
+			Engine::PauseScene((Scene*)&pause);
+
+		}
+		else {
+			isPaused2 = false;
+		}
+	}
+
+	if (!isPaused2) {
+		// Update the scene
+		Scene::Update(dt);
+	}
 }
 
 // Render function
