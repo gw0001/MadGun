@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 16/04/2020
+ * Date Last Modified: 23/04/2020
  * -------------------------------------
  * GAME - game.h
  *
@@ -19,14 +19,31 @@
 
 // Libraries
 #pragma once
+#include "scenes/scene_intro.h"
 #include "scenes/scene_menu.h"
+#include "scenes/scene_continue.h"
+#include "scenes/scene_options.h"
+#include "scenes/scene_ending.h"
 #include "scenes/scene_level1.h"
 #include "scenes/scene_level2.h"
 #include "scenes/scene_level3.h"
 #include "scenes/scene_debug.h"
+#include "scenes/scene_credits.h"
+
+// IntroScene object
+extern IntroScene intro;
 
 // MenuScene object
 extern MenuScene menu;
+
+// ContinueScene object
+extern ContinueScene continueScene;
+
+// OptionsScene object
+extern OptionsScene optionsScene;
+
+// EndingScene object
+extern EndingScene endingScene;
 
 // Level 1 Scene object
 extern Level1Scene level1;
@@ -37,8 +54,11 @@ extern Level2Scene level2;
 // Level 3 Scene Object
 extern Level3Scene level3;
 
-// Debug Scene - For testing
+// Debug Scene object- For testing
 extern DebugScene debugScene;
+
+// Credits Scene Object
+extern CreditsScene creditsScene;
 
 // Game Width
 constexpr int gameWidth = 1920;
