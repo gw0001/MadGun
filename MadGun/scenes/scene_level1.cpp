@@ -127,34 +127,30 @@ void Level1Scene::Update(const double& dt)
 
 	
 	
+
+	//if (Keyboard::isKeyPressed(Keyboard::Space))
+	//if((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space))
 	if (Keyboard::isKeyPressed(Keyboard::Space))
 	{
 		if (paused == false) {
 			paused = true;
 			_pauseBackground = makeEntity();
-			//_pauseContainer = makeEntity();
 			_pauseTitle = makeEntity();
 
 
 
 			auto pauseBack = _pauseBackground->addComponent<PauseMenu>();
-			pauseBack->setSize(sf::Vector2f(gameHeight, gameWidth));
-			pauseBack->setFillColor(sf::Color(20, 20, 20, 20));
-
-
-			/*auto pauseCont = _pauseContainer->addComponent<PauseMenu>();
-			pauseCont->setSize(sf::Vector2f(static_cast<float>(gameHeight) / 4.f, static_cast<float>(gameWidth) - 60.f));
-			pauseCont->setFillColor(sf::Color(20, 20, 20, 200));
-			pauseCont->setPosition((gameHeight / 2.f), 30.f);*/
-
-
+			pauseBack->setSize(sf::Vector2f(gameHeight /2.f, gameWidth/2.f));
+			pauseBack->setFillColor(sf::Color(20, 20, 20, 200));
+			pauseBack->setPosition(player->getPosition());
+			pauseBack->setOrigin(sf::Vector2f(gameHeight, gameWidth));
 
 			auto pauseText = _pauseTitle->addComponent<TextComponent>("PAUSE");
 			pauseText->setFont("gotham.ttf");
 			pauseText->setCharacterSize(150.0f);
 			pauseText->setLetterSpacing(5.0f);
 			pauseText->setColour(Color::White);
-			pauseText->setPosition(Vector2f(30.0f, 0.0f));
+			pauseText->setPosition(player->getPosition());
 		}
 		else
 		{
@@ -169,10 +165,7 @@ void Level1Scene::Update(const double& dt)
 	{
 		// Update the scene
 		Scene::Update(dt);
-	}
-	
-
-	
+	}	
 }
 
 // Render function

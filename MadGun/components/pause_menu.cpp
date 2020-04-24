@@ -17,12 +17,6 @@ PauseMenu::PauseMenu(Entity* const p)
 {
 
 	 
-	/*_background.setSize(sf::Vector2f(static_cast<float>(gameHeight), static_cast<float>(window.getSize().y)));
-	_background.setFillColor(sf::Color(20, 20, 20, 100));*/
-	
-	/*_container.setSize(sf::Vector2f(static_cast<float>(window.getSize().x) / 4.f, static_cast<float>(window.getSize().y) - 60.f));
-	_container.setFillColor(sf::Color(20, 20, 20, 200));
-	_container.setPosition(static_cast<float>(window.getSize().x) / 2.f - this->_container.getSize().x / 2.f, 30.f);*/
 	
 	
 	
@@ -39,7 +33,12 @@ void PauseMenu::setFillColor(Color color)
 	_background.setFillColor(color);
 }
 
-void PauseMenu::setPosition(float x, float y) 
+void PauseMenu::setPosition(Vector2f cord) 
 {
-	_background.setPosition(x, y);
+	_background.setPosition(cord);
+}
+
+void PauseMenu::setOrigin(Vector2f orig)
+{
+	_background.setOrigin(orig);
 }
