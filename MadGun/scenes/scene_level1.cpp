@@ -23,12 +23,17 @@
 #include <iostream>
 #include <thread>
 #include <SFML/Audio.hpp>
+#include "../components/pause_menu.h"
+#include "../components/cmp_text.h"
+
+
 
 
 //Level audio variables
 sf::Music music1;
 sf::SoundBuffer buffer1;
 sf::Sound endLvl1;
+sf::Event event;
 
 bool paused = false;
 
@@ -120,15 +125,52 @@ void Level1Scene::Update(const double& dt)
 		music1.stop();
 	}
 
+	
+	
+	if (Keyboard::isKeyPressed(Keyboard::Space))
+	{
+		if (paused == false) {
+			paused = true;
+			_pauseBackground = makeEntity();
+			//_pauseContainer = makeEntity();
+			_pauseTitle = makeEntity();
+
+
+
+			auto pauseBack = _pauseBackground->addComponent<PauseMenu>();
+			pauseBack->setSize(sf::Vector2f(gameHeight, gameWidth));
+			pauseBack->setFillColor(sf::Color(20, 20, 20, 20));
+
+
+			/*auto pauseCont = _pauseContainer->addComponent<PauseMenu>();
+			pauseCont->setSize(sf::Vector2f(static_cast<float>(gameHeight) / 4.f, static_cast<float>(gameWidth) - 60.f));
+			pauseCont->setFillColor(sf::Color(20, 20, 20, 200));
+			pauseCont->setPosition((gameHeight / 2.f), 30.f);*/
+
+
+
+			auto pauseText = _pauseTitle->addComponent<TextComponent>("PAUSE");
+			pauseText->setFont("gotham.ttf");
+			pauseText->setCharacterSize(150.0f);
+			pauseText->setLetterSpacing(5.0f);
+			pauseText->setColour(Color::White);
+			pauseText->setPosition(Vector2f(30.0f, 0.0f));
+		}
+		else
+		{
+			paused = false;
+			_pauseBackground->setForDelete();
+			_pauseTitle->setForDelete();
+		}
+	
+	}
+
 	if (!paused) //unpaused update
 	{
 		// Update the scene
 		Scene::Update(dt);
 	}
-	else //pause update
-	{
-		pmenu.Update();
-	}
+	
 
 	
 }
@@ -139,12 +181,6 @@ void Level1Scene::Update(const double& dt)
 // and tiles of the scene
 void Level1Scene::Render() 
 {
-	if (paused) 
-	{
-		pmenu.Render(*target);
-		Renderer::queue(pmenu);
-	}
-
 	// Render tiles
 	ls::Render(Engine::GetWindow());
 

@@ -21,7 +21,7 @@
 // Libraries
 #pragma once
 #include "engine.h"
-#include "pause_menu.h"
+
 
 // Name Spaces
 using namespace std; // Standard namespace
@@ -46,7 +46,9 @@ class Level1Scene : public Scene
 		void Render() override;
 
 private:
-    PauseMenu pmenu;
+    shared_ptr<Entity> _pauseBackground;
+    shared_ptr<Entity> _pauseContainer;
+    shared_ptr<Entity> _pauseTitle;
 
 
 };
