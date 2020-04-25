@@ -453,7 +453,7 @@ void Scene::createHazards(int hazardType)
 		hazardTileSet = ls::HAZARD_1;
 
 		// Set enemy colour to light orange
-		hazardColour = Color::Color(243,124,66);
+		hazardColour = Color(243,124,66);
 	}
 	// Else, check if argument number is 2
 	else if (hazardType == 2)
@@ -462,7 +462,7 @@ void Scene::createHazards(int hazardType)
 		hazardTileSet = ls::HAZARD_2;
 
 		// Set enemy colour to Dark Orange
-		hazardColour = Color::Color(199, 64, 56);
+		hazardColour = Color(199, 64, 56);
 	}
 	// Else, check if argument number is 3
 	else if (hazardType == 3)
@@ -471,7 +471,7 @@ void Scene::createHazards(int hazardType)
 		hazardTileSet = ls::HAZARD_3;
 
 		// Set enemy colour to Blood
-		hazardColour = Color::Color(117, 20, 48);
+		hazardColour = Color(117, 20, 48);
 	}
 
 	// Find enemy tiles from level
@@ -486,8 +486,8 @@ void Scene::createHazards(int hazardType)
 			// Make enemy entity
 			auto hazard = makeEntity();
 
-			// Obtain enemy tile position
-			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - 15.0f);
+			// Obtain enemy tile position and offset
+			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() / 2.0f);
 
 			// Set enemy position to an enemy tile
 			hazard->setPosition(hazardTilePos);
@@ -499,13 +499,13 @@ void Scene::createHazards(int hazardType)
 			auto s = hazard->addComponent<ShapeComponent>();
 
 			// Set Shape of Enemy
-			s->setShape<RectangleShape>(Vector2f(30.0f, 30.0f));
+			s->setShape<RectangleShape>(Vector2f(ls::getTileSize(), ls::getTileSize()));
 
 			// Set fill colour of enemy
 			s->getShape().setFillColor(hazardColour);
 
 			// Set enemy origin
-			s->getShape().setOrigin(Vector2f(15.0f, 15.0f));
+			s->getShape().setOrigin(Vector2f(ls::getTileSize()/2.0f, ls::getTileSize()/2.0f));
 		}
 	}
 }

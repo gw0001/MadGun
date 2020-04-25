@@ -34,7 +34,7 @@ void EnemyAIComponent::update(double dt)
 	mov.x += _direction.x * 16.f;
 	
 	// Check if invalid move made
-	if (!validMove(_parent->getPosition() + mov)) 
+	if (!enemyValidMove(_parent->getPosition() + mov)) 
 	{
 		// Inverse the direction
 		_direction *= -1.f;

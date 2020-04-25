@@ -439,7 +439,7 @@ bool LevelSystem::isUniqueTile(Tile tile)
 	return check;
 }
 
-//Is Unique Tile funciton
+//Is Wall Tile funciton
 //
 //Method checks if a tiles ID is considered a unique ID
 bool LevelSystem::isWallTile(Tile tile)
@@ -459,6 +459,25 @@ bool LevelSystem::isWallTile(Tile tile)
 			// Break loop
 			break;
 		}
+	}
+
+	// Return check boolean
+	return check;
+}
+
+//Is Waypoint Tile funciton
+//
+//Method checks if a tiles ID is considered a unique ID
+bool LevelSystem::isWaypointTile(Tile tile)
+{
+	// Check boolean set to false
+	bool check = false;
+
+	// Check if tile matches that of any of the unique IDs
+	if (tile == ls::WAYPOINT)
+	{
+		// Unique ID found, set check to true
+		check = true;
 	}
 
 	// Return check boolean

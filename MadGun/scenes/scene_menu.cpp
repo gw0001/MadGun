@@ -206,6 +206,16 @@ void MenuScene::Update(const double& dt)
 		}
 	}
 
+	// Enter Debug Room
+	if (Keyboard::isKeyPressed(Keyboard::F1))
+	{
+		// Stop the music
+		music0.stop();
+
+		// Change scene to the debug scene
+		Engine::ChangeScene(&debugScene);
+	}
+
 	// User Chooses a selection
 	if (Keyboard::isKeyPressed(Keyboard::Enter))
 	{
