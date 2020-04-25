@@ -49,6 +49,7 @@ private:
     shared_ptr<Entity> _pauseBackground;
     shared_ptr<Entity> _pauseContainer;
     shared_ptr<Entity> _pauseTitle;
+    shared_ptr<Entity> _pauseResume;
 
 
 };
