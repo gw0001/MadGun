@@ -8,15 +8,12 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * ENEMY TURRET COMPONET
  * - cmp_enemy_ai.cpp
  *
  * Enemy turret component
- *
- * Currently populated with boiler plate
- * code from platformer practical
  *
  */
 
@@ -41,8 +38,8 @@ void EnemyTurretComponent::update(double dt)
 		// Invoke fire function
 		fire();
 
-		// Set fire time to 1 second
-		_firetime = 1.f;
+		// Set fire time to default fire time
+		_firetime = _defaultFiretime;
 	}
 
 	// Angle of turret
@@ -53,6 +50,18 @@ void EnemyTurretComponent::update(double dt)
 
 	// Rotate the parent of the enemy turret
 	_parent->setRotation(180.f + sin(angle) * 45.f);
+}
+
+// Set Fire Time
+//
+// Function that sets the fire time of the turret
+void EnemyTurretComponent::setFireTime(float fireTime)
+{
+	// Set the default fire time
+	_defaultFiretime = fireTime;
+
+	// Set the fire time to the default firetime
+	_firetime = _defaultFiretime;
 }
 
 // Fire function

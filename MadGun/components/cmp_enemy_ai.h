@@ -8,14 +8,11 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * ENEMY AI COMPONENT- cmp_enemy_ai.h
  *
  * Header file for enemy AI component
- *
- * Currently populated with boiler plate
- * code from platformer practical
  * 
  */
 
@@ -43,8 +40,8 @@ class EnemyAIComponent : public ActorMovementComponent
 		// Enemy AI Component constructor
 		explicit EnemyAIComponent(Entity* p);
 
-		// Enemy AI Component Constructor
-		explicit EnemyAIComponent(Entity* p, float speed, Vector2f direction);
+		// Set Speed Function
+		void setSpeed(float speedVal);
 
 		// Blank Enemy AI component Constructor (deleted)
 		EnemyAIComponent() = delete;

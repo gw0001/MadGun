@@ -34,6 +34,7 @@
 #include "../MadGun/components/cmp_physics.h"
 #include "../MadGun/components/cmp_hurt_player.h"
 #include "../MadGun/components/cmp_enemy_ai.h"
+#include "../MadGun/components/cmp_enemy_turret.h"
 
 // Active scene pointer
 Scene* Engine::_activeScene = nullptr;
@@ -49,6 +50,8 @@ static float loadingspinner = 0.0f;
 
 // Loading time
 static float loadingTime;
+
+float turretFirerate = 3.5f;
 
 // Render Window
 static RenderWindow* _window;
@@ -443,11 +446,34 @@ void Scene::createEnemy(int enemyType)
 			// Set enemy position to an enemy tile
 			enemy->setPosition(enemyTilePos);
 
-			// Check enemy type
+			// Add an enemy AI Component to the entity
+			auto enemyAI = enemy->addComponent<EnemyAIComponent>();
+
+			// Check if enemy type is 1
 			if (enemyType == 1)
 			{
-				// Add an enemy AI Component to the entity
-				enemy->addComponent<EnemyAIComponent>();
+				// Set enemy to fast speed
+				enemyAI->setSpeed(125.0f);
+			}
+			else if (enemyType == 2)
+			{
+				// Set enemy to normal speed
+				enemyAI->setSpeed(100.0f);
+			}
+			else if (enemyType == 3)
+			{
+				// Set enemy to normal speed
+				enemyAI->setSpeed(100.0f);
+			}
+			else if (enemyType == 4)
+			{
+				// Set enemy to slow speed
+				enemyAI->setSpeed(75.0f);
+			}
+			else if (enemyType == 5)
+			{
+				// Set enemy to very slow speed
+				enemyAI->setSpeed(50.0f);
 			}
 
 			// Allow entity to hurt the player
@@ -488,8 +514,8 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_1
 		hazardTileSet = ls::HAZARD_1;
 
-		// Set Hazard Texture to Spikes
-		hazardTexture = Resources::get<Texture>("spikes.png");
+		// Set Hazard Texture to Spikes Facing Up
+		hazardTexture = Resources::get<Texture>("spikeFacingUp.png");
 	}
 
 	// Else, check if argument number is 2
@@ -498,8 +524,8 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_2
 		hazardTileSet = ls::HAZARD_2;
 
-		// Set hazard Texture to TEXTURENAME
-		hazardTexture = Resources::get<Texture>("dev.png");
+		// Set hazard Texture to Spikes Facing Down
+		hazardTexture = Resources::get<Texture>("spikeFacingDown.png");
 	}
 	// Else, check if argument number is 3
 	else if (hazardType == 3)
@@ -507,8 +533,8 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_3
 		hazardTileSet = ls::HAZARD_3;
 
-		// Set hazard Texture to TEXTURE NAME
-		hazardTexture = Resources::get<Texture>("dev2.png");
+		// Set hazard Texture to Turret
+		hazardTexture = Resources::get<Texture>("turret3.png");
 	}
 
 	// Find hazard tiles from level
@@ -529,14 +555,26 @@ void Scene::createHazards(int hazardType)
 			// Make hazard entity
 			auto hazard = makeEntity();
 
-			// Obtain hazard tile position and offset
-			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - textureHeight / 2);
+			// Hazard Position
+			Vector2f hazardTilePos;
+
+			// If hazard type is considered a turret
+			if (hazardType == 3)
+			{
+				// Obtain hazard tile position and offset
+				hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, 0.0f);
+
+			}
+			// Else, other hazard
+			else
+			{
+				// Obtain hazard tile position and offset
+				hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - textureHeight / 2);
+
+			}
 
 			// Set hazard position to a hazard tile
 			hazard->setPosition(hazardTilePos);
-
-			// Allow entity to hurt the player
-			hazard->addComponent<HurtComponent>();
 
 			// Add shape component to the hazard entity
 			auto s = hazard->addComponent<SpriteComponent>();
@@ -545,10 +583,26 @@ void Scene::createHazards(int hazardType)
 			s->setTexure(hazardTexture);
 
 			// Scale the hazard sprite
-			s->getSprite().setScale(Vector2f(ls::getTileSize()/textureWidth, ls::getTileSize() / textureHeight));
+			s->getSprite().setScale(Vector2f(ls::getTileSize() / textureWidth, ls::getTileSize() / textureHeight));
 
 			// Set hazard origin
 			s->getSprite().setOrigin(Vector2f(textureWidth / 2, ls::getTileSize() / 2 - 1));
+
+			// If hazard type is considered a turret
+			if (hazardType == 3)
+			{
+				// Make hazard into a roof turret
+				auto turret = hazard->addComponent<EnemyTurretComponent>();
+
+				// Set fire rate
+				turret->setFireTime(turretFirerate);
+			}
+			// Else, other hazards
+			else
+			{
+				// Allow entity to hurt the player
+				hazard->addComponent<HurtComponent>();
+			}
 		}
 	}
 }

@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * ENEMY AI COMPONENT- cmp_enemy_ai.cpp
  *
@@ -67,12 +67,10 @@ EnemyAIComponent::EnemyAIComponent(Entity* p) : ActorMovementComponent(p)
 	_speed = 100.0f;
 }
 
-// Enemy AI Component Constructor
-EnemyAIComponent::EnemyAIComponent(Entity* p, float speedVal, Vector2f directionVector) : ActorMovementComponent(p)
+// Set Speed
+//
+// Function that allows the speed of the component to be set
+void EnemyAIComponent::setSpeed(float speedVal)
 {
-	// Set direction
-	_direction = directionVector;
-
-	// Set speed
 	_speed = speedVal;
 }
