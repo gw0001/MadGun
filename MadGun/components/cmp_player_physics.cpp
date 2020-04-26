@@ -129,7 +129,7 @@ void PlayerPhysicsComponent::update(double dt)
 				impulse({ (float)(dt * _groundspeed), 0 });
 			}
 
-			// 
+			// Set the player sprite to face the right direction
 			spriteComponent->spriteFaceRight();
 		}
 		// Else left key has been pressed
@@ -142,6 +142,7 @@ void PlayerPhysicsComponent::update(double dt)
 				impulse({ -(float)(dt * _groundspeed), 0 });
 			}
 
+			// Set the player sprite to face the left direction
 			spriteComponent->spriteFaceLeft();
 		}
 	}
@@ -208,37 +209,6 @@ void PlayerPhysicsComponent::update(double dt)
 
 	// Update the physics component
 	PhysicsComponent::update(dt);
-}
-
-// Knockback function
-//
-// Function applies an impulse to the player, depending on if they have come into contact with an
-// enemy
-void PlayerPhysicsComponent::knockBack(float playerPosX, float otherEntPosX)
-{
-	// Determine the difference between the players X coordinate and the other entities
-	// x coordinate
-	float diffX = playerPosX - otherEntPosX;
-	
-	// Direction variable
-	int direction;
-
-	// Check if the difference in X is positive
-	if (diffX > 0)
-	{
-		// Player is on the right side of the enemy/hazard
-		direction = 1;
-
-	}
-	// Else, it is negative
-	else
-	{
-		// Player is on the left side of the enemy/Hazard
-		direction = -1;
-	}
-	
-	// Apply impuse to the player
-	impulse(Vector2f(knockBackForce * (float)direction, -0.01));
 }
 
 // Player Physics Component constructor

@@ -36,19 +36,11 @@ void HurtComponent::update(double dt)
 		// Check if player is within distance of the entity with the hurt player component
 		if (length(pl->getPosition() - _parent->getPosition()) < 25.0) 
 		{
-			float playerPosX = pl->getPosition().x;
+			// Set player for delete
+			pl->setForDelete();
 
-			float parentPosX = _parent->getPosition().x;
-
-			auto playerPhysics = pl->get_components<PlayerPhysicsComponent>();
-
-			playerPhysics[0]->knockBack(playerPosX, parentPosX);
-
-			//// Set player for delete
-			//pl->setForDelete();
-
-			//// Set parent for delet
-			//_parent->setForDelete();
+			// Set parent for delete
+			_parent->setForDelete();
 		}
 	}
 }
