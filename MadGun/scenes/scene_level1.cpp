@@ -6,7 +6,7 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White - F. Fico
  * Date Created: 14/03/2020
  * Date Last Modified: 22/04/2020
  * -------------------------------------
@@ -155,7 +155,7 @@ void Level1Scene::Update(const double& dt)
 			pauseResume->setLetterSpacing(5.0f);
 			pauseResume->setColour(Color::Red);
 			pauseResume->setCharacterSize(50.0f);
-			pauseResume->setPosition(Vector2f(plW - 475.f, plH * 2.f));				
+			pauseResume->setPosition(Vector2f(plW - 475.f, plH + 350.f));				
 		}				
 	}
 	//if pause is true and enter or controller X is pressed

@@ -43,4 +43,10 @@ class Level2Scene : public Scene
 
 		// Render function
 		void Render() override;
+
+private:
+    // shared entity created
+    shared_ptr<Entity> _pauseBackground;
+    shared_ptr<Entity> _pauseTitle;
+    shared_ptr<Entity> _pauseResume;
 };

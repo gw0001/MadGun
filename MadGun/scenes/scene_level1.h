@@ -6,7 +6,7 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White - F. Fico
  * Date Created: 14/03/2020
  * Date Last Modified: 15/03/2020
  * -------------------------------------
@@ -45,7 +45,7 @@ class Level1Scene : public Scene
 		// Render function
 		void Render() override;
 
-private:
+   private:
     // shared entity created
     shared_ptr<Entity> _pauseBackground;
     shared_ptr<Entity> _pauseTitle;
