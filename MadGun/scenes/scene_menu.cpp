@@ -29,6 +29,9 @@
 //Level soundtrack
 sf::Music music0;
 
+//Y axis variable
+float joyY = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
 // Set selection number to 0
 int selectionNumber;
 
@@ -189,14 +192,14 @@ void MenuScene::Update(const double& dt)
 	if (menuCooldownTime <= 0.0f)
 	{
 		// Check if user has pressed (UP ARROW)
-		if (Keyboard::isKeyPressed(Keyboard::Up))
+		if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) == -100)
 		{
 			// Invoke moveUp() function
 			moveUp();
 		}
 
 		// Check if user has pressed (DOWN ARROW)
-		if (Keyboard::isKeyPressed(Keyboard::Down))
+		if (Keyboard::isKeyPressed(Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) == 100)
 		{
 			// Invoke moveDown() function
 			moveDown();
@@ -204,7 +207,7 @@ void MenuScene::Update(const double& dt)
 	}
 
 	// User Chooses a selection
-	if (Keyboard::isKeyPressed(Keyboard::Enter))
+	if (Keyboard::isKeyPressed(Keyboard::Enter) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		// Stop music
 		music0.stop();

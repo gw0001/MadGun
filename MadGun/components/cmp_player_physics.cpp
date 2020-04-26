@@ -6,7 +6,7 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White - F. Fico
  * Date Created: 14/03/2020
  * Date Last Modified: 13/04/2020
  * -------------------------------------
@@ -37,7 +37,7 @@ sf::SoundBuffer bufferJump;
 sf::Sound soundWalk;
 sf::Sound soundJump;
 
-
+// X axis variable
 float joyX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
 
 

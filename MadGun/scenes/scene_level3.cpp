@@ -164,7 +164,7 @@ void Level3Scene::Update(const double& dt)
 	if (!pausedLvl3) //unpaused update
 	{
 		// Check if user has pressed the escape key
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		if (Keyboard::isKeyPressed(Keyboard::Escape) || (sf::Joystick::isButtonPressed(0, 7)))
 		{
 			// Close the window
 			Engine::ChangeScene((Scene*)&menu);
