@@ -14,8 +14,6 @@
  *
  * Main file for the MadGun game.
  *
- * Currently populated with boilerplate 
- * platformer code from practicals
  */
 
 // Libraries

@@ -236,6 +236,18 @@ void LevelSystem::buildTexturedSprites()
 		throw string("Cannot load sprite sheet! Check the file path!");
 	}
 
+	// Determine the width of the sprite sheet texture
+	int textureWidth = spriteSheet.getSize().x;
+
+	// Determine the height of the textyre
+	int textureHeight = spriteSheet.getSize().y;
+
+	// Determine the number of tiles in X direction
+	int tilesInX = textureWidth / tsSpriteWidth;
+
+	// Determine the number of tiles in the Y direction
+	int tilesInY = textureHeight / tsSpriteHeight;
+
 	// Iterate over all tile y-coordinates
 	for (int y = 0; y < _height; y++)
 	{
@@ -253,18 +265,6 @@ void LevelSystem::buildTexturedSprites()
 
 			// Set the tile position of the sprite
 			sprite->setPosition(getTilePosition(tilePos));	
-
-			// Determine the width of the sprite sheet texture
-			int textureWidth = spriteSheet.getSize().x;
-
-			// Determine the height of the textyre
-			int textureHeight = spriteSheet.getSize().y;
-
-			// Determine the number of tiles in X direction
-			int tilesInX = textureWidth / tsSpriteWidth;
-
-			// Determine the number of tiles in the Y direction
-			int tilesInY = textureHeight / tsSpriteHeight;
 
 			// Check that tile is not considered a unique tile to avoid adding textures to these tiles
 			if (isUniqueTile(CSVtile) == false)
