@@ -159,7 +159,7 @@ void PlayerPhysicsComponent::update(double dt)
 	// No keys pressed
 	else 
 	{
-		soundWalk.setLoop(false);
+		//soundWalk.setLoop(false);
 		// Dampen X axis movement
 		dampen({0.9f, 1.0f});
 	}

@@ -19,6 +19,7 @@
 // Libraries
 #include "scene_level1.h"
 #include "../game.h"
+#include "system_physics.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -37,7 +38,7 @@ sf::Sound endLvl1;
 sf::Event event;
 
 
-
+// paused bool set to false
 bool paused = false;
 
 // Load Function
@@ -98,8 +99,6 @@ void Level1Scene::UnLoad()
 // Function updates entities within the scene
 void Level1Scene::Update(const double& dt) 
 {
-	
-
 	// Set the camera to target the player, based on their position
 	Renderer::setCameraTarget(player->getPosition());
 
@@ -121,42 +120,26 @@ void Level1Scene::Update(const double& dt)
 		// Reload level 2
 		Engine::ChangeScene((Scene*)&level1);
 	}
-
-	// Check if user has pressed the escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape)) 
-	{
-		// Close the window
-		Engine::ChangeScene((Scene*)&menu);
-		music1.stop();
-	}
-
 	
-	
-
-	//if (Keyboard::isKeyPressed(Keyboard::Space))
-	if ((paused == false) && (Keyboard::isKeyPressed(Keyboard::Space)))
-	{
-		
-		cout << "PAUSED";
-
-		
-			
+	//if the pause bool is false and space or B are pressed 
+	if ((paused == false) && (Keyboard::isKeyPressed(Keyboard::Space)) || (paused == false) && (sf::Joystick::isButtonPressed(0, 1)))
+	{		
+		//if pause is false
 		if (paused == false) {
+			//bool switch to true
 			paused = true;
+			//pause background entity created
 			_pauseBackground = makeEntity();
+			//pause title entity created
 			_pauseTitle = makeEntity();
+			//pause resume entity created
 			_pauseResume = makeEntity();
 
-
-
+			//pause component created and set at the player position
 			auto pauseBack = _pauseBackground->addComponent<PauseMenu>();
-			/*pauseBack->setSize(sf::Vector2f(gameHeight, gameWidth));
-			pauseBack->setFillColor(sf::Color(20, 20, 20, 200));*/
 			pauseBack->setPosition(player->getPosition());
-			
-			
-			
-
+						
+			//pause title created and centered in the background
 			auto pauseTitle = _pauseTitle->addComponent<TextComponent>("PAUSED");
 			float plW = player->getPosition().x;
 			float plH = player->getPosition().y;
@@ -164,25 +147,23 @@ void Level1Scene::Update(const double& dt)
 			pauseTitle->setCharacterSize(150.0f);
 			pauseTitle->setLetterSpacing(5.0f);
 			pauseTitle->setColour(Color::White);
-			pauseTitle->setPosition(Vector2f(plW - 475.f, plH / 2.f));
+			pauseTitle->setPosition(Vector2f(plW - 475.f, plH / 2.f));			
 			
-			
-			
-
+			//pause resume created and set at the bottom of the page
 			auto pauseResume = _pauseResume->addComponent<TextComponent>("press Enter to resume");
 			pauseResume->setFont("gotham.ttf");
 			pauseResume->setLetterSpacing(5.0f);
 			pauseResume->setColour(Color::Red);
 			pauseResume->setCharacterSize(50.0f);
-			pauseResume->setPosition(Vector2f(plW - 475.f, plH * 2.f));
-			
-		}
-				
+			pauseResume->setPosition(Vector2f(plW - 475.f, plH * 2.f));				
+		}				
 	}
-	if ((paused == true) && (Keyboard::isKeyPressed(Keyboard::Return)))
+	//if pause is true and enter or controller X is pressed
+	if ((paused == true) && (Keyboard::isKeyPressed(Keyboard::Return)) || (paused == true) && (sf::Joystick::isButtonPressed(0, 0)))
 	{
-		cout << "RESUME";
+		// pause bool set to true
 		paused = false;
+		//pause entities are deleted
 		_pauseBackground->setForDelete();
 		_pauseTitle->setForDelete();
 		_pauseResume->setForDelete();
@@ -191,6 +172,14 @@ void Level1Scene::Update(const double& dt)
 
 	if (!paused) //unpaused update
 	{
+		// Check if user has pressed the escape key
+		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		{
+			// Close the window
+			Engine::ChangeScene((Scene*)&menu);
+			music1.stop();
+		}
+		
 		// Update the scene
 		Scene::Update(dt);
 	}	

@@ -46,6 +46,7 @@ class Level1Scene : public Scene
 		void Render() override;
 
 private:
+    // shared entity created
     shared_ptr<Entity> _pauseBackground;
     shared_ptr<Entity> _pauseTitle;
     shared_ptr<Entity> _pauseResume;
