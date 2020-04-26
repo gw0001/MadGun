@@ -55,6 +55,9 @@ class PlayerPhysicsComponent : public PhysicsComponent
 		// Update function
 		void update(double dt) override;
 
+		// Knock back
+		void knockBack(float playerPosX, float otherEntPosX);
+
 		// Player Physics Component constructor
 		explicit PlayerPhysicsComponent(Entity* p, const Vector2f& size);
 

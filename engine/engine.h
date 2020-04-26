@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 22/04/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * ENGINE - engine.h
  *
@@ -39,7 +39,7 @@ class Scene
 		shared_ptr<Entity> player;
 
 		// Number of Enemy Types
-		const int numberOfEnemyTypes = 5;
+		const int numberOfEnemyTypes = 3;
 
 		// Number of Hazard Types
 		const int numberOfHazardTypes = 3;

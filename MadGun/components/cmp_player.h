@@ -41,6 +41,9 @@ class PlayerStatsComponent : public Component
 		// Lives
 		int _lives;
 
+		// Max Health
+		int _maxHealth = 100;
+
 		// Max Lives
 		int _maxLives = 10;
 
@@ -63,21 +66,45 @@ class PlayerStatsComponent : public Component
 		// Enemy Stats Component constructor
 		explicit PlayerStatsComponent(Entity* p);
 
-		//// Set Health function
-		//void setHealth(int healthValue);
+		// Set Health function
+		void setHealth(int healthValue);
 
-		//void reduceHealth(int reductionVal);
+		// Reduce Health
+		void reduceHealth(int reductionVal);
 
-		//// Damage Enemy function
-		//void damagePlayuer(int damageValue);
+		// Get Health function
+		int getHealth();
 
-		//// Get Health function
-		//int getHealth();
+		// Get Direction Function
+		int getDirection();
 
-		//// Get Direction Function
-		//int getDirection();
+		// Invert Direction Function
+		void invertDirection();
 
-		//// Invert Direction Function
-		//void invertDirection();
+		// Increment Score function
+		void increaseScore(int scoreAddition);
 
+		// Add Life function
+		void addLife();
+
+		// Get Lives function
+		int getLives();
+
+		// Lose Life function
+		void loseLife();
+
+		// Reset stats function
+		void resetStats();
+
+		// Is Facing Left function
+		bool isFacingLeft();
+
+		// Is Facing Right function
+		bool isFacingRight();
+
+		// Set Facing Left function
+		void setFacingLeft(bool leftValue);
+
+		//Set Facing Right function
+		void setFacingRight(bool rightValue);
 };

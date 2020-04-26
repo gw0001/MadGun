@@ -6,17 +6,15 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White, F. Fico
  * Date Created: 14/03/2020
- * Date Last Modified: 13/04/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * PLAYER PHYSICS COMPONENT
  * - cmp_player_physics.cpp
  *
  * Player physics component
  *
- * Currently populated with boiler plate
- * code from platformer practical
  *
  */
 
@@ -27,6 +25,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Joystick.hpp>
+#include "cmp_sprite.h"
 
 // Namespace
 using namespace Physics; // Physics namespace
@@ -37,11 +36,13 @@ sf::SoundBuffer bufferJump;
 sf::Sound soundWalk;
 sf::Sound soundJump;
 
+// Jumping Force
+float jumpForce = 6.5f;
+
+// Knockback force
+float knockBackForce = 2.5f;
 
 float joyX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-float jumpForce = 6.0f;
-
 
 // Is Grounded function
 //
@@ -100,6 +101,14 @@ void PlayerPhysicsComponent::update(double dt)
 	// Obtain Position
 	const auto pos = _parent->getPosition();
 
+	// Obtain vector containing player sprite component
+	auto spriteComponents = _parent->get_components<PlayerSpriteComponent>();
+
+	// As there is only one player sprite component applied to the player, obtain the
+	// player sprite component at index 0 of the vector
+	auto spriteComponent = spriteComponents[0];
+
+
 	// Check if player has fallen off the map
 	if (pos.y > ls::getHeight() * ls::getTileSize())
 	{
@@ -119,6 +128,9 @@ void PlayerPhysicsComponent::update(double dt)
 				// Apply impulse (move player right)
 				impulse({ (float)(dt * _groundspeed), 0 });
 			}
+
+			// 
+			spriteComponent->spriteFaceRight();
 		}
 		// Else left key has been pressed
 		else
@@ -129,6 +141,8 @@ void PlayerPhysicsComponent::update(double dt)
 				// Apply negative impulse (move player left)
 				impulse({ -(float)(dt * _groundspeed), 0 });
 			}
+
+			spriteComponent->spriteFaceLeft();
 		}
 	}
 	
@@ -194,6 +208,37 @@ void PlayerPhysicsComponent::update(double dt)
 
 	// Update the physics component
 	PhysicsComponent::update(dt);
+}
+
+// Knockback function
+//
+// Function applies an impulse to the player, depending on if they have come into contact with an
+// enemy
+void PlayerPhysicsComponent::knockBack(float playerPosX, float otherEntPosX)
+{
+	// Determine the difference between the players X coordinate and the other entities
+	// x coordinate
+	float diffX = playerPosX - otherEntPosX;
+	
+	// Direction variable
+	int direction;
+
+	// Check if the difference in X is positive
+	if (diffX > 0)
+	{
+		// Player is on the right side of the enemy/hazard
+		direction = 1;
+
+	}
+	// Else, it is negative
+	else
+	{
+		// Player is on the left side of the enemy/Hazard
+		direction = -1;
+	}
+	
+	// Apply impuse to the player
+	impulse(Vector2f(knockBackForce * (float)direction, -0.01));
 }
 
 // Player Physics Component constructor

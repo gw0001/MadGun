@@ -22,6 +22,7 @@
 
 // Libraries
 #include "cmp_hurt_player.h"
+#include "cmp_player_physics.h"
 #include <engine.h>
 
 // Update function
@@ -35,11 +36,19 @@ void HurtComponent::update(double dt)
 		// Check if player is within distance of the entity with the hurt player component
 		if (length(pl->getPosition() - _parent->getPosition()) < 25.0) 
 		{
-			// Set player for delete
-			pl->setForDelete();
+			float playerPosX = pl->getPosition().x;
 
-			// Set parent for delet
-			_parent->setForDelete();
+			float parentPosX = _parent->getPosition().x;
+
+			auto playerPhysics = pl->get_components<PlayerPhysicsComponent>();
+
+			playerPhysics[0]->knockBack(playerPosX, parentPosX);
+
+			//// Set player for delete
+			//pl->setForDelete();
+
+			//// Set parent for delet
+			//_parent->setForDelete();
 		}
 	}
 }

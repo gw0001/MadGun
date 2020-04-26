@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * SPRITE COMPONENT
  * - cmp_sprite.h
@@ -70,7 +70,6 @@ class ShapeComponent : public Component
 	protected:
 		// Shape pointer
 		shared_ptr<Shape> _shape;
-		// sf::Shape _shape;
 
 	public:
 		// Blank Shape Component constructor (deleted)
@@ -94,4 +93,49 @@ class ShapeComponent : public Component
 			// Reset shape
 			_shape.reset(new T(params...));
 		}
+};
+
+/*
+ * PLAYER SPRITE COMPONENT
+ */
+
+class PlayerSpriteComponent : public Component
+{
+	protected:
+		// Sprite Shared Pointer
+		shared_ptr<Sprite> _playerSprite;
+
+		// Left Facing Texture Shared Pointer
+		shared_ptr<Texture> _leftFacingTexture;
+
+		// Right Facing Texture Shared Pointer
+		shared_ptr<Texture> _rightFacingTexture;
+
+	public:
+		// Blank Sprite Component constructor (deleted)
+		PlayerSpriteComponent() = delete;
+
+		// Sprite Component constructor
+		explicit PlayerSpriteComponent(Entity* p);
+
+		// Update function
+		void update(double dt) override;
+
+		// Render function
+		void render() override;
+
+		// Get Sprite function
+		Sprite& getSprite() const;
+
+		// Set Left Facing Texture function
+		void setLeftFacingTexure(shared_ptr<Texture> tex);
+
+		// Set Right Facing Texture
+		void setRightFacingTexure(shared_ptr<Texture> tex);
+
+		// Set Sprite to face Left
+		void spriteFaceLeft();
+
+		// Sprite Face Right function
+		void spriteFaceRight();
 };

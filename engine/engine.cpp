@@ -315,17 +315,38 @@ void Scene::createPlayer()
 	// Set player to starting position
 	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
-	// Add shape component to the player
-	auto s = player->addComponent<ShapeComponent>();
+	// Right Facing Player Texture Shared Pointer
+	shared_ptr<Texture> playerRightTexture;
 
-	// Set shape component of the player
-	s->setShape<RectangleShape>(Vector2f(20.f, 30.f));
+	// Left Facing Player Texture Shared Pointer
+	shared_ptr<Texture> playerLeftTexture;
 
-	// Set fill colour of the player
-	s->getShape().setFillColor(Color::Magenta);
+	// Load right facing texture
+	playerRightTexture = Resources::get<Texture>("player_right.png");
 
-	// Set player's origin
-	s->getShape().setOrigin(10.f, 15.f);
+	// Load left facing texture
+	playerLeftTexture = Resources::get<Texture>("player_left.png");
+
+	// Texture Width
+	int textureWidth = playerRightTexture->getSize().x;
+
+	// Texture Height
+	int textureHeight = playerRightTexture->getSize().y;
+
+	// Note - both left and right textures have the same width and height
+	// Only need to obtain values for the height and width once
+
+	// Add player sprite component to the player entity
+	auto s = player->addComponent<PlayerSpriteComponent>();
+
+	// Set up left facing texture
+	s->setLeftFacingTexure(playerLeftTexture);
+
+	// Set up right facing texture
+	s->setRightFacingTexure(playerRightTexture);
+
+	// Set player origin
+	s->getSprite().setOrigin(Vector2f(textureWidth / 2, textureHeight / 2 + 12));
 
 	// Add Physics component to the player
 	player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
@@ -343,13 +364,14 @@ void Scene::createEnemy(int enemyType)
 	// Enemy Tile Set
 	ls::Tile enemyTileSet;
 
-	// Enemy colour
-	Color enemyColour;
 	// Enemy Texture Shared Pointer
 	shared_ptr<Texture> enemyTexture;
 
-	int textureHeight;
+	// Texture Width
 	int textureWidth;
+
+	// Texture Height
+	int textureHeight;
 
 	// Check if argument number is 1
 	if (enemyType == 1)
@@ -445,14 +467,20 @@ void Scene::createEnemy(int enemyType)
 
 // Create Hazard function
 //
-//
+// Function for creating hazard entities found within the level
 void Scene::createHazards(int hazardType)
 {
-	// Enemy Tile Set
+	// Hazard Tile Set
 	ls::Tile hazardTileSet;
 
-	// Enemy colour
-	Color hazardColour;
+	// Hazard Texture Shared Pointer
+	shared_ptr<Texture> hazardTexture;
+
+	// Texture Width
+	int textureWidth;
+
+	// Texture Height
+	int textureHeight;
 
 	// Check if argument number is 1
 	if (hazardType == 1)
@@ -460,17 +488,18 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_1
 		hazardTileSet = ls::HAZARD_1;
 
-		// Set enemy colour to light orange
-		hazardColour = Color(243,124,66);
+		// Set Hazard Texture to Spikes
+		hazardTexture = Resources::get<Texture>("spikes.png");
 	}
+
 	// Else, check if argument number is 2
 	else if (hazardType == 2)
 	{
 		// Set tile set to HAZARD_2
 		hazardTileSet = ls::HAZARD_2;
 
-		// Set enemy colour to Dark Orange
-		hazardColour = Color(199, 64, 56);
+		// Set hazard Texture to TEXTURENAME
+		hazardTexture = Resources::get<Texture>("dev.png");
 	}
 	// Else, check if argument number is 3
 	else if (hazardType == 3)
@@ -478,42 +507,48 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_3
 		hazardTileSet = ls::HAZARD_3;
 
-		// Set enemy colour to Blood
-		hazardColour = Color(117, 20, 48);
+		// Set hazard Texture to TEXTURE NAME
+		hazardTexture = Resources::get<Texture>("dev2.png");
 	}
 
-	// Find enemy tiles from level
+	// Find hazard tiles from level
 	auto hazardTiles = ls::findTiles(hazardTileSet);
+
+	// Obtain Texture Width
+	textureWidth = hazardTexture->getSize().x;
+
+	// Obtain Texture Height
+	textureHeight = hazardTexture->getSize().y;
 
 	// Check that relevant tiles have been found within the level
 	if (hazardTiles.size() > 0)
 	{
-		// Relevant tile exists
+		// Relevant hazard exists
 		for (auto hazardTile : hazardTiles)
 		{
-			// Make enemy entity
+			// Make hazard entity
 			auto hazard = makeEntity();
 
-			// Obtain enemy tile position and offset
-			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() / 2.0f);
+			// Obtain hazard tile position and offset
+			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - textureHeight / 2);
 
-			// Set enemy position to an enemy tile
+			// Set hazard position to a hazard tile
 			hazard->setPosition(hazardTilePos);
 
 			// Allow entity to hurt the player
 			hazard->addComponent<HurtComponent>();
 
-			// Add shape component to the enemy entity
-			auto s = hazard->addComponent<ShapeComponent>();
+			// Add shape component to the hazard entity
+			auto s = hazard->addComponent<SpriteComponent>();
 
-			// Set Shape of Enemy
-			s->setShape<RectangleShape>(Vector2f(ls::getTileSize(), ls::getTileSize()));
+			// Apply hazard Texture
+			s->setTexure(hazardTexture);
 
-			// Set fill colour of enemy
-			s->getShape().setFillColor(hazardColour);
+			// Scale the hazard sprite
+			s->getSprite().setScale(Vector2f(ls::getTileSize()/textureWidth, ls::getTileSize() / textureHeight));
 
-			// Set enemy origin
-			s->getShape().setOrigin(Vector2f(ls::getTileSize()/2.0f, ls::getTileSize()/2.0f));
+			// Set hazard origin
+			s->getSprite().setOrigin(Vector2f(textureWidth / 2, ls::getTileSize() / 2 - 1));
 		}
 	}
 }
@@ -549,10 +584,13 @@ void Scene::addWallPhysics()
 
 // Populate Level function
 //
-// 
+// Function populates the level with all the revelant 
+// entities after a tiled level has been created.
+// Function invokes other functions to spawn player,
+// enemies and hazards
 void Scene::populateLevel()
 {
-	// Create Player entity
+	// Invoke create player entity
 	createPlayer();
 
 	// Add wall physics colliders
@@ -561,12 +599,14 @@ void Scene::populateLevel()
 	// Iterate over all enemy types
 	for (int i = 1; i < numberOfEnemyTypes + 1; i++)
 	{
+		// Invoke create enemy function
 		createEnemy(i);
 	}
 
 	// Create Hazards
-	for (int i = 1; i < 4; i++)
+	for (int i = 1; i < numberOfHazardTypes + 1; i++)
 	{
+		// Invoke create hazards function
 		createHazards(i);
 	}
 }
