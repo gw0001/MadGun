@@ -158,15 +158,13 @@ void Level1Scene::Update(const double& dt)
 			
 
 			auto pauseTitle = _pauseTitle->addComponent<TextComponent>("PAUSED");
-			//sf::FloatRect textRect = pauseTitle->getLocalBounds();
+			float plW = player->getPosition().x;
+			float plH = player->getPosition().y;
 			pauseTitle->setFont("gotham.ttf");
 			pauseTitle->setCharacterSize(150.0f);
 			pauseTitle->setLetterSpacing(5.0f);
 			pauseTitle->setColour(Color::White);
-			//pauseTitle->setPosition(player->getPosition());
-			//pauseTitle->setOrigin(textRect.width/2.f, textRect.height/2.f);
-			//pauseTitle->setOrigin(player->getPosition().x, player->getPosition().y);
-			pauseTitle->setPosition(player->getPosition());
+			pauseTitle->setPosition(Vector2f(plW - 475.f, plH / 2.f));
 			
 			
 			
@@ -176,7 +174,7 @@ void Level1Scene::Update(const double& dt)
 			pauseResume->setLetterSpacing(5.0f);
 			pauseResume->setColour(Color::Red);
 			pauseResume->setCharacterSize(50.0f);
-			pauseResume->setPosition(player->getPosition());
+			pauseResume->setPosition(Vector2f(plW - 475.f, plH * 2.f));
 			
 		}
 				
