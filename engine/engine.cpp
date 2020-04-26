@@ -34,6 +34,7 @@
 #include "../MadGun/components/cmp_physics.h"
 #include "../MadGun/components/cmp_hurt_player.h"
 #include "../MadGun/components/cmp_enemy_ai.h"
+#include "../MadGun/components/cmp_enemy_turret.h"
 
 // Active scene pointer
 Scene* Engine::_activeScene = nullptr;
@@ -49,6 +50,8 @@ static float loadingspinner = 0.0f;
 
 // Loading time
 static float loadingTime;
+
+float turretFirerate = 3.5f;
 
 // Render Window
 static RenderWindow* _window;
@@ -315,17 +318,38 @@ void Scene::createPlayer()
 	// Set player to starting position
 	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
-	// Add shape component to the player
-	auto s = player->addComponent<ShapeComponent>();
+	// Right Facing Player Texture Shared Pointer
+	shared_ptr<Texture> playerRightTexture;
 
-	// Set shape component of the player
-	s->setShape<RectangleShape>(Vector2f(20.f, 30.f));
+	// Left Facing Player Texture Shared Pointer
+	shared_ptr<Texture> playerLeftTexture;
 
-	// Set fill colour of the player
-	s->getShape().setFillColor(Color::Magenta);
+	// Load right facing texture
+	playerRightTexture = Resources::get<Texture>("player_right.png");
 
-	// Set player's origin
-	s->getShape().setOrigin(10.f, 15.f);
+	// Load left facing texture
+	playerLeftTexture = Resources::get<Texture>("player_left.png");
+
+	// Texture Width
+	int textureWidth = playerRightTexture->getSize().x;
+
+	// Texture Height
+	int textureHeight = playerRightTexture->getSize().y;
+
+	// Note - both left and right textures have the same width and height
+	// Only need to obtain values for the height and width once
+
+	// Add player sprite component to the player entity
+	auto s = player->addComponent<PlayerSpriteComponent>();
+
+	// Set up left facing texture
+	s->setLeftFacingTexure(playerLeftTexture);
+
+	// Set up right facing texture
+	s->setRightFacingTexure(playerRightTexture);
+
+	// Set player origin
+	s->getSprite().setOrigin(Vector2f(textureWidth / 2, textureHeight / 2 + 12));
 
 	// Add Physics component to the player
 	player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
@@ -343,8 +367,14 @@ void Scene::createEnemy(int enemyType)
 	// Enemy Tile Set
 	ls::Tile enemyTileSet;
 
-	// Enemy colour
-	Color enemyColour;
+	// Enemy Texture Shared Pointer
+	shared_ptr<Texture> enemyTexture;
+
+	// Texture Width
+	int textureWidth;
+
+	// Texture Height
+	int textureHeight;
 
 	// Check if argument number is 1
 	if (enemyType == 1)
@@ -352,8 +382,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_1
 		enemyTileSet = ls::ENEMY_1;
 
-		// Set enemy colour to blue
-		enemyColour = Color::Blue;
+		// Set enemy Texture to Enemy 1
+		enemyTexture = Resources::get<Texture>("enemy_1.png");
 	}
 	// Else, check if argument number is 2
 	else if (enemyType == 2)
@@ -361,8 +391,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_2
 		enemyTileSet = ls::ENEMY_2;
 
-		// Set enemy colour to Yellow
-		enemyColour = Color::Yellow;
+		// Set enemy Texture to Enemy 2
+		enemyTexture = Resources::get<Texture>("enemy_2.png");
 	}
 	// Else, check if argument number is 3
 	else if (enemyType == 3)
@@ -370,8 +400,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_3
 		enemyTileSet = ls::ENEMY_3;
 
-		// Set enemy colour to Red
-		enemyColour = Color::Red;
+		// Set enemy Texture to Enemy 3
+		enemyTexture = Resources::get<Texture>("enemy_3.png");
 	}
 	// Else, check if argument number is 4
 	else if (enemyType == 4)
@@ -379,8 +409,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_4
 		enemyTileSet = ls::ENEMY_4;
 
-		// Set enemy colour to Cyan
-		enemyColour = Color::Cyan;
+		// Set enemy Texture to Enemy 4
+		enemyTexture = Resources::get<Texture>("enemy_4.png");
 	}
 	// Else, check if argument number is 5
 	else if (enemyType == 5)
@@ -388,12 +418,18 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_5
 		enemyTileSet = ls::ENEMY_5;
 
-		// Set enemy colour to Green
-		enemyColour = Color::Green;
+		// Set enemy Texture to Enemy 5
+		enemyTexture = Resources::get<Texture>("enemy_5.png");
 	}
 
 	// Find enemy tiles from level
 	auto enemyTiles = ls::findTiles(enemyTileSet);
+
+	// Obtain Texture Width
+	textureWidth = enemyTexture->getSize().x;
+
+	// Obtain Texture Height
+	textureHeight = enemyTexture->getSize().y;
 
 	// Check that relevant tiles have been found within the level
 	if (enemyTiles.size() > 0)
@@ -404,47 +440,73 @@ void Scene::createEnemy(int enemyType)
 			// Make enemy entity
 			auto enemy = makeEntity();
 
-			// Obtain enemy tile position
-			Vector2f enemyTilePos = ls::getTilePosition(enemyTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - 15.0f);
+			// Obtain enemy tile position and offset
+			Vector2f enemyTilePos = ls::getTilePosition(enemyTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - textureHeight / 2);
 
 			// Set enemy position to an enemy tile
 			enemy->setPosition(enemyTilePos);
 
-			// Check enemy type
+			// Add an enemy AI Component to the entity
+			auto enemyAI = enemy->addComponent<EnemyAIComponent>();
+
+			// Check if enemy type is 1
 			if (enemyType == 1)
 			{
-				// Add an enemy AI Component to the entity
-				enemy->addComponent<EnemyAIComponent>();
+				// Set enemy to fast speed
+				enemyAI->setSpeed(125.0f);
+			}
+			else if (enemyType == 2)
+			{
+				// Set enemy to normal speed
+				enemyAI->setSpeed(100.0f);
+			}
+			else if (enemyType == 3)
+			{
+				// Set enemy to normal speed
+				enemyAI->setSpeed(100.0f);
+			}
+			else if (enemyType == 4)
+			{
+				// Set enemy to slow speed
+				enemyAI->setSpeed(75.0f);
+			}
+			else if (enemyType == 5)
+			{
+				// Set enemy to very slow speed
+				enemyAI->setSpeed(50.0f);
 			}
 
 			// Allow entity to hurt the player
 			enemy->addComponent<HurtComponent>();
 
 			// Add shape component to the enemy entity
-			auto s = enemy->addComponent<ShapeComponent>();
+			auto s = enemy->addComponent<SpriteComponent>();
 
-			// Set Shape of Enemy
-			s->setShape<RectangleShape>(Vector2f(30.0f, 30.0f));
-
-			// Set fill colour of enemy
-			s->getShape().setFillColor(enemyColour);
+			// Apply Enemy Texture
+			s->setTexure(enemyTexture);
 
 			// Set enemy origin
-			s->getShape().setOrigin(Vector2f(15.0f, 15.0f));
+			s->getSprite().setOrigin(Vector2f(textureWidth/2, textureHeight/2));
 		}
 	}
 }
 
 // Create Hazard function
 //
-//
+// Function for creating hazard entities found within the level
 void Scene::createHazards(int hazardType)
 {
-	// Enemy Tile Set
+	// Hazard Tile Set
 	ls::Tile hazardTileSet;
 
-	// Enemy colour
-	Color hazardColour;
+	// Hazard Texture Shared Pointer
+	shared_ptr<Texture> hazardTexture;
+
+	// Texture Width
+	int textureWidth;
+
+	// Texture Height
+	int textureHeight;
 
 	// Check if argument number is 1
 	if (hazardType == 1)
@@ -452,17 +514,18 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_1
 		hazardTileSet = ls::HAZARD_1;
 
-		// Set enemy colour to light orange
-		hazardColour = Color::Color(243,124,66);
+		// Set Hazard Texture to Spikes Facing Up
+		hazardTexture = Resources::get<Texture>("spikeFacingUp.png");
 	}
+
 	// Else, check if argument number is 2
 	else if (hazardType == 2)
 	{
 		// Set tile set to HAZARD_2
 		hazardTileSet = ls::HAZARD_2;
 
-		// Set enemy colour to Dark Orange
-		hazardColour = Color::Color(199, 64, 56);
+		// Set hazard Texture to Spikes Facing Down
+		hazardTexture = Resources::get<Texture>("spikeFacingDown.png");
 	}
 	// Else, check if argument number is 3
 	else if (hazardType == 3)
@@ -470,42 +533,76 @@ void Scene::createHazards(int hazardType)
 		// Set tile set to HAZARD_3
 		hazardTileSet = ls::HAZARD_3;
 
-		// Set enemy colour to Blood
-		hazardColour = Color::Color(117, 20, 48);
+		// Set hazard Texture to Turret
+		hazardTexture = Resources::get<Texture>("turret3.png");
 	}
 
-	// Find enemy tiles from level
+	// Find hazard tiles from level
 	auto hazardTiles = ls::findTiles(hazardTileSet);
+
+	// Obtain Texture Width
+	textureWidth = hazardTexture->getSize().x;
+
+	// Obtain Texture Height
+	textureHeight = hazardTexture->getSize().y;
 
 	// Check that relevant tiles have been found within the level
 	if (hazardTiles.size() > 0)
 	{
-		// Relevant tile exists
+		// Relevant hazard exists
 		for (auto hazardTile : hazardTiles)
 		{
-			// Make enemy entity
+			// Make hazard entity
 			auto hazard = makeEntity();
 
-			// Obtain enemy tile position
-			Vector2f hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - 15.0f);
+			// Hazard Position
+			Vector2f hazardTilePos;
 
-			// Set enemy position to an enemy tile
+			// If hazard type is considered a turret
+			if (hazardType == 3)
+			{
+				// Obtain hazard tile position and offset
+				hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, 0.0f);
+
+			}
+			// Else, other hazard
+			else
+			{
+				// Obtain hazard tile position and offset
+				hazardTilePos = ls::getTilePosition(hazardTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - textureHeight / 2);
+
+			}
+
+			// Set hazard position to a hazard tile
 			hazard->setPosition(hazardTilePos);
 
-			// Allow entity to hurt the player
-			hazard->addComponent<HurtComponent>();
+			// Add shape component to the hazard entity
+			auto s = hazard->addComponent<SpriteComponent>();
 
-			// Add shape component to the enemy entity
-			auto s = hazard->addComponent<ShapeComponent>();
+			// Apply hazard Texture
+			s->setTexure(hazardTexture);
 
-			// Set Shape of Enemy
-			s->setShape<RectangleShape>(Vector2f(30.0f, 30.0f));
+			// Scale the hazard sprite
+			s->getSprite().setScale(Vector2f(ls::getTileSize() / textureWidth, ls::getTileSize() / textureHeight));
 
-			// Set fill colour of enemy
-			s->getShape().setFillColor(hazardColour);
+			// Set hazard origin
+			s->getSprite().setOrigin(Vector2f(textureWidth / 2, ls::getTileSize() / 2 - 1));
 
-			// Set enemy origin
-			s->getShape().setOrigin(Vector2f(15.0f, 15.0f));
+			// If hazard type is considered a turret
+			if (hazardType == 3)
+			{
+				// Make hazard into a roof turret
+				auto turret = hazard->addComponent<EnemyTurretComponent>();
+
+				// Set fire rate
+				turret->setFireTime(turretFirerate);
+			}
+			// Else, other hazards
+			else
+			{
+				// Allow entity to hurt the player
+				hazard->addComponent<HurtComponent>();
+			}
 		}
 	}
 }
@@ -541,10 +638,13 @@ void Scene::addWallPhysics()
 
 // Populate Level function
 //
-// 
+// Function populates the level with all the revelant 
+// entities after a tiled level has been created.
+// Function invokes other functions to spawn player,
+// enemies and hazards
 void Scene::populateLevel()
 {
-	// Create Player entity
+	// Invoke create player entity
 	createPlayer();
 
 	// Add wall physics colliders
@@ -553,12 +653,14 @@ void Scene::populateLevel()
 	// Iterate over all enemy types
 	for (int i = 1; i < numberOfEnemyTypes + 1; i++)
 	{
+		// Invoke create enemy function
 		createEnemy(i);
 	}
 
 	// Create Hazards
-	for (int i = 1; i < 4; i++)
+	for (int i = 1; i < numberOfHazardTypes + 1; i++)
 	{
+		// Invoke create hazards function
 		createHazards(i);
 	}
 }

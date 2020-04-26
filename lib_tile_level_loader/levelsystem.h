@@ -112,6 +112,9 @@ class LevelSystem
 		// Is Wall Tile function
 		static bool isWallTile(Tile tile);
 
+		// Is Waypoint Tile function
+		static bool isWaypointTile(Tile tile);
+
 		// Get Offset function
 		static const Vector2f& getOffset();
 

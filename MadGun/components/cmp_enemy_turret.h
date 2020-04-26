@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * ENEMY TURRET COMPONENT
  * - cmp_enemy_ai.h
@@ -16,8 +16,6 @@
  * Header file for enemy turret
  * component
  *
- * Currently populated with boiler plate
- * code from platformer practical
  *
  */
 
@@ -42,12 +40,18 @@ class EnemyTurretComponent : public Component
 		// Fire time
 		float _firetime;
 
+		// Default Fire time
+		float _defaultFiretime;
+
 	public:
 		// Update function
 		void update(double dt) override;
 
 		// Render function
 		void render() override {};
+
+		// Set fire time function
+		void setFireTime(float fireTime);
 
 		// Enemy Turret Component Constructor
 		explicit EnemyTurretComponent(Entity* p);

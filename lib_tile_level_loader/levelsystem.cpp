@@ -236,6 +236,18 @@ void LevelSystem::buildTexturedSprites()
 		throw string("Cannot load sprite sheet! Check the file path!");
 	}
 
+	// Determine the width of the sprite sheet texture
+	int textureWidth = spriteSheet.getSize().x;
+
+	// Determine the height of the textyre
+	int textureHeight = spriteSheet.getSize().y;
+
+	// Determine the number of tiles in X direction
+	int tilesInX = textureWidth / tsSpriteWidth;
+
+	// Determine the number of tiles in the Y direction
+	int tilesInY = textureHeight / tsSpriteHeight;
+
 	// Iterate over all tile y-coordinates
 	for (int y = 0; y < _height; y++)
 	{
@@ -253,18 +265,6 @@ void LevelSystem::buildTexturedSprites()
 
 			// Set the tile position of the sprite
 			sprite->setPosition(getTilePosition(tilePos));	
-
-			// Determine the width of the sprite sheet texture
-			int textureWidth = spriteSheet.getSize().x;
-
-			// Determine the height of the textyre
-			int textureHeight = spriteSheet.getSize().y;
-
-			// Determine the number of tiles in X direction
-			int tilesInX = textureWidth / tsSpriteWidth;
-
-			// Determine the number of tiles in the Y direction
-			int tilesInY = textureHeight / tsSpriteHeight;
 
 			// Check that tile is not considered a unique tile to avoid adding textures to these tiles
 			if (isUniqueTile(CSVtile) == false)
@@ -439,7 +439,7 @@ bool LevelSystem::isUniqueTile(Tile tile)
 	return check;
 }
 
-//Is Unique Tile funciton
+//Is Wall Tile funciton
 //
 //Method checks if a tiles ID is considered a unique ID
 bool LevelSystem::isWallTile(Tile tile)
@@ -459,6 +459,25 @@ bool LevelSystem::isWallTile(Tile tile)
 			// Break loop
 			break;
 		}
+	}
+
+	// Return check boolean
+	return check;
+}
+
+//Is Waypoint Tile funciton
+//
+//Method checks if a tiles ID is considered a unique ID
+bool LevelSystem::isWaypointTile(Tile tile)
+{
+	// Check boolean set to false
+	bool check = false;
+
+	// Check if tile matches that of any of the unique IDs
+	if (tile == ls::WAYPOINT)
+	{
+		// Unique ID found, set check to true
+		check = true;
 	}
 
 	// Return check boolean

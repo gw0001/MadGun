@@ -28,6 +28,7 @@
 // Function updates the actor movement component
 void ActorMovementComponent::update(double dt) 
 {
+
 }
 
 // Actor Movement Component Constructor
@@ -52,6 +53,28 @@ bool ActorMovementComponent::validMove(const Vector2f& pos)
 	if (LevelSystem::isWallTile(tileAtPos))
 	{
 		// Wall tile found, set valid move check to false
+		validMoveCheck = false;
+	}
+
+	// Return value of valid move check
+	return validMoveCheck;
+}
+
+// Valid Move
+//
+// Function determines if the enemy actor has made a valid move
+bool ActorMovementComponent::enemyValidMove(const Vector2f& pos)
+{
+	// Check boolean set to true by default
+	bool validMoveCheck = true;
+
+	// Obtain the tile at the position
+	auto tileAtPos = LevelSystem::getTileAt(pos);
+
+	// Check that tile at position is a wall tile or a waypoint tile
+	if (LevelSystem::isWallTile(tileAtPos) || LevelSystem::isWaypointTile(tileAtPos))
+	{
+		// Set valid move check to false
 		validMoveCheck = false;
 	}
 

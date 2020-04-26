@@ -22,6 +22,7 @@
 
 // Libraries
 #include "cmp_hurt_player.h"
+#include "cmp_player_physics.h"
 #include <engine.h>
 
 // Update function
@@ -38,7 +39,7 @@ void HurtComponent::update(double dt)
 			// Set player for delete
 			pl->setForDelete();
 
-			// Set parent for delet
+			// Set parent for delete
 			_parent->setForDelete();
 		}
 	}

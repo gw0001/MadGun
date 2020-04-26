@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * SPRITE COMPONENT
  * - cmp_sprite.cpp
@@ -100,4 +100,72 @@ ShapeComponent::ShapeComponent(Entity* p)
 Sprite& SpriteComponent::getSprite() const
 {
 	return *_sprite; 
+}
+
+
+
+
+// Sprite Component constructor
+PlayerSpriteComponent::PlayerSpriteComponent(Entity* p)
+	: Component(p), _playerSprite(make_shared<Sprite>()) {}
+
+// Update function
+void PlayerSpriteComponent::update(double dt)
+{
+	// Set position
+	_playerSprite->setPosition(_parent->getPosition());
+
+	// Set rotation
+	_playerSprite->setRotation(_parent->getRotation());
+
+}
+
+// Render function
+void PlayerSpriteComponent::render()
+{
+	// Add shape component to the renderer queue
+	Renderer::queue(_playerSprite.get());
+}
+
+// Get Sprite function
+Sprite& PlayerSpriteComponent::getSprite() const
+{
+	return *_playerSprite;
+}
+
+// Set Texture function
+void PlayerSpriteComponent::setLeftFacingTexure(shared_ptr<Texture> tex)
+{
+	// Set texture
+	_leftFacingTexture = tex;
+
+	// Set sprite to the left facing texture
+	_playerSprite->setTexture(*_leftFacingTexture);
+}
+
+// Set Texture function
+void PlayerSpriteComponent::setRightFacingTexure(shared_ptr<Texture> tex)
+{
+	// Set texture
+	_rightFacingTexture = tex;
+
+	// Set Sprite to the right facing texture
+	_playerSprite->setTexture(*_rightFacingTexture);
+}
+
+// Set Sprite to face Left
+void PlayerSpriteComponent::spriteFaceLeft()
+{
+	// Set sprite to the left facing texture
+	_playerSprite->setTexture(*_leftFacingTexture);
+}
+
+
+// Sprite Face Right function
+//
+// Function sets sprite to the right facing texture
+void PlayerSpriteComponent::spriteFaceRight()
+{
+	// Set Sprite to the right facing texture
+	_playerSprite->setTexture(*_rightFacingTexture);
 }

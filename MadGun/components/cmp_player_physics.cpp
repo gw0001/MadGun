@@ -6,17 +6,15 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White, F. Fico
  * Date Created: 14/03/2020
- * Date Last Modified: 13/04/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * PLAYER PHYSICS COMPONENT
  * - cmp_player_physics.cpp
  *
  * Player physics component
  *
- * Currently populated with boiler plate
- * code from platformer practical
  *
  */
 
@@ -27,6 +25,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Joystick.hpp>
+#include "cmp_sprite.h"
 
 // Namespace
 using namespace Physics; // Physics namespace
@@ -37,11 +36,13 @@ sf::SoundBuffer bufferJump;
 sf::Sound soundWalk;
 sf::Sound soundJump;
 
+// Jumping Force
+float jumpForce = 6.5f;
+
+// Knockback force
+float knockBackForce = 2.5f;
 
 float joyX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-
-
 
 // Is Grounded function
 //
@@ -97,12 +98,16 @@ bool PlayerPhysicsComponent::isGrounded() const
 // Function updates the player physics component
 void PlayerPhysicsComponent::update(double dt) 
 {
-	
-	
-	
-
 	// Obtain Position
 	const auto pos = _parent->getPosition();
+
+	// Obtain vector containing player sprite component
+	auto spriteComponents = _parent->get_components<PlayerSpriteComponent>();
+
+	// As there is only one player sprite component applied to the player, obtain the
+	// player sprite component at index 0 of the vector
+	auto spriteComponent = spriteComponents[0];
+
 
 	// Check if player has fallen off the map
 	if (pos.y > ls::getHeight() * ls::getTileSize())
@@ -114,57 +119,40 @@ void PlayerPhysicsComponent::update(double dt)
 	// Check if player is has pressed right or left
 	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right) || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100 || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == -100)
 	{
-		//soundfx loaded in the buffer
-		//bufferWalk.loadFromFile("res/audio/fx/footsteps.wav");
-		//soundWalk.setBuffer(bufferWalk);
-		//soundWalk.setLoop(true);
-
-			// Check if right key pressed
-			if (Keyboard::isKeyPressed(Keyboard::Right)|| sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100)
+		// Check if right key pressed
+		if (Keyboard::isKeyPressed(Keyboard::Right)|| sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100)
+		{
+			// Check if velocity of the player is less than the max velocity
+			if (getVelocity().x < _maxVelocity.x)
 			{
-				
-
-				// Check if velocity of the player is less than the max velocity
-				if (getVelocity().x < _maxVelocity.x)
-				{
-					
-
-					// Apply impulse (move player right)
-					impulse({ (float)(dt * _groundspeed), 0 });
-				}
+				// Apply impulse (move player right)
+				impulse({ (float)(dt * _groundspeed), 0 });
 			}
-			// Else left key has been pressed
-			else
-			{
-				
-				
-				// Check if velocity of the player is less than the negative max velocity
-				if (getVelocity().x > -_maxVelocity.x)
-				{
 
-					
-					// Apply negative impulse (move player left)
-					impulse({ -(float)(dt * _groundspeed), 0 });
-				}
+			// Set the player sprite to face the right direction
+			spriteComponent->spriteFaceRight();
+		}
+		// Else left key has been pressed
+		else
+		{
+			// Check if velocity of the player is less than the negative max velocity
+			if (getVelocity().x > -_maxVelocity.x)
+			{	
+				// Apply negative impulse (move player left)
+				impulse({ -(float)(dt * _groundspeed), 0 });
 			}
-			
-				
-			
 
-			
-
-		
+			// Set the player sprite to face the left direction
+			spriteComponent->spriteFaceLeft();
+		}
 	}
 	
 	// No keys pressed
 	else 
 	{
-		soundWalk.setLoop(false);
 		// Dampen X axis movement
 		dampen({0.9f, 1.0f});
 	}
-
-	
 
 	// Handle Jump
 	if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::isButtonPressed(0, 0))
@@ -187,7 +175,7 @@ void PlayerPhysicsComponent::update(double dt)
 			teleport(Vector2f(pos.x, pos.y - 2.0f));
 
 			// Impulse
-			impulse(Vector2f(0, -6.f));
+			impulse(Vector2f(0, -jumpForce));
 		}
 	}
 
@@ -227,7 +215,6 @@ void PlayerPhysicsComponent::update(double dt)
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p, const Vector2f& size)
     : PhysicsComponent(p, true, size) 
 {
-	
 	// Set Size
 	_size = sv2_to_bv2(size, true);
 

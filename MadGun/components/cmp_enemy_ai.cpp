@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 26/04/2020
  * -------------------------------------
  * ENEMY AI COMPONENT- cmp_enemy_ai.cpp
  *
@@ -21,6 +21,7 @@
 
 // Library
 #include "cmp_enemy_ai.h"
+#include "cmp_sprite.h"
 
 // Update function
 //
@@ -34,10 +35,19 @@ void EnemyAIComponent::update(double dt)
 	mov.x += _direction.x * 16.f;
 	
 	// Check if invalid move made
-	if (!validMove(_parent->getPosition() + mov)) 
+	if (!enemyValidMove(_parent->getPosition() + mov)) 
 	{
 		// Inverse the direction
 		_direction *= -1.f;
+
+		// Obtain shape from the parent
+		auto shape = _parent->get_components<SpriteComponent>();
+
+		// Obtain the scale of the parent's sprite
+		auto spriteScale = shape[0]->getSprite().getScale();
+
+		// Inverse the x value to alter the direction that the sprite is facing
+		shape[0]->getSprite().setScale(Vector2f(spriteScale.x * -1.0, 1.0));
 	}
 
 	// Move component
@@ -55,4 +65,12 @@ EnemyAIComponent::EnemyAIComponent(Entity* p) : ActorMovementComponent(p)
 
 	// Set speed
 	_speed = 100.0f;
+}
+
+// Set Speed
+//
+// Function that allows the speed of the component to be set
+void EnemyAIComponent::setSpeed(float speedVal)
+{
+	_speed = speedVal;
 }

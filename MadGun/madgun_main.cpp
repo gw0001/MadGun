@@ -14,8 +14,6 @@
  *
  * Main file for the MadGun game.
  *
- * Currently populated with boilerplate 
- * platformer code from practicals
  */
 
 // Libraries
@@ -63,5 +61,5 @@ DebugScene debugScene;
 int main() 
 {
 	// Start game from menu screen
-	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&intro);
+	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&menu);
 }

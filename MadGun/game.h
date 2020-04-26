@@ -65,9 +65,3 @@ constexpr int gameWidth = 1920;
 
 // Game Height
 constexpr int gameHeight = 1080;
-
-// Game Zoom
-constexpr float gameZoom = 1.0f;
-
-// Menu Zoom
-constexpr float menuZoom = 1.0f;

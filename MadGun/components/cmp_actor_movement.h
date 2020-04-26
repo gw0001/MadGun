@@ -35,6 +35,9 @@ class ActorMovementComponent : public Component
 		// Valid Move function
 		bool validMove(const Vector2f&);
 
+		// Enemy Valid Move Function
+		bool enemyValidMove(const Vector2f&);
+
 		// Speed variable
 		float _speed;
 
