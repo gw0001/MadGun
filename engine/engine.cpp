@@ -345,6 +345,11 @@ void Scene::createEnemy(int enemyType)
 
 	// Enemy colour
 	Color enemyColour;
+	// Enemy Texture Shared Pointer
+	shared_ptr<Texture> enemyTexture;
+
+	int textureHeight;
+	int textureWidth;
 
 	// Check if argument number is 1
 	if (enemyType == 1)
@@ -352,8 +357,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_1
 		enemyTileSet = ls::ENEMY_1;
 
-		// Set enemy colour to blue
-		enemyColour = Color::Blue;
+		// Set enemy Texture to Enemy 1
+		enemyTexture = Resources::get<Texture>("enemy_1.png");
 	}
 	// Else, check if argument number is 2
 	else if (enemyType == 2)
@@ -361,8 +366,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_2
 		enemyTileSet = ls::ENEMY_2;
 
-		// Set enemy colour to Yellow
-		enemyColour = Color::Yellow;
+		// Set enemy Texture to Enemy 2
+		enemyTexture = Resources::get<Texture>("enemy_2.png");
 	}
 	// Else, check if argument number is 3
 	else if (enemyType == 3)
@@ -370,8 +375,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_3
 		enemyTileSet = ls::ENEMY_3;
 
-		// Set enemy colour to Red
-		enemyColour = Color::Red;
+		// Set enemy Texture to Enemy 3
+		enemyTexture = Resources::get<Texture>("enemy_3.png");
 	}
 	// Else, check if argument number is 4
 	else if (enemyType == 4)
@@ -379,8 +384,8 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_4
 		enemyTileSet = ls::ENEMY_4;
 
-		// Set enemy colour to Cyan
-		enemyColour = Color::Cyan;
+		// Set enemy Texture to Enemy 4
+		enemyTexture = Resources::get<Texture>("enemy_4.png");
 	}
 	// Else, check if argument number is 5
 	else if (enemyType == 5)
@@ -388,12 +393,18 @@ void Scene::createEnemy(int enemyType)
 		// Set tile set to ENEMY_5
 		enemyTileSet = ls::ENEMY_5;
 
-		// Set enemy colour to Green
-		enemyColour = Color::Green;
+		// Set enemy Texture to Enemy 5
+		enemyTexture = Resources::get<Texture>("enemy_5.png");
 	}
 
 	// Find enemy tiles from level
 	auto enemyTiles = ls::findTiles(enemyTileSet);
+
+	// Obtain Texture Width
+	textureWidth = enemyTexture->getSize().x;
+
+	// Obtain Texture Height
+	textureHeight = enemyTexture->getSize().y;
 
 	// Check that relevant tiles have been found within the level
 	if (enemyTiles.size() > 0)
@@ -404,8 +415,8 @@ void Scene::createEnemy(int enemyType)
 			// Make enemy entity
 			auto enemy = makeEntity();
 
-			// Obtain enemy tile position
-			Vector2f enemyTilePos = ls::getTilePosition(enemyTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - 15.0f);
+			// Obtain enemy tile position and offset
+			Vector2f enemyTilePos = ls::getTilePosition(enemyTile) + Vector2f(ls::getTileSize() / 2.0f, ls::getTileSize() - textureHeight / 2);
 
 			// Set enemy position to an enemy tile
 			enemy->setPosition(enemyTilePos);
@@ -421,16 +432,13 @@ void Scene::createEnemy(int enemyType)
 			enemy->addComponent<HurtComponent>();
 
 			// Add shape component to the enemy entity
-			auto s = enemy->addComponent<ShapeComponent>();
+			auto s = enemy->addComponent<SpriteComponent>();
 
-			// Set Shape of Enemy
-			s->setShape<RectangleShape>(Vector2f(30.0f, 30.0f));
-
-			// Set fill colour of enemy
-			s->getShape().setFillColor(enemyColour);
+			// Apply Enemy Texture
+			s->setTexure(enemyTexture);
 
 			// Set enemy origin
-			s->getShape().setOrigin(Vector2f(15.0f, 15.0f));
+			s->getSprite().setOrigin(Vector2f(textureWidth/2, textureHeight/2));
 		}
 	}
 }

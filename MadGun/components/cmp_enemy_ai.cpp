@@ -21,6 +21,7 @@
 
 // Library
 #include "cmp_enemy_ai.h"
+#include "cmp_sprite.h"
 
 // Update function
 //
@@ -38,6 +39,15 @@ void EnemyAIComponent::update(double dt)
 	{
 		// Inverse the direction
 		_direction *= -1.f;
+
+		// Obtain shape from the parent
+		auto shape = _parent->get_components<SpriteComponent>();
+
+		// Obtain the scale of the parent's sprite
+		auto spriteScale = shape[0]->getSprite().getScale();
+
+		// Inverse the x value to alter the direction that the sprite is facing
+		shape[0]->getSprite().setScale(Vector2f(spriteScale.x * -1.0, 1.0));
 	}
 
 	// Move component
@@ -55,4 +65,14 @@ EnemyAIComponent::EnemyAIComponent(Entity* p) : ActorMovementComponent(p)
 
 	// Set speed
 	_speed = 100.0f;
+}
+
+// Enemy AI Component Constructor
+EnemyAIComponent::EnemyAIComponent(Entity* p, float speedVal, Vector2f directionVector) : ActorMovementComponent(p)
+{
+	// Set direction
+	_direction = directionVector;
+
+	// Set speed
+	_speed = speedVal;
 }

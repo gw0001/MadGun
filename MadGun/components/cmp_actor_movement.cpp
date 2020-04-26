@@ -62,7 +62,7 @@ bool ActorMovementComponent::validMove(const Vector2f& pos)
 
 // Valid Move
 //
-// Function determines if the actor has made a valid move
+// Function determines if the enemy actor has made a valid move
 bool ActorMovementComponent::enemyValidMove(const Vector2f& pos)
 {
 	// Check boolean set to true by default

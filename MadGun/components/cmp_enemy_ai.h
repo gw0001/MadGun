@@ -43,6 +43,9 @@ class EnemyAIComponent : public ActorMovementComponent
 		// Enemy AI Component constructor
 		explicit EnemyAIComponent(Entity* p);
 
+		// Enemy AI Component Constructor
+		explicit EnemyAIComponent(Entity* p, float speed, Vector2f direction);
+
 		// Blank Enemy AI component Constructor (deleted)
 		EnemyAIComponent() = delete;
 };

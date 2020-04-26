@@ -8,13 +8,11 @@
  * -------------------------------------
  * Code Author: G. White
  * Date Created: 24/04/2020
- * Date Last Modified: 24/04/2020
+ * Date Last Modified: 25/04/2020
  * -------------------------------------
- * ENEMY
- * - ecm.h
+ * ENEMY COMPONENT - cmp_enemy.h
  *
- * Header file for entity component
- * manager
+ * Header file for enemy component
  *
  */
 
@@ -42,7 +40,6 @@ class EnemyStatsComponent : public Component
 
 		// Points
 		int _points;
-
 		
 	public:
 		// Delete standard constructor
@@ -54,10 +51,8 @@ class EnemyStatsComponent : public Component
 		// Set Health function
 		void setHealth(int healthValue);
 
+		// Reduce health function
 		void reduceHealth(int reductionVal);
-
-		// Damage Enemy function
-		void damageEnemy(int damageValue);
 
 		// Get Health function
 		int getHealth();
