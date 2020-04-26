@@ -55,6 +55,11 @@ class TextComponent : public Component
 
 		// Set Position function
 		void setPosition(Vector2f position);
+		//Set origin
+		void setOrigin(float width, float height);
+
+		//get size function
+		//Vector2f getLocalBounds();
 
 		// Set Character Size function
 		void setCharacterSize(float charSize);

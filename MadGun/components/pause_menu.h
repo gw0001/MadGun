@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <ecm.h>
+#include "../game.h"
+#include "engine.h"
 
 using namespace std; // Standard namespace
 using namespace sf; // SFML namespace
@@ -12,6 +14,9 @@ protected:
 
 
     RectangleShape _background;
+    Text _title;
+    Text _subText;
+    shared_ptr<Font> _font;
     
     
 
@@ -32,5 +37,8 @@ public:
     void setSize(Vector2f size);
     void setFillColor(Color color);
     void setPosition(Vector2f);
-    void setOrigin(Vector2f);
+    
+    
+
+    
 };

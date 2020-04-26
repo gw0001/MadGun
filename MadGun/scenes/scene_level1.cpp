@@ -131,45 +131,7 @@ void Level1Scene::Update(const double& dt)
 	}
 
 	
-	//while (Engine::GetWindow().pollEvent(event)) 
-	//{
-	//	if (event.type == sf::Event::KeyReleased)
-	//	{
-	//		if (event.key.code == sf::Keyboard::Space)
-	//		{
-	//			cout << "SPACE BAR PRESSED";
-	//			if (paused == false) {
-	//				paused = true;
-	//				_pauseBackground = makeEntity();
-	//				_pauseTitle = makeEntity();
-
-
-
-	//				auto pauseBack = _pauseBackground->addComponent<PauseMenu>();
-	//				pauseBack->setSize(sf::Vector2f(gameHeight / 2.f, gameWidth / 2.f));
-	//				pauseBack->setFillColor(sf::Color(20, 20, 20, 200));
-	//				pauseBack->setPosition(player->getPosition());
-	//				//pauseBack->setOrigin(sf::Vector2f(gameHeight, gameWidth));
-
-	//				auto pauseText = _pauseTitle->addComponent<TextComponent>("PAUSE");
-	//				pauseText->setFont("gotham.ttf");
-	//				pauseText->setCharacterSize(150.0f);
-	//				pauseText->setLetterSpacing(5.0f);
-	//				pauseText->setColour(Color::White);
-	//				pauseText->setPosition(player->getPosition());
-	//			}
-	//			else
-	//			{
-	//				paused = false;
-	//				_pauseBackground->setForDelete();
-	//				_pauseTitle->setForDelete();
-	//			}
-	//		}
-
-	//	}
-	//
-	//
-	//}
+	
 
 	//if (Keyboard::isKeyPressed(Keyboard::Space))
 	if ((paused == false) && (Keyboard::isKeyPressed(Keyboard::Space)))
@@ -188,24 +150,34 @@ void Level1Scene::Update(const double& dt)
 
 
 			auto pauseBack = _pauseBackground->addComponent<PauseMenu>();
-			pauseBack->setSize(sf::Vector2f(gameHeight, gameWidth));
-			pauseBack->setFillColor(sf::Color(20, 20, 20, 20));
-			//pauseBack->setPosition(player->getPosition());
-			//pauseBack->setOrigin(sf::Vector2f(gameHeight, gameWidth));
+			/*pauseBack->setSize(sf::Vector2f(gameHeight, gameWidth));
+			pauseBack->setFillColor(sf::Color(20, 20, 20, 200));*/
+			pauseBack->setPosition(player->getPosition());
+			
+			
+			
 
 			auto pauseTitle = _pauseTitle->addComponent<TextComponent>("PAUSED");
+			//sf::FloatRect textRect = pauseTitle->getLocalBounds();
 			pauseTitle->setFont("gotham.ttf");
 			pauseTitle->setCharacterSize(150.0f);
 			pauseTitle->setLetterSpacing(5.0f);
 			pauseTitle->setColour(Color::White);
+			//pauseTitle->setPosition(player->getPosition());
+			//pauseTitle->setOrigin(textRect.width/2.f, textRect.height/2.f);
+			//pauseTitle->setOrigin(player->getPosition().x, player->getPosition().y);
 			pauseTitle->setPosition(player->getPosition());
+			
+			
+			
 
 			auto pauseResume = _pauseResume->addComponent<TextComponent>("press Enter to resume");
 			pauseResume->setFont("gotham.ttf");
 			pauseResume->setLetterSpacing(5.0f);
 			pauseResume->setColour(Color::Red);
 			pauseResume->setCharacterSize(50.0f);
-			pauseResume->setPosition(player->getPosition() * 2.f);
+			pauseResume->setPosition(player->getPosition());
+			
 		}
 				
 	}

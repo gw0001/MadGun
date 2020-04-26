@@ -83,6 +83,22 @@ void TextComponent::setPosition(Vector2f aPosition)
 	_text.setPosition(aPosition);
 }
 
+// Set Origin Function
+//
+// Function for setting the origin of a 
+// text component
+void TextComponent::setOrigin(float aWidth, float anHeight)
+{
+	// Set position of the text
+	_text.setOrigin(aWidth,anHeight);
+}
+
+//Vector2f TextComponent::getLocalBounds()
+//{
+//	_text.getLocalBounds();
+//	return rectSiz;
+//}
+
 // Set Character Size function
 //
 // Function sets the character size of the text
