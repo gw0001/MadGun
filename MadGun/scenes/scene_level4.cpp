@@ -6,7 +6,7 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White, F. Fico
  * Date Created: 14/03/2020
  * Date Last Modified: 27/04/2020
  * -------------------------------------
@@ -22,6 +22,7 @@
 #include <LevelSystem.h>
 #include <iostream>
 #include <SFML/Audio.hpp>
+#include <SFML/Window/Joystick.hpp>
 
 // Player shared pointer
 static shared_ptr<Entity> player;
@@ -109,7 +110,7 @@ void Level4Scene::Update(const double& dt)
 	}
 
 	// Check if user has pressed the escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	if (Keyboard::isKeyPressed(Keyboard::Escape) || (sf::Joystick::isButtonPressed(0, 7)))
 	{
 		music4.stop();
 		// Close the window

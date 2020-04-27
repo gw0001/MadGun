@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 22/04/2020
+ * Date Last Modified: 27/04/2020
  * -------------------------------------
  * DEBUG SCENE - scene_debug.cpp
  *
@@ -23,6 +23,7 @@
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
+#include <SFML/Window/Joystick.hpp>
 
 // Load Function
 //
@@ -113,8 +114,8 @@ void DebugScene::Update(const double& dt)
 		Reset();
 	}
 
-	// Check if user has pressed the escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	// Check if user has pressed the escape key or start button
+	if (Keyboard::isKeyPressed(Keyboard::Escape) || (sf::Joystick::isButtonPressed(0, 7)))
 	{
 		// Close the window
 		Engine::ChangeScene((Scene*)&menu);

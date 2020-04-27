@@ -42,6 +42,7 @@ float jumpForce = 6.5f;
 // Knockback force
 float knockBackForce = 2.5f;
 
+// X Axis Variable
 float joyX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
 
 // Is Grounded function
@@ -116,10 +117,10 @@ void PlayerPhysicsComponent::update(double dt)
 		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	}
 
-	// Check if player is has pressed right or left
+	// Check if player is has pressed right or left, or moved the analogue stick left or right
 	if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right) || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100 || sf::Joystick::getAxisPosition(0, sf::Joystick::X) == -100)
 	{
-		// Check if right key pressed
+		// Check if right key pressed or analogue stick moved right
 		if (Keyboard::isKeyPressed(Keyboard::Right)|| sf::Joystick::getAxisPosition(0, sf::Joystick::X) == 100)
 		{
 			// Check if velocity of the player is less than the max velocity
@@ -132,7 +133,7 @@ void PlayerPhysicsComponent::update(double dt)
 			// Set the player sprite to face the right direction
 			spriteComponent->spriteFaceRight();
 		}
-		// Else left key has been pressed
+		// Else left key has been pressed/ analogue stick moved left
 		else
 		{
 			// Check if velocity of the player is less than the negative max velocity
@@ -154,7 +155,7 @@ void PlayerPhysicsComponent::update(double dt)
 		dampen({0.9f, 1.0f});
 	}
 
-	// Handle Jump
+	// User presses up or presses A on the controller
 	if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		// Obtain status of player being grounded

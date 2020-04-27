@@ -6,9 +6,9 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White, F. Fico
  * Date Created: 23/04/2020
- * Date Last Modified: 23/04/2020
+ * Date Last Modified: 27/04/2020
  * -------------------------------------
  * CONTINUE SCENE - scene_continue.cpp
  *
@@ -25,6 +25,9 @@
 
 // Component libraries
 #include "../components/cmp_text.h"
+
+//Y axis variable
+float joyYContinue = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
 // Level Selection Number
 int levelSelectionNumber;
@@ -183,14 +186,14 @@ void ContinueScene::Update(const double& dt)
 	if (levelMenuCooldownTime <= 0.0f)
 	{
 		// Check if user has pressed (UP ARROW)
-		if (Keyboard::isKeyPressed(Keyboard::Up))
+		if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) == -100)
 		{
 			// Invoke moveUp() function
 			moveUp();
 		}
 
 		// Check if user has pressed (DOWN ARROW)
-		if (Keyboard::isKeyPressed(Keyboard::Down))
+		if (Keyboard::isKeyPressed(Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) == 100)
 		{
 			// Invoke moveDown() function
 			moveDown();
@@ -200,7 +203,7 @@ void ContinueScene::Update(const double& dt)
 	// Check that the level menu cool down time is less than 0.0f
 	if ( levelMenuCooldownTime <= 0.0f)
 	{
-		// Enter Debug Room - SHHH... Very secret
+		// Enter Debug Room - SHHH... Very secret. Accessible by keyboard only
 		if (Keyboard::isKeyPressed(Keyboard::F1))
 		{
 			// Change scene to the debug scene
@@ -208,7 +211,7 @@ void ContinueScene::Update(const double& dt)
 		}
 
 		// User Chooses a selection
-		if (Keyboard::isKeyPressed(Keyboard::Enter))
+		if (Keyboard::isKeyPressed(Keyboard::Enter) || sf::Joystick::isButtonPressed(0, 0))
 		{
 
 			// New Game
@@ -245,7 +248,7 @@ void ContinueScene::Update(const double& dt)
 	}
 	
 	// Check if user has pressed the escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	if (Keyboard::isKeyPressed(Keyboard::Escape) || (sf::Joystick::isButtonPressed(0, 7)))
 	{
 		// Close the window
 		Engine::ChangeScene((Scene*)&menu);

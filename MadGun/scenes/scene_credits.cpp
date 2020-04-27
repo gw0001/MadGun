@@ -214,8 +214,8 @@ void CreditsScene::Load()
 // Function updates the menu scene
 void CreditsScene::Update(const double& dt) 
 {
-	// User Presses escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	// User Presses escape key or start button
+	if (Keyboard::isKeyPressed(Keyboard::Escape) || (sf::Joystick::isButtonPressed(0, 7)))
 	{
 		// Stop music
 		music6.stop();

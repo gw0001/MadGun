@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White, F. Fico
  * Date Created: 14/03/2020
- * Date Last Modified: 23/04/2020
+ * Date Last Modified: 27/04/2020
  * -------------------------------------
  * MENU SCENE - scene_menu.cpp
  *
@@ -38,7 +38,7 @@ int selectionNumber;
 bool menuSelectionChanged = false;
 
 // Default cooldown time for changing menu selection
-float defaultMenuCooldownTime = 0.25f;
+float defaultMenuCooldownTime = 0.2f;
 
 // Menu Cool Down time initialised to 0.0f
 float menuCooldownTime;
@@ -220,15 +220,15 @@ void MenuScene::Update(const double& dt)
 	// Check if menu cool down time is less that or equal to 0.0f
 	if (menuCooldownTime <= 0.0f)
 	{
-		// Check if user has pressed (UP ARROW)
-		if (Keyboard::isKeyPressed(Keyboard::Up))
+		// Check if user has pressed up arrow, or move the analogue stick up
+		if (Keyboard::isKeyPressed(Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) == -100)
 		{
 			// Invoke moveUp() function
 			moveUp();
 		}
 
-		// Check if user has pressed (DOWN ARROW)
-		if (Keyboard::isKeyPressed(Keyboard::Down))
+		// Check if user has pressed down arrow, or moved the analogue stick down
+		if (Keyboard::isKeyPressed(Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) == 100)
 		{
 			// Invoke moveDown() function
 			moveDown();
@@ -239,7 +239,7 @@ void MenuScene::Update(const double& dt)
 	if (menuCooldownTime <= 0.0f)
 	{
 		// User Chooses a selection
-		if (Keyboard::isKeyPressed(Keyboard::Enter))
+		if (Keyboard::isKeyPressed(Keyboard::Enter) || sf::Joystick::isButtonPressed(0, 0))
 		{
 			// Stop music
 			music0.stop();

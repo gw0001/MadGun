@@ -6,7 +6,7 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White, F. Fico
  * Date Created: 23/04/2020
  * Date Last Modified: 23/04/2020
  * -------------------------------------
@@ -142,7 +142,7 @@ void HowToScene::Load()
 		auto e = makeEntity();
 
 		// Add text component
-		auto text = e->addComponent<TextComponent>("\nMOVE LEFT: Left Analogue Stick (Left)\nMOVE RIGHT: Left Analogue Stick (Right)\nJUMP: A Button\nRETURN TO MAIN MENU: B Button\nMOVE MENU SELECTION UP: Left Analogue Stick (up)\nMOVE MENU SELECTION DOWN: Left Analogue Stick (down)\nCONFIRM SELECTION: A button");
+		auto text = e->addComponent<TextComponent>("\nMOVE LEFT: Left Analogue Stick (Left)\nMOVE RIGHT: Left Analogue Stick (Right)\nJUMP: A Button\nRETURN TO MAIN MENU: Start Button\nMOVE MENU SELECTION UP: Left Analogue Stick (up)\nMOVE MENU SELECTION DOWN: Left Analogue Stick (down)\nCONFIRM SELECTION: A button");
 
 		// Set font to Gotham.ttf
 		text->setFont("gotham.ttf");
@@ -160,7 +160,7 @@ void HowToScene::Load()
 		auto e = makeEntity();
 
 		// Add text component
-		auto text = e->addComponent<TextComponent>("Press \"Escape\" to return to the main menu");
+		auto text = e->addComponent<TextComponent>("Press \"Escape\" key on the keyboard or press \"Start\" on the controller to return to the main menu");
 
 		// Set font to Gotham.ttf
 		text->setFont("gotham.ttf");
@@ -174,8 +174,6 @@ void HowToScene::Load()
 		// Set Position of text
 		text->setPosition(Vector2f(30.0f, 1000.0f));
 	}
-
-
 }
 
 // Update Function
@@ -183,8 +181,8 @@ void HowToScene::Load()
 // Function updates the menu scene
 void HowToScene::Update(const double& dt) 
 {
-	// User presses escape key
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	// User presses escape key or presses start
+	if (Keyboard::isKeyPressed(Keyboard::Escape) || (sf::Joystick::isButtonPressed(0, 7)))
 	{
 		// Return to the menu screen
 		Engine::ChangeScene(&menu);

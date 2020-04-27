@@ -6,9 +6,9 @@
  * Franceso Fico - 40404272
  * Graeme White - 40415739
  * -------------------------------------
- * Code Author(s): G. White
+ * Code Author(s): G. White, F. Fico
  * Date Created: 02/03/2020
- * Date Last Modified: 14/04/2020
+ * Date Last Modified: 27/04/2020
  * -------------------------------------
  * MAIN - main.cpp
  *
@@ -67,5 +67,5 @@ DebugScene debugScene;
 int main() 
 {
 	// Start game from menu screen
-	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&howToScene);
+	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&intro);
 }
