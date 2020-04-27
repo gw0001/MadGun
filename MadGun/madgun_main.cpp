@@ -34,7 +34,7 @@ MenuScene menu;
 ContinueScene continueScene;
 
 // Options Scene
-OptionsScene optionsScene;
+HowToScene howToScene;
 
 // Credits Scene
 CreditsScene creditsScene;
@@ -67,5 +67,5 @@ DebugScene debugScene;
 int main() 
 {
 	// Start game from menu screen
-	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&intro);
+	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&howToScene);
 }

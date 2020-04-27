@@ -22,7 +22,7 @@
 #include "scenes/scene_intro.h"
 #include "scenes/scene_menu.h"
 #include "scenes/scene_continue.h"
-#include "scenes/scene_options.h"
+#include "scenes/scene_howto.h"
 #include "scenes/scene_ending.h"
 #include "scenes/scene_level1.h"
 #include "scenes/scene_level2.h"
@@ -42,7 +42,7 @@ extern MenuScene menu;
 extern ContinueScene continueScene;
 
 // OptionsScene object
-extern OptionsScene optionsScene;
+extern HowToScene howToScene;
 
 // EndingScene object
 extern EndingScene endingScene;

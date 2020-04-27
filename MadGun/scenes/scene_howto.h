@@ -8,9 +8,9 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 23/04/2020
- * Date Last Modified: 23/04/2020
+ * Date Last Modified: 27/04/2020
  * -------------------------------------
- * OPTIONS SCENE - scene_options.h
+ * HOW TO SCENE - scene_howto.h
  *
  * Header file of Options scene.
  *
@@ -25,35 +25,22 @@ using namespace std; // Standard namespace
 using namespace sf; // SFML namespace
 
 /*
- * OPTIONS SCENE
+ * HOW TO SCENE
  *
- * Options Scene Class
+ * How-To Scene Class
  */
-class OptionsScene : public Scene 
+class HowToScene : public Scene 
 {
 	public:
 		// Options scene constructor
-		OptionsScene() = default;
+		HowToScene() = default;
 
 		// Options scene deconstructor
-		~OptionsScene() override = default;
+		~HowToScene() override = default;
 
 		// Load function
 		void Load() override;
 
 		// Update function
 		void Update(const double& dt) override;
-
-	private:
-		//// Menu entity array
-		//shared_ptr<Entity> _menu[MAX_MENU_ITEMS];
-
-		//// Selection Highlight function
-		//void selectionHightlight(int anInt);
-
-		//// Move Up function
-		//void moveUp();
-
-		//// Move Down function
-		//void moveDown();
 };

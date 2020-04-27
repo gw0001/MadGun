@@ -41,7 +41,7 @@ bool menuSelectionChanged = false;
 float defaultMenuCooldownTime = 0.25f;
 
 // Menu Cool Down time initialised to 0.0f
-float menuCooldownTime = 0.0f;
+float menuCooldownTime;
 
 // Load Function
 //
@@ -56,6 +56,9 @@ void MenuScene::Load()
 
 	// Inistialise Menu
 	selectionNumber = 0;
+
+	// Initialise the menu cooldown time to 0.5
+	menuCooldownTime = 0.5f;
 
 	//open the soundtrack file
 	music0.openFromFile("res/audio/music/0_menu.ogg");
@@ -196,8 +199,6 @@ void MenuScene::Load()
 
 		// Set position
 		e->setPosition(Vector2f(gameWidth / 2.0f, 0.0f));
-
-
 	}
 }
 
@@ -234,51 +235,45 @@ void MenuScene::Update(const double& dt)
 		}
 	}
 
-	// Enter Debug Room
-	if (Keyboard::isKeyPressed(Keyboard::F1))
+	// Check that the menu cooldown time is less than or equal to 0.0f
+	if (menuCooldownTime <= 0.0f)
 	{
-		// Stop the music
-		music0.stop();
+		// User Chooses a selection
+		if (Keyboard::isKeyPressed(Keyboard::Enter))
+		{
+			// Stop music
+			music0.stop();
 
-		// Change scene to the debug scene
-		Engine::ChangeScene(&debugScene);
-	}
-
-	// User Chooses a selection
-	if (Keyboard::isKeyPressed(Keyboard::Enter))
-	{
-		// Stop music
-		music0.stop();
-
-		// New Game
-		if (selectionNumber == 0)
-		{
-			// Start the game from level 1
-			Engine::ChangeScene(&level1);
-		}
-		// Continue Game
-		else if (selectionNumber == 1)
-		{
-			// Continue game screen
-			Engine::ChangeScene(&continueScene);
-		}
-		// Options
-		else if (selectionNumber == 2)
-		{
-			// Options Screen
-			Engine::ChangeScene(&optionsScene);
-		}
-		// Credits
-		else if (selectionNumber == 3)
-		{
-			// Credits screen
-			Engine::ChangeScene(&creditsScene);
-		}
-		// Quit game
-		else if (selectionNumber == 4)
-		{
-			// Quit Game
-			Engine::quitGame();
+			// New Game
+			if (selectionNumber == 0)
+			{
+				// Start the game from level 1
+				Engine::ChangeScene(&level1);
+			}
+			// Continue Game
+			else if (selectionNumber == 1)
+			{
+				// Continue game screen
+				Engine::ChangeScene(&continueScene);
+			}
+			// Options
+			else if (selectionNumber == 2)
+			{
+				// Options Screen
+				Engine::ChangeScene(&howToScene);
+			}
+			// Credits
+			else if (selectionNumber == 3)
+			{
+				// Credits screen
+				Engine::ChangeScene(&creditsScene);
+			}
+			// Quit game
+			else if (selectionNumber == 4)
+			{
+				// Quit Game
+				Engine::quitGame();
+			}
 		}
 	}
 

@@ -38,16 +38,13 @@ float defaultLevelMenuCooldownTime = 0.2f;
 // Menu Cool Down time
 float levelMenuCooldownTime;
 
-// Can Make Choice
-bool canMakeChoice;
-
 // Load Function
 //
 // Function loads required entities for the continue scene
 void ContinueScene::Load() 
 {
 	// Message to console
-	cout << "Menu Load \n";
+	cout << "Level Select Load \n";
 
 	// Set Camera position to the middle of the window screen
 	Renderer::setCameraTarget(Vector2f(gameWidth / 2, gameHeight / 2));
@@ -55,12 +52,8 @@ void ContinueScene::Load()
 	// Inistialise Menu selection number
 	levelSelectionNumber = 0;
 
-	// Initialise menu cooldown time
-	levelMenuCooldownTime = 0.0f;
-
-
-	// Can make choice boolean
-	canMakeChoice = false;
+	// Initialise menu cooldown time to 0.5f
+	levelMenuCooldownTime = 0.5f;
 
 	// Title
 	{
@@ -77,7 +70,7 @@ void ContinueScene::Load()
 		titleText->setCharacterSize(150.0f);
 
 		// Set letter spacing to 5.0f
-		titleText->setLetterSpacing(5.0f);
+		titleText->setLetterSpacing(1.5f);
 
 		// Set text colour to white
 		titleText->setColour(Color::White);
@@ -148,6 +141,26 @@ void ContinueScene::Load()
 			menuItem->setPosition(Vector2f(150.0f, 250.0f + (i * 120.0f)));
 		}
 	}
+
+	{
+		// Create title entity
+		auto e = makeEntity();
+
+		// Add Text Component
+		auto titleText = e->addComponent<TextComponent>("Press \"Escape\" to return to the main menu");
+
+		// Set font to Gotham
+		titleText->setFont("gotham.ttf");
+
+		// Set character size to 150.0f
+		titleText->setCharacterSize(45.0f);
+
+		// Set text colour to white
+		titleText->setColour(Color::White);
+
+		// Set title position
+		titleText->setPosition(Vector2f(30.0f, 1000.0f));
+	}
 }
 
 // Update Function
@@ -169,8 +182,6 @@ void ContinueScene::Update(const double& dt)
 	// Check if menu cool down time is less that or equal to 0.0f
 	if (levelMenuCooldownTime <= 0.0f)
 	{
-		canMakeChoice = true;
-
 		// Check if user has pressed (UP ARROW)
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
@@ -186,9 +197,10 @@ void ContinueScene::Update(const double& dt)
 		}
 	}
 
-	if (canMakeChoice = true)
+	// Check that the level menu cool down time is less than 0.0f
+	if ( levelMenuCooldownTime <= 0.0f)
 	{
-		// Enter Debug Room
+		// Enter Debug Room - SHHH... Very secret
 		if (Keyboard::isKeyPressed(Keyboard::F1))
 		{
 			// Change scene to the debug scene
@@ -232,6 +244,12 @@ void ContinueScene::Update(const double& dt)
 		}
 	}
 	
+	// Check if user has pressed the escape key
+	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	{
+		// Close the window
+		Engine::ChangeScene((Scene*)&menu);
+	}
 
 	// Update the scene
 	Scene::Update(dt);
