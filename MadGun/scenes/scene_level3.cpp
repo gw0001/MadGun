@@ -48,6 +48,7 @@ void Level3Scene::Load()
 	//open the soundtrack file and plays it
 	music3.openFromFile("res/audio/music/3_boss.ogg");
 	music3.play();
+	music3.setLoop(true);
 
 	// Populate the level with entities and wall collision physics
 	populateLevel();

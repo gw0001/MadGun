@@ -41,6 +41,7 @@ void Level1Scene::Load()
 	//open the soundtrack file and plays it
 	music1.openFromFile("res/audio/music/1_manifest.ogg");
 	music1.play();
+	music1.setLoop(true);
 
 	// Load level 1, tile size 40.0f
 	ls::loadCSVLevelFile("res/levels/level1.csv", 40.0f);

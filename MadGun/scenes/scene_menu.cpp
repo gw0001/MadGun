@@ -61,6 +61,9 @@ void MenuScene::Load()
 	// play background music
 	music0.play();
 
+	// Loop background music
+	music0.setLoop(true);
+
 	// Title
 	{
 		// Create title entity
@@ -136,14 +139,14 @@ void MenuScene::Load()
 			// If i is 1
 			else if (i == 1)
 			{
-				// Change text to "Continue Game"
-				menuItem->setText("CONTINUE GAME");
+				// Change text to "Level Select"
+				menuItem->setText("LEVEL SELECT");
 			}
 			// If i is 2
 			else if (i == 2)
 			{
-				// Change text to "Options"
-				menuItem->setText("OPTIONS");
+				// Change text to "How to Play"
+				menuItem->setText("HOW TO PLAY");
 			}
 			// If i is 3
 			else if (i == 3)

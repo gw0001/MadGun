@@ -61,5 +61,5 @@ DebugScene debugScene;
 int main() 
 {
 	// Start game from menu screen
-	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&creditsScene);
+	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&level3);
 }

@@ -8,7 +8,7 @@
  * -------------------------------------
  * Code Author(s): G. White
  * Date Created: 14/03/2020
- * Date Last Modified: 15/03/2020
+ * Date Last Modified: 27/04/2020
  * -------------------------------------
  * HURT PLAYER COMPONET
  * - cmp_hurt_player.cpp
@@ -24,6 +24,7 @@
 #include "cmp_hurt_player.h"
 #include "cmp_player_physics.h"
 #include <engine.h>
+#include <levelsystem.h>
 
 // Update function
 //
@@ -36,11 +37,11 @@ void HurtComponent::update(double dt)
 		// Check if player is within distance of the entity with the hurt player component
 		if (length(pl->getPosition() - _parent->getPosition()) < 25.0) 
 		{
-			// Set player for delete
-			pl->setForDelete();
+			// Obtain physics component
+			auto playerPhysics = pl->get_components<PlayerPhysicsComponent>();
 
-			// Set parent for delete
-			_parent->setForDelete();
+			// Teleport player to start of level
+			playerPhysics[0]->teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 		}
 	}
 }

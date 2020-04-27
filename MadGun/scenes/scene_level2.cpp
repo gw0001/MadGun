@@ -48,6 +48,7 @@ void Level2Scene::Load()
 	//open the soundtrack file and plays it
 	music2.openFromFile("res/audio/music/2_landing.ogg");
 	music2.play();
+	music2.setLoop(true);
 
 	// Populate Level
 	populateLevel();
