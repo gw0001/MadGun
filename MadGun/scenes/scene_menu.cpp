@@ -22,9 +22,11 @@
 #include <iostream>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Joystick.hpp>
+#include "system_resources.h"
 
 // Component libraries
 #include "../components/cmp_text.h"
+#include "../components/cmp_sprite.h"
 
 //Level soundtrack
 sf::Music music0;
@@ -173,6 +175,29 @@ void MenuScene::Load()
 			// Set position of each menu item depending on the value of i
 			menuItem->setPosition(Vector2f(150.0f, 250.0f + (i * 120.0f)));
 		}
+	}
+
+	// MadGun image
+	{
+		// Create entity
+		auto e = makeEntity();
+
+		// Assing Sprite component
+		auto madgun = e->addComponent<SpriteComponent>();
+
+		// MadGun texture shared pointer
+		shared_ptr<Texture> madgunTexture;
+
+		// Load madgun texture
+		madgunTexture = Resources::get<Texture>("playerBig.png");
+
+		// Set Textrue
+		madgun->setTexure(madgunTexture);
+
+		// Set position
+		e->setPosition(Vector2f(gameWidth / 2.0f, 0.0f));
+
+
 	}
 }
 

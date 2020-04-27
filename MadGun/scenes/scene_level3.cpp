@@ -46,7 +46,7 @@ void Level3Scene::Load()
 	Renderer::setCameraTarget(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
 	//open the soundtrack file and plays it
-	music3.openFromFile("res/audio/music/3_boss.ogg");
+	music3.openFromFile("res/audio/music/3_almostBoss.ogg");
 	music3.play();
 	music3.setLoop(true);
 
@@ -99,7 +99,7 @@ void Level3Scene::Update(const double& dt)
 		music3.stop();
 		
 		// Change scene to level 1
-		Engine::ChangeScene((Scene*)&level1);
+		Engine::ChangeScene((Scene*)&level4);
 	} 
 	// Else, check if player is dead
 	else if (!player->isAlive()) 

@@ -32,6 +32,11 @@ float headingSize = 80.0f;
 // Standard Text Size
 float textSize = 30.0f;
 
+//Level audio variables
+sf::Music music6;
+sf::SoundBuffer buffer6;
+sf::Sound endLvl6;
+
 // Entity shared Pointers
 shared_ptr<Entity> creditsHeading, teamMembers, spriteAssets, musicAssets, soundEffectAssets, thankYou, instructions;
 
@@ -48,6 +53,10 @@ void CreditsScene::Load()
 
 	// Set camera position to the middle of the screen
 	Renderer::setCameraTarget(Vector2f(gameWidth / 2, gameHeight / 2));
+
+	music6.openFromFile("res/audio/music/6_credits.ogg");
+	music6.play();
+	music6.setLoop(true);
 
 	// Credits Heading
 	{
@@ -100,7 +109,7 @@ void CreditsScene::Load()
 		spriteAssets = makeEntity();
 
 		// Apply Text component
-		spriteText = spriteAssets->addComponent<TextComponent>("Sprite Assets:\n	16 x 16 Robot Tile Set by Robert \"0x72\" Norenberg \n	Available via:- https://0x72.itch.io/16x16-robot-tileset");
+		spriteText = spriteAssets->addComponent<TextComponent>("Sprite Assets:\n	16 x 16 Robot Tile Set and Robots by Robert \"0x72\" Norenberg \n		Available via:- https://0x72.itch.io/16x16-robot-tileset\n\n	Orange Robot and Turret by \" Edu\" \n	Available via: - https://eduuuuu.itch.io/robot-platform-pack\n\n	Developer textures and spikes by Graeme White");
 
 		// Set font to Gotham.ttf
 		spriteText->setFont("gotham.ttf");
@@ -121,7 +130,7 @@ void CreditsScene::Load()
 		musicAssets = makeEntity();
 
 		// Apply Text component
-		musicText = musicAssets->addComponent<TextComponent>("Music Assets:\n	Asset Creator\n	Asset Link");
+		musicText = musicAssets->addComponent<TextComponent>("Music Assets:\n	DOS-88 Synthwave Music Library by DOS88\n		Available via:- https://dos88.itch.io/dos-88-music-library");
 
 		// Set font to Gotham.ttf
 		musicText->setFont("gotham.ttf");
@@ -133,7 +142,7 @@ void CreditsScene::Load()
 		musicText->textItalic();
 
 		// Set Position
-		musicText->setPosition(Vector2f(60.0f, 310.0f));
+		musicText->setPosition(Vector2f(60.0f, 475.0f));
 	}
 
 	// Sound Effects
@@ -142,7 +151,7 @@ void CreditsScene::Load()
 		soundEffectAssets = makeEntity();
 
 		// Apply Text component
-		soundEffectText = soundEffectAssets->addComponent<TextComponent>("Sound Effect Assets:\n	Asset Creator\n	Asset Link");
+		soundEffectText = soundEffectAssets->addComponent<TextComponent>("Sound Effect Assets:\n	8-bit Soundpack by \"SoundsByDane\"\n		Available via:- https://soundsbydane.itch.io/8-bit-sound-pack");
 
 		// Set font to Gotham.ttf
 		soundEffectText->setFont("gotham.ttf");
@@ -154,7 +163,7 @@ void CreditsScene::Load()
 		soundEffectText->textItalic();
 
 		// Set Position
-		soundEffectText->setPosition(Vector2f(60.0f, 410.0f));
+		soundEffectText->setPosition(Vector2f(60.0f, 575.0f));
 	}
 
 	// Thank You Message
@@ -184,7 +193,7 @@ void CreditsScene::Load()
 		instructions = makeEntity();
 
 		// Apply Text component
-		instructionText = instructions->addComponent<TextComponent>("Press the \"Escape\" key to return to the main menu");
+		instructionText = instructions->addComponent<TextComponent>("Press the \"Escape\" key or the \"B\" button to return to the main menu");
 
 		// Set font to Gotham.ttf
 		instructionText->setFont("gotham.ttf");
@@ -208,6 +217,9 @@ void CreditsScene::Update(const double& dt)
 	// User Presses escape key
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
 	{
+		// Stop music
+		music6.stop();
+
 		// Change scene to the main menu
 		Engine::ChangeScene(&menu);
 	}

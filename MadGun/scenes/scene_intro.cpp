@@ -29,16 +29,16 @@
 #include "../components/cmp_sprite.h"
 
 // Intro Timer
-float introTimer = 0.0f;
+float introTimer;
 
 // Intro Scene Duration
 float introSceneDuration = 7.0f;
 
 // Fade In Timer
-float fadeInTimer = 0.0f;
+float fadeInTimer;
 
 // Fade Out Timer
-float fadeOutTimer = 0.0f;
+float fadeOutTimer;
 
 // Fade Duration
 float fadeDuration = 1.5f;
@@ -64,6 +64,15 @@ void IntroScene::Load()
 {
 	// Message to console
 	cout << "Intro Load \n";
+
+	// Initialise Intro timer to 0
+	introTimer = 0.0f;
+
+	// Initialise fade in timer to 0
+	fadeInTimer = 0.0f;
+
+	// Initialise Fade Out Timer to 0
+	fadeOutTimer = 0.0f;
 
 	// Set camera to the centre of the screen
 	Renderer::setCameraTarget(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));

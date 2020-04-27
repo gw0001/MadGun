@@ -43,4 +43,20 @@ class ContinueScene : public Scene
 
 		// Update function
 		void Update(const double& dt) override;
+
+	private:
+		// Game title entity
+		shared_ptr<Entity> _levelSelectTitle;
+
+		// Menu entity array
+		shared_ptr<Entity> _levelMenu[5];
+
+		// Selection Highlight function
+		void selectionHightlight(int anInt);
+
+		// Move Up function
+		void moveUp();
+
+		// Move Down function
+		void moveDown();
 };

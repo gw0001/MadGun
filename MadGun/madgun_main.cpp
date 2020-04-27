@@ -51,6 +51,12 @@ Level2Scene level2;
 // Level 3
 Level3Scene level3;
 
+// Level 4
+Level4Scene level4;
+
+// Level 5
+Level5Scene level5;
+
 // Debug Scene
 DebugScene debugScene;
 
@@ -61,5 +67,5 @@ DebugScene debugScene;
 int main() 
 {
 	// Start game from menu screen
-	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&level3);
+	Engine::Start(gameWidth, gameHeight, "MadGun: Gears and Blood",&intro);
 }

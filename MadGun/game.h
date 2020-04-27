@@ -27,6 +27,8 @@
 #include "scenes/scene_level1.h"
 #include "scenes/scene_level2.h"
 #include "scenes/scene_level3.h"
+#include "scenes/scene_level4.h"
+#include "scenes/scene_level5.h"
 #include "scenes/scene_debug.h"
 #include "scenes/scene_credits.h"
 
@@ -53,6 +55,12 @@ extern Level2Scene level2;
 
 // Level 3 Scene Object
 extern Level3Scene level3;
+
+// Level 3 Scene Object
+extern Level4Scene level4;
+
+// Level 3 Scene Object
+extern Level5Scene level5;
 
 // Debug Scene object- For testing
 extern DebugScene debugScene;

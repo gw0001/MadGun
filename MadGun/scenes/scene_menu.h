@@ -50,7 +50,6 @@ class MenuScene : public Scene
 		void Update(const double& dt) override;
 
 	private:
-
 		// Game title entity
 		shared_ptr<Entity> _gameTitle;
 
@@ -68,7 +67,4 @@ class MenuScene : public Scene
 
 		// Move Down function
 		void moveDown();
-
-
-
 };
