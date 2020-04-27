@@ -193,7 +193,7 @@ void CreditsScene::Load()
 		instructions = makeEntity();
 
 		// Apply Text component
-		instructionText = instructions->addComponent<TextComponent>("Press the \"Escape\" key or the \"B\" button to return to the main menu");
+		instructionText = instructions->addComponent<TextComponent>("Press the \"Escape\" key or press \"Start\" on the controller to return to the main menu");
 
 		// Set font to Gotham.ttf
 		instructionText->setFont("gotham.ttf");

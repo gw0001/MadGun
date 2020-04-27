@@ -150,7 +150,7 @@ void ContinueScene::Load()
 		auto e = makeEntity();
 
 		// Add Text Component
-		auto titleText = e->addComponent<TextComponent>("Press \"Escape\" to return to the main menu");
+		auto titleText = e->addComponent<TextComponent>("Press \"Escape\" or press \"Start\" on the controller to return to the main menu");
 
 		// Set font to Gotham
 		titleText->setFont("gotham.ttf");

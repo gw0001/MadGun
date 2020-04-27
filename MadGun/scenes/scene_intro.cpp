@@ -74,9 +74,6 @@ void IntroScene::Load()
 	// Initialise Fade Out Timer to 0
 	fadeOutTimer = 0.0f;
 
-	// Set camera to the centre of the screen
-	Renderer::setCameraTarget(Vector2f(gameWidth / 2.0f, gameHeight / 2.0f));
-
 	// Create Logo entity
 	introLogo = makeEntity();
 	
@@ -133,6 +130,9 @@ void IntroScene::Load()
 
 	// Set the origin of the rectangle to half the width and height of the game window
 	rectangleShape->getShape().setOrigin(gameWidth / 2.0f, gameHeight / 2.0f);
+
+	// Set camera to the centre of the screen
+	Renderer::setCameraTarget(Vector2f(introLogo->getPosition()));
 }
 
 // Update Function
